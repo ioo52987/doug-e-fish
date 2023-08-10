@@ -21,3 +21,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# my files
+.env
+notes.txt
+hidden.txt
+/src/images
+/src/windows_code
