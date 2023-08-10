@@ -1,0 +1,15 @@
+#star-one,#star-two,#star-three,#star-four,#star-five{
+    margin: 1px;
+}
+
+
+
+
+/* these aren't working by nature of the <select> tag currently */
+select:invalid{
+    outline: 2px solid #fe8498;
+}
+select:valid{
+    background-color: #ffffff;
+    outline: none;
+}

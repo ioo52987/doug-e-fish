@@ -1,0 +1,7 @@
+.table{
+    --bs-table-bg: #5d757e;
+    width: 60%;
+    margin: auto;
+    padding: 15px;
+    border-radius: 25px;
+}
