@@ -1,0 +1,17 @@
+.foo {
+    text-align: center;
+    font-size: 15px;
+    font-family: 'Architects Daughter', cursive;
+    background-color: #e3e5ed;
+    position: absolute;
+    width: 100%;
+    margin-top:525px;
+    margin-left: 170px;
+}
+/*Absolutely positioned elements will be removed from the flow of the document. 
+So the footer moves up because container is not part of that flow. You would need 
+to either use relative positioning on both, or absolute positioning for both and 
+set their specific top and left values.
+
+Alternatively you could set a top margin on footer that makes it drop enough so it 
+is positioned below the container.*/
