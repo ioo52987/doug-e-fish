@@ -1,38 +1,39 @@
-.App {
-  text-align: center;
+#pageContainer{
+    position: fixed;
+    height: 600px;
+    background-color: #e3e5ed;
+    top: 17%;
+    width: 84%;
+    margin-left: 245px;
+}
+.form-content, .table-content{
+    padding: 15px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* PAGE TITLE */
+#pageTitle{
+    font-family: 'Architects Daughter', cursive;
+    font-size: 30px;
+    background-color: gainsboro;
+    padding: 5px;
+    border-radius: 5px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* CLIENT-SIDE FORM VALIDATION */
+input:invalid, textarea:invalid{
+    outline: 2px solid #fe8498;
+}
+input:valid, textarea:valid{
+    background-color: #ffffff;
+    outline: none;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+/* SUBMIT BUTTON FORMATTING */
+.submit-btn {
+    background-color: #70d3a9;
+    font-family: 'Architects Daughter', cursive;
+    font-size: 20px;
 }
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.submit-btn:hover {
+    background-color: #eab7ed;
 }
