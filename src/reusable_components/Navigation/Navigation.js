@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Navigation.css';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 
 function Navigation() {
 
@@ -64,7 +65,7 @@ function Navigation() {
             {/* RIGHT ALIGNED LINKS */}
             <ul className="navbar-nav ms-auto d-flex flex-row">
               <li className="nav-item me-3 me-lg-0">
-                <span><i className="fas fa-fish"></i><p>Daily Fish Total:</p></span>
+                <span><i className="fas fa-fish"></i><p>Daily Fish Total:&nbsp;&nbsp;{getFishCaughtToday()}</p></span>
               </li>
               <li className="nav-item me-3 me-lg-0">
                 <span><i className="fas fa-water"></i><p>High Tide:</p></span>
@@ -87,5 +88,37 @@ function Navigation() {
 
 export default Navigation;
 
+
+
+
+
+function getFishCaughtToday() {
+
+  let totalFishCaughtToday = 0;
+  let [data, setData] = useState([]);
+  let recordsArr = [];
+  let currentDate = new Date().toJSON().slice(0, 10);
+
+  axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date')
+    .then(response => setData(response.data));
+  
+  if (data.records) {
+    recordsArr = data.records;
+  }
+  
+  for (let i = 0; i < recordsArr.length; i++) {
+    if (recordsArr[i].fields.date == currentDate) {
+      totalFishCaughtToday = recordsArr[i].fields.fishCaught + totalFishCaughtToday;
+    }
+  }
+
+  return (totalFishCaughtToday);
+}
+
+
+/*
+function getLocalWeather{
 //https://open-meteo.com/
 //Open-Meteo is an open-source weather API and offers free access for non-commercial use. No API key required. Start using it now!
+}
+*/
