@@ -3,18 +3,32 @@ import Message from '../../reusable_components/Message/Message.js';
 import './AddFishingTrip.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
+import FormErrors from '../../reusable_components/FormErrors/FormErrors.js';
 
 function AddFishingTrip() {
 
-    let [pierNames, setPierNames] = useState({});
+    /* FIELD INPUT VALUES */
     let [startDate, setStartDate] = useState(new Date());
+    let [pierNames, setPierNames] = useState({});
     let [fishCaught, setFishCaught] = useState();
     let [rating, setRating] = useState(""); // to be added later
     let [description, setDescription] = useState("");
     let [url, setUrl] = useState("");
-    let [formState, setFormState] = useState();
 
-    // GET site names
+    /* FIELD (VALID || INVALID) STATES */
+    let [startDateValid, setStartDateValid] = useState(false);
+    let [pierNamesValid, setPierNamesValid] = useState(false);
+    let [fishCaughtValid, setFishCaughtValid] = useState(false);
+    let [ratingValid, setRatingValid] = useState(false);
+    let [descriptionValid, setDescriptionValid] = useState(false);
+    let [urlValid, setUrlValid] = useState(false);
+
+    /* FORM VALID? STATE */
+    let [formState, setFormState] = useState();
+    /* TEXT ERRORS (IF ANY) */
+    let [formErrors, setFormErrors] = useState({date: '', pierName: '', fishCaught: '', rating: '', description: '', url: ''});
+
+    // GET site names for dropdown field
     useEffect(() => {
         axios.get('/tbl73KANXAAstm4Kr')
             .then(response => setPierNames(response.data));
@@ -25,6 +39,36 @@ function AddFishingTrip() {
         recordsArr = pierNames.records;
     }
 
+    // form validation
+    const validateField = (fieldName, value) => {
+        switch(fieldName){
+            case 'date':
+                break;
+            case 'pierName':
+                break;
+            case 'fishCaught':
+                break;
+            case 'rating':
+                break;
+            case 'description':
+                descriptionValid = (value.length >= 25 && value.length <= 1500);
+                formErrors.description = descriptionValid ? '' : ' Description required to be between 25-1500 characters.';
+                break;
+            case 'url':
+                break;
+            default:
+                break;
+        }
+
+        setFormErrors(formErrors);
+        setStartDate(startDateValid);
+        setPierNamesValid(pierNamesValid);
+        setFishCaught(fishCaughtValid);
+        setRating(ratingValid);
+        setDescriptionValid(descriptionValid);
+        setUrlValid(urlValid);
+    }
+
     // on form submission...
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -33,9 +77,10 @@ function AddFishingTrip() {
                 "fields": {
                     "date": document.getElementById("date").value,
                     "pierName": document.getElementById("pierName").value,
+                    "fishCaught": Number(document.getElementById("fishCaught").value),
+                    //"rating": document.getElementById("rating").value,
                     "description": document.getElementById("description").value,
                     "url": document.getElementById("url").value,
-                    "fishCaught": Number(document.getElementById("fishCaught").value)
                 }
             }
         )
@@ -70,6 +115,9 @@ function AddFishingTrip() {
                             onChange={(e) => setStartDate(e.target.value)}
                             required
                         ></input>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="date" />
+                        </div>
                     </div>
                     <div className="col-3">
                         <select
@@ -80,6 +128,9 @@ function AddFishingTrip() {
                             <option disabled selected>Choose Fishing Site</option>
                             {recordsArr.map((i) => (<option key={i.fields.pierName}>{i.fields.pierName}</option>))}
                         </select>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="pierName" />
+                        </div>
                     </div>
                     <div className="col-2">
                         <input
@@ -93,9 +144,12 @@ function AddFishingTrip() {
                             onChange={(e) => setFishCaught(e.target.value)}
                             required
                         ></input>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="fishCaught" />
+                        </div>
                     </div>
                     <div className="col-3">
-                        <div className="btn-group btn-group" role="group" aria-label="Basic example" id="tripRating">
+                        <div className="btn-group btn-group" role="group" aria-label="Basic example" id="rating">
                             <button type="button" className="btn btn-secondary star-btn" id="star-one"><i className="fa fa-star"></i></button>
                             <button type="button" className="btn btn-secondary star-btn" id="star-two"><i className="fa fa-star"></i></button>
                             <button type="button" className="btn btn-secondary star-btn" id="star-three"><i className="fa fa-star"></i></button>
@@ -115,9 +169,17 @@ function AddFishingTrip() {
                             value={description}
                             placeholder="Describe the fishing trip!"
                             aria-label="Describe the fishing trip!"
-                            onChange={(e) => setDescription(e.target.value)}
+                            onChange={(e) => {
+                                setDescription(e.target.value);
+                                validateField("description", e.target.value);
+                            }}
+                            minLength="25"
+                            maxLength="1500"
                             required
                         ></textarea>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="description" />
+                        </div>
                     </div>
                 </div> {/* close row */}
                 <br />
@@ -133,6 +195,9 @@ function AddFishingTrip() {
                             aria-describedby="basic-addon1"
                             onChange={(e) => setUrl(e.target.value)}
                         ></input>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="url" />
+                        </div>
                     </div>
                 </div> {/* close row */}
                 <br />

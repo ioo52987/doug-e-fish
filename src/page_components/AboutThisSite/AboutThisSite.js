@@ -83,7 +83,7 @@ function AboutThisSite() {
                     <div className="row">
                         <div className="col-6">
                             <Message
-                                formValid={true}
+                                formValid={formState}
                                 message="Success! Thanks for submitting us a message!  :)"
                             />
                         </div>
