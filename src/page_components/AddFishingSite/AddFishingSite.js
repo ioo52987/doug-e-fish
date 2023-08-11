@@ -22,7 +22,7 @@ function AddFishingSite() {
 
     /* FORM VALIDATION STATE */
     let [formValid, setFormValid] = useState(false);
-    /* TEXT ERRORS (IF ANY)*/
+    /* TEXT ERRORS (IF ANY) */
     let [formErrors, setFormErrors] = useState({ pierName: '', longitude: '', latitude: '', description: '' });
 
     // form validation
@@ -59,11 +59,7 @@ function AddFishingSite() {
     const handleSubmit = (e) => {
 
         e.preventDefault();
-        setFormValid(pierNameValid && longitudeValid && latitudeValid && descriptionValid);
-        const delay = 5000; // in milliseconds
-            setTimeout(() => {
-                window.location.reload(true);
-            }, delay);
+        formValid = (pierNameValid && longitudeValid && latitudeValid && descriptionValid);
 
         if (formValid) {
             axios.post("/tbl73KANXAAstm4Kr/",
@@ -78,13 +74,18 @@ function AddFishingSite() {
                 }
             )
                 .then((resp) => {
-                    console.log("success!");
+                    console.log("success!!");
+                    setFormValid(true);
+                    const delay = 5000; // in milliseconds
+                    setTimeout(() => {
+                        window.location.reload(true);
+                    }, delay);
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
         }
-    };
+    }
 
     return (
         <div>
@@ -104,8 +105,8 @@ function AddFishingSite() {
                                 setPierName(e.target.value);
                                 validateField("pierName", e.target.value);
                             }}
-                            minlength="3"
-                            maxlength="75"
+                            minLength="3"
+                            maxLength="75"
                             required
                         ></input>
                         <div className='panel panel-default'>
@@ -170,8 +171,8 @@ function AddFishingSite() {
                                 setDescription(e.target.value);
                                 validateField("description", e.target.value);
                             }}
-                            minlength="25"
-                            maxlength="1500"
+                            minLength="25"
+                            maxLength="1500"
                             required
                         ></textarea>
                         <div className='panel panel-default'>
@@ -206,6 +207,3 @@ export default AddFishingSite;
 // 2. bounding box
 //      latitude range 36.5610543 - 37.6024947 => 36.56 - 37.60
 //      longitude range -75.4199042 - -77.5756627 => -75.2 - -77.58
-// 3. <Message /> needs a little UI work
-
-// This spot looks neat! -76.504313,37.202649
