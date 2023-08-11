@@ -10,7 +10,7 @@ function AddFishingTrip() {
     /* FIELD INPUT VALUES */
     let [startDate, setStartDate] = useState(new Date());
     let [pierNames, setPierNames] = useState({});
-    let [fishCaught, setFishCaught] = useState();
+    let [fishCaught, setFishCaught] = useState("");
     let [rating, setRating] = useState(""); // to be added later
     let [description, setDescription] = useState("");
     let [url, setUrl] = useState("");
@@ -26,7 +26,7 @@ function AddFishingTrip() {
     /* FORM VALID? STATE */
     let [formState, setFormState] = useState();
     /* TEXT ERRORS (IF ANY) */
-    let [formErrors, setFormErrors] = useState({date: '', pierName: '', fishCaught: '', rating: '', description: '', url: ''});
+    let [formErrors, setFormErrors] = useState({ date: '', pierName: '', fishCaught: '', rating: '', description: '', url: '' });
 
     // GET site names for dropdown field
     useEffect(() => {
@@ -41,12 +41,15 @@ function AddFishingTrip() {
 
     // form validation
     const validateField = (fieldName, value) => {
-        switch(fieldName){
+        switch (fieldName) {
             case 'date':
+                startDateValid = true;
                 break;
             case 'pierName':
+                pierNames = true;
                 break;
             case 'fishCaught':
+                // convert string to a number and throw warning.
                 break;
             case 'rating':
                 break;
@@ -71,31 +74,36 @@ function AddFishingTrip() {
 
     // on form submission...
     const handleSubmit = (event) => {
+
         event.preventDefault();
-        axios.post("/tblZXiWg0iGnfIucV/",
-            {
-                "fields": {
-                    "date": document.getElementById("date").value,
-                    "pierName": document.getElementById("pierName").value,
-                    "fishCaught": Number(document.getElementById("fishCaught").value),
-                    //"rating": document.getElementById("rating").value,
-                    "description": document.getElementById("description").value,
-                    "url": document.getElementById("url").value,
+        formState = (startDateValid && pierNamesValid && fishCaughtValid && ratingValid && descriptionValid && urlValid);
+
+        if (formState) {
+            axios.post("/tblZXiWg0iGnfIucV/",
+                {
+                    "fields": {
+                        "date": document.getElementById("date").value,
+                        "pierName": document.getElementById("pierName").value,
+                        "fishCaught": Number(document.getElementById("fishCaught").value),
+                        //"rating": document.getElementById("rating").value,
+                        "description": document.getElementById("description").value,
+                        "url": document.getElementById("url").value,
+                    }
                 }
-            }
-        )
-            .then((resp) => {
-                console.log("success!");
-                setFormState(true);
-                const delay = 5000; // milliseconds
-                setTimeout(() => {
-                    window.location.reload(true);
-                }, delay)
-            })
-            .catch(function (error) {
-                console.log(error);
-                setFormState(false);
-            });
+            )
+                .then((resp) => {
+                    console.log("success!");
+                    setFormState(true);
+                    const delay = 5000; // milliseconds
+                    setTimeout(() => {
+                        window.location.reload(true);
+                    }, delay)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    setFormState(false);
+                });
+        }
     };
 
     return (
@@ -112,7 +120,10 @@ function AddFishingTrip() {
                             placeholder="Date Format: ##/##/####"
                             aria-label={startDate}
                             aria-describedby="basic-addon2"
-                            onChange={(e) => setStartDate(e.target.value)}
+                            onChange={(e) => {
+                                setStartDate(e.target.value);
+                                validateField("date", e.target.value);
+                            }}
                             required
                         ></input>
                         <div className='panel panel-default'>
@@ -126,7 +137,9 @@ function AddFishingTrip() {
                             required
                         >
                             <option disabled selected>Choose Fishing Site</option>
-                            {recordsArr.map((i) => (<option key={i.fields.pierName}>{i.fields.pierName}</option>))}
+                            {recordsArr.map((i) =>
+                                (<option key={i.fields.pierName}>{i.fields.pierName}</option>)
+                            )}
                         </select>
                         <div className='panel panel-default'>
                             <FormErrors formErrors={formErrors} fieldName="pierName" />
@@ -141,7 +154,10 @@ function AddFishingTrip() {
                             placeholder="No. Fish Caught"
                             aria-label={fishCaught}
                             aria-describedby="basic-addon2"
-                            onChange={(e) => setFishCaught(e.target.value)}
+                            onChange={(e) => {
+                                setFishCaught(e.target.value);
+                                validateField("fishCaught", e.target.value);
+                            }}
                             required
                         ></input>
                         <div className='panel panel-default'>
