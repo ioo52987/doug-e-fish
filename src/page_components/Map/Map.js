@@ -127,3 +127,7 @@ function Map() {
 }
 
 export default Map;
+
+
+// maybe show bounding box on the map and the local NOAA stations.... give them points on the map
+// if i'm going to put a dropdown in the header for tides at each of the station locations
