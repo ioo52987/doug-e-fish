@@ -107,7 +107,7 @@ function getFishCaughtToday() {
   }
   
   for (let i = 0; i < recordsArr.length; i++) {
-    if (recordsArr[i].fields.date == currentDate) {
+    if (recordsArr[i].fields.date === currentDate) {
       totalFishCaughtToday = recordsArr[i].fields.fishCaught + totalFishCaughtToday;
     }
   }

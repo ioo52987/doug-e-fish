@@ -5,13 +5,33 @@ import './HelpfulFishingInfo.css';
 function HelpfulFishingInfo() {
 
     /*ONLY NOAA STATIONS WITH WATER LEVEL DATA AND METEROLOGICAL */
-    let stationNos = {
-        8637689: 'Yorktown USCG Training Center',
-        8632200: 'Kiptopeke',
-        8638901: 'Chesapeake Channel CBBT',
-        8638610: 'Sewells Point',
-        8639348: 'Money Point'
-    };
+    let stationNos = [
+        {   'station_no': 8637689,
+            'station_name': 'Yorktown USCG Training Center',
+            'longitude': -76.47881,
+            'latitude': 37.22650
+        },
+        {   'station_no': 8632200,
+            'station_name': 'Kiptopeke',
+            'longitude': -75.98830,
+            'latitude': 37.16670
+        },
+        {   'station_no': 8638901,
+            'station_name': 'Chesapeake Channel CBBT',
+            'longitude': -76.08330,
+            'latitude': 37.03290
+        },
+        {   'station_no': 8638610,
+            'station_name': 'Sewells Point',
+            'longitude': -76.33000,
+            'latitude': 36.94667
+        },
+        {   'station_no': 8639348,
+            'station_name': 'Money Point',
+            'longitude': -76.30169,
+            'latitude': 36.77831
+        }
+    ];
 
     /* building API calls */
     let frontOfAPIcall = `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?`;
