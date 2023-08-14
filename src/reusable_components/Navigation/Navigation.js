@@ -68,13 +68,21 @@ function Navigation() {
                 <span><i className="fas fa-fish"></i><p>Daily Fish Total:&nbsp;&nbsp;{getFishCaughtToday()}</p></span>
               </li>
               <li className="nav-item me-3 me-lg-0">
-                <span><i className="fas fa-water"></i><p>High Tide:</p></span>
+                <span><i className="fas fa-water"></i>
+                  <div class="input-group mb-3">
+                    <select class="custom-select form-control" onchange="getTideData(this.value);">
+                      <p>High Tide:{getTideData()}</p>
+                      <option value="8637689" selected>Yorktown USCG Training Center</option>
+                      <option value="8632200">Kiptopeke</option>
+                      <option value="8638901">Chesapeake Channel CBBT</option>
+                      <option value="8638610">Sewells Point</option>
+                      <option value="8639348">Money Point</option>
+                    </select>
+                  </div>
+                </span>
               </li>
             </ul>
           </div>
-
-          {/* local NOAA weather and high and low tides for that day*/}
-
         </nav>
       </header>
 
@@ -101,19 +109,46 @@ function getFishCaughtToday() {
 
   axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date')
     .then(response => setData(response.data));
-  
+
   if (data.records) {
     recordsArr = data.records;
   }
-  
+
   for (let i = 0; i < recordsArr.length; i++) {
-    if (recordsArr[i].fields.date == currentDate) {
+    if (recordsArr[i].fields.date === currentDate) {
       totalFishCaughtToday = recordsArr[i].fields.fishCaught + totalFishCaughtToday;
     }
   }
 
   return (totalFishCaughtToday);
 }
+
+function getTideData(station) {
+
+  let stationNo = `8637689`;
+  let frontOfAPIcall = `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?`;
+  let endOfAPIcall = `time_zone=lst_ldt&interval=hilo&units=english&application=dougEfish&format=json`;
+  let tideAPIcall = `${frontOfAPIcall}date=today&station=${station}&product=predictions&datum=MLLW&${endOfAPIcall}`;
+  let [tideData, setTideData] = useState([]);
+  let recordsArr = [];
+
+  axios.get(tideAPIcall)
+    .then(response => setTideData(response.data));
+
+  if (tideData.predictions) {
+    recordsArr = tideData.predictions;
+  }
+
+  let time = '';
+  for (let i = 0; i < recordsArr.length; i++) {
+    if (recordsArr[i].type === 'H') {
+      time = recordsArr[i].t;
+      break;
+    }
+  }
+  return (time);
+}
+
 
 
 /*
