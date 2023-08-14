@@ -4,7 +4,7 @@ import './HelpfulFishingInfo.css';
 
 function HelpfulFishingInfo() {
 
-    /*ONLY NOAA STATIONS WITH WATER LEVEL DATA AND METEROLOGICAL */
+    /* NOAA STATIONS WITH WATER LEVEL DATA AND METEROLOGICAL */
     let stationNos = [
         {   'station_no': 8637689,
             'station_name': 'Yorktown USCG Training Center',
