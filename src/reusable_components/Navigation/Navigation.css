@@ -76,7 +76,15 @@ a.list-group-item:hover{
     margin: 0px;
     padding: 0px;
 }
-/*
 .navbar-nav{
-    width: 150px;
-}*/
+    margin-bottom: auto;
+}
+#nav-1{
+    width: 175px;
+}
+#nav-2{
+    width: 200px;
+}
+#nav-3{
+    width: 275px;
+}
