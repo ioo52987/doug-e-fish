@@ -208,7 +208,7 @@ function Map() {
                 });
             });
         }
-    }); /* useEffect() */
+    },[]); /* useEffect() */
 
     return (
         <div>
