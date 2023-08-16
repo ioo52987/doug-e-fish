@@ -22,7 +22,7 @@ function Map() {
         url: 'https://i.ibb.co/VvfdYjG/placeholder-684908.png',
         id: 'station-custom-marker'
     };
-
+/*
     useEffect(() => {
 
         // GET latest site data
