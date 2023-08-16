@@ -56,9 +56,16 @@ function Navigation() {
       for (let i = 0; i < d.length; i++) {
         if (d[i].type === 'H') {
           let dateTime = (d[i].t).split(" ");
-          times.push(dateTime[1]);
+          let hour = dateTime[1].split(":");
+          if(hour[0]<=12){
+            times.push(`${dateTime[1]}am`);
+          }else{
+            // can do military time conversion here
+            times.push(` ${dateTime[1]}pm`);
+          }
         }
       }
+
       return (times.toString());
     }
   };

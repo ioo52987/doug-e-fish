@@ -22,15 +22,16 @@ function Map() {
         url: 'https://i.ibb.co/VvfdYjG/placeholder-684908.png',
         id: 'station-custom-marker'
     };
-/*
+
     useEffect(() => {
 
         // GET latest site data
         axios.get('/tbl73KANXAAstm4Kr')
             .then(response => setData(response.data));
 
+        console.log('out');
         if (data.records) {
-
+            console.log('in');
             let recordsArr = data.records;
             let siteMapProperties = [];
             let len = recordsArr.length;
@@ -220,6 +221,12 @@ function Map() {
 export default Map;
 
 
-// maybe show bounding box on the map and the local NOAA stations.... give them points on the map
-// if i'm going to put a dropdown in the header for tides at each of the station locations
+// maybe show bounding box on the map
 
+// Ideally I need to re-engineer this yet again. Where instead of invoking useEffect() api call per component
+// I have an endpoints component that can send props with all specific info to each "page" component. 
+// This way there are less calls to APIs. Only when someone initially enters the site will the enpoints component be called. 
+// https://www.freecodecamp.org/news/how-to-consume-rest-apis-in-react/
+
+// actually not sure if this is better. You just make the calls you need when you access the sections of the
+// site you navigate too. It depends on how the site is used.
