@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './Navigation.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 function Navigation() {
 
+  let location = useLocation().pathname;
   let MDBclasses = "list-group-item list-group-item-action py-2 ripple";
   let navigationInfo = [
     { id: 1, href: "/", icon: "fas fa-map fa-fw me-3", title: "Map" },
@@ -57,15 +58,53 @@ function Navigation() {
         if (d[i].type === 'H') {
           let dateTime = (d[i].t).split(" ");
           let hour = dateTime[1].split(":");
-          if(hour[0]<=12){
+          if (hour[0] <= 12) {
             times.push(`${dateTime[1]}am`);
-          }else{
-            // can do military time conversion here
-            times.push(` ${dateTime[1]}pm`);
+          } else {
+            let converted_hr = null;
+            switch (hour[0]) {
+              case '13':
+                converted_hr = '1';
+                break;
+              case '14':
+                converted_hr = '2';
+                break;
+              case '15':
+                converted_hr = '3';
+                break;
+              case '16':
+                converted_hr = '4';
+                break;
+              case '17':
+                converted_hr = '5';
+                break;
+              case '18':
+                converted_hr = '6';
+                break;
+              case '19':
+                converted_hr = '7';
+                break;
+              case '20':
+                converted_hr = '8';
+                break;
+              case '21':
+                converted_hr = '9';
+                break;
+              case '22':
+                converted_hr = '10';
+                break;
+              case '23':
+                converted_hr = '11';
+                break;
+              case '24':
+                converted_hr = '12';
+                break;
+              default:
+            }
+            times.push(` ${converted_hr}:${hour[1]}pm`);
           }
         }
       }
-
       return (times.toString());
     }
   };
@@ -107,7 +146,11 @@ function Navigation() {
               ))}
             </div>
           </div>
-          <img id="dadIcon" src="https://i.ibb.co/wRcmdxw/dad-hilton-pier.png" alt="dad-hilton-pier" border="0" />
+          {
+            location === '/about_this_site'
+              ? <img id="jeriIcon" src="https://i.ibb.co/kMn501q/jeri-triangle-glasses.png" alt="jeri-the-coolest-duh" border="0" />
+              : <img id="dadIcon" src="https://i.ibb.co/wRcmdxw/dad-hilton-pier.png" alt="dad-hilton-pier" border="0" />
+          }
         </nav>
 
         {/* NAVBAR */}

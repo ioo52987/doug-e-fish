@@ -42,7 +42,7 @@ function AboutThisSite() {
                 free for everyone to use! &nbsp;&nbsp;&nbsp;--<i>Property is theft!</i>
                 <br></br>
                 <br></br>
-                <i class="fas fa-envelope"></i>&nbsp;&nbsp;&nbsp;If you have an suggestions for making this a more effective
+                <i className="fas fa-envelope"></i>&nbsp;&nbsp;&nbsp;If you have an suggestions for making this a more effective
                 or fun tool please shoot us a message via the contact form below. (*powered by emailJS)
                 <br></br>
                 <br></br>
@@ -60,7 +60,7 @@ function AboutThisSite() {
                             <input
                                 type="email"
                                 name="user_email"
-                                class="form-control"
+                                className="form-control"
                                 placeholder="Email"
                                 required />
                         </div>
@@ -92,10 +92,10 @@ function AboutThisSite() {
                 <br></br>
                 <div id='welcome'>Programmers!</div>
                 <br></br>
-                <i class="fab fa-github-alt"></i>&nbsp;&nbsp;&nbsp;Please take a look at the public gitHub repository&nbsp; 
+                <i className="fab fa-github-alt"></i>&nbsp;&nbsp;&nbsp;Please take a look at the public gitHub repository&nbsp; 
                 <a href="https://github.com/ioo52987/doug-e-fish" target="_blank" rel="noopener noreferrer" >here</a>.
                 <br></br>
-                <i class="fas fa-code-branch"></i>&nbsp;&nbsp;&nbsp;Want to contribute? Checkout a branch and make a pull request!
+                <i className="fas fa-code-branch"></i>&nbsp;&nbsp;&nbsp;Want to contribute? Checkout a branch and make a pull request!
                 {/* Dedicated to Douglas Dilts, my dad, and the (self proclamied) Unofficial Mayor of Hilton. */}
             </div>
         </div >

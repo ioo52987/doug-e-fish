@@ -55,6 +55,12 @@ body {
     width: 80%;
     margin-left: 20px;
 }
+#jeriIcon {
+    position: absolute;
+    bottom: 0;
+    width: 90%;
+    margin-left: 20px;
+}
 #sidebarMenu{
     padding-top: 100px;
 }
