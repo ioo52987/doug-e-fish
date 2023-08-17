@@ -83,9 +83,11 @@ a.list-group-item:hover{
 }
 #nav-1{
     width: 175px;
+    padding-bottom: 7px;
 }
 #nav-2{
-    width: 250px;
+    width: 260px;
+    padding-bottom: 7px;
 }
 #nav-3{
     width: 275px;
