@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './Navigation.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 function Navigation() {
 
-  /* */
+  let location = useLocation().pathname;
   let MDBclasses = "list-group-item list-group-item-action py-2 ripple";
   let navigationInfo = [
     { id: 1, href: "/", icon: "fas fa-map fa-fw me-3", title: "Map" },
@@ -17,68 +17,103 @@ function Navigation() {
   ];
 
   /* states */
-  let [tideData, setTideData] = useState([]);
-  let [tideTimes, setTideTimes] = useState('');
-  let [fishCaughtData, setFishCaughtData] = useState([]);
-  let [fishCaught, setFishCaught] = useState(0);
-  let [selectValue, setSelectValue] = useState("8637689");
-
-  /* */
-  let station = `8637689`;
-  //var station = document.getElementById("highTide").value;
-  let frontOfAPIcall = `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?`;
-  let endOfAPIcall = `time_zone=lst_ldt&interval=hilo&units=english&application=dougEfish&format=json`;
-  let tideAPIcall = `${frontOfAPIcall}date=today&station=${station}&product=predictions&datum=MLLW&${endOfAPIcall}`;
-
-  /* extract tide times from response data*/
-  const getTideTimes = (d) => {
-    let times = [];
-    if (d) {
-      for (let i = 0; i < d.length; i++) {
-        if (d[i].type === 'H') {
-          let dateTime = (d[i].t).split(" ");
-          times.push(dateTime[1]);
-        }
-      }
-      setTideTimes(times.toString());
-    }
-  };
+  let [fishCaughtData, setFishCaughtData] = useState({});
+  let [tideData, setTideData] = useState({});
+  let [stationValue, setStationValue] = useState("8637689");
 
   useEffect(() => {
 
-    /* GET HIGH TIDE TIMES */
-    axios.get(tideAPIcall)
-      .then(response => setTideData(response.data));
+    /* build NOAA api call*/
+    let frontOfAPIcall = `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?`;
+    let endOfAPIcall = `time_zone=lst_ldt&interval=hilo&units=english&application=dougEfish&format=json`;
+    let tideAPIcall = `${frontOfAPIcall}date=today&station=${stationValue}&product=predictions&datum=MLLW&${endOfAPIcall}`;
 
-    /* GET DAILY CAUGHT FISH */
     axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date')
       .then(response => setFishCaughtData(response.data));
-
-
-    getTideTimes(tideData.predictions);
-    getDailyFishCaught(fishCaughtData.records);
-  }, []);
-
-
-
+    axios.get(tideAPIcall)
+      .then(response => setTideData(response.data));
+  }, [stationValue]);
 
   /* extract daily caught fish from response data */
-  const getDailyFishCaught = (d) => {
+  const getDailyFishCaught = () => {
     let totalFishCaughtToday = 0;
-    let currentDate = new Date().toJSON().slice(0, 10);
-    if (d) {
+    if (fishCaughtData.records) {
+      let d = fishCaughtData.records;
+      let currentDate = new Date().toJSON().slice(0, 10);
       for (let i = 0; i < d.length; i++) {
         if (d[i].fields.date === currentDate) {
-          totalFishCaughtToday = d[i].fields.fishCaughtData + totalFishCaughtToday;
+          totalFishCaughtToday = d[i].fields.fishCaught + totalFishCaughtToday;
         }
       }
-      setFishCaught(totalFishCaughtToday);
+    }
+    return (totalFishCaughtToday);
+  };
+
+  /* extract tide times from response data*/
+  const getTideTimes = () => {
+    let times = [];
+    if (tideData.predictions) {
+      let d = tideData.predictions;
+      for (let i = 0; i < d.length; i++) {
+        if (d[i].type === 'H') {
+          let dateTime = (d[i].t).split(" ");
+          let hour = dateTime[1].split(":");
+          if (hour[0] <= 12) {
+            times.push(`${dateTime[1]}am`);
+          } else {
+            let converted_hr = null;
+            switch (hour[0]) {
+              case '13':
+                converted_hr = '1';
+                break;
+              case '14':
+                converted_hr = '2';
+                break;
+              case '15':
+                converted_hr = '3';
+                break;
+              case '16':
+                converted_hr = '4';
+                break;
+              case '17':
+                converted_hr = '5';
+                break;
+              case '18':
+                converted_hr = '6';
+                break;
+              case '19':
+                converted_hr = '7';
+                break;
+              case '20':
+                converted_hr = '8';
+                break;
+              case '21':
+                converted_hr = '9';
+                break;
+              case '22':
+                converted_hr = '10';
+                break;
+              case '23':
+                converted_hr = '11';
+                break;
+              case '24':
+                converted_hr = '12';
+                break;
+              default:
+            }
+            times.push(` ${converted_hr}:${hour[1]}pm`);
+          }
+        }
+      }
+      return (times.toString());
     }
   };
 
-
-
-
+  const clickHandler = () => {
+    var options = document.getElementById("highTide").options;
+    var station = options[options.selectedIndex].id;
+    setStationValue(station);
+  }
 
   return (
     <div>
@@ -111,7 +146,11 @@ function Navigation() {
               ))}
             </div>
           </div>
-          <img id="dadIcon" src="https://i.ibb.co/wRcmdxw/dad-hilton-pier.png" alt="dad-hilton-pier" border="0" />
+          {
+            location === '/about_this_site'
+              ? <img id="jeriIcon" src="https://i.ibb.co/kMn501q/jeri-triangle-glasses.png" alt="jeri-the-coolest-duh" border="0" />
+              : <img id="dadIcon" src="https://i.ibb.co/wRcmdxw/dad-hilton-pier.png" alt="dad-hilton-pier" border="0" />
+          }
         </nav>
 
         {/* NAVBAR */}
@@ -129,19 +168,19 @@ function Navigation() {
             {/* RIGHT ALIGNED LINKS */}
             <ul className="navbar-nav ms-auto d-flex flex-row">
               <li className="nav-item" id="nav-1">
-                <span><i className="fas fa-fish"></i>&nbsp;Daily Fish Total:&nbsp;&nbsp;</span>
+                <span><i className="fas fa-fish"></i>&nbsp;Daily Fish Total:&nbsp;&nbsp;{getDailyFishCaught()}</span>
               </li>
               <li className="nav-item" id="nav-2">
-                <span><i className="fas fa-water"></i>&nbsp;High Tide:&nbsp;&nbsp;</span>
+                <span><i className="fas fa-water"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>
               </li>
               <li className="nav-item" id="nav-3">
                 <div className="input-group">
-                  <select className="custom-select form-control" id="highTide">
-                    <option value="8637689" defaultValue>Yorktown USCG Training Center</option>
-                    <option value="8632200">Kiptopeke</option>
-                    <option value="8638901">Chesapeake Channel CBBT</option>
-                    <option value="8638610">Sewells Point</option>
-                    <option value="8639348">Money Point</option>
+                  <select className="custom-select form-control" id="highTide" onClick={clickHandler}>
+                    <option id="8637689" defaultValue>Yorktown USCG Training Center</option>
+                    <option id="8632200">Kiptopeke</option>
+                    <option id="8638901">Chesapeake Channel CBBT</option>
+                    <option id="8638610">Sewells Point</option>
+                    <option id="8639348">Money Point</option>
                   </select>
                 </div>
               </li>
@@ -159,12 +198,3 @@ function Navigation() {
 }
 
 export default Navigation;
-
-
-
-/*
-function getLocalWeather{
-//https://open-meteo.com/
-//Open-Meteo is an open-source weather API and offers free access for non-commercial use. No API key required. Start using it now!
-}
-*/

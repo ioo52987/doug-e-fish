@@ -11,5 +11,19 @@
 }
 .mapboxgl-popup {
     max-width: 400px;
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-family: 'Architects Daughter', cursive;
+}
+
+/*
+look at this link
+https://gis.stackexchange.com/questions/279127/how-to-add-css-styling-in-mapbox-gl-popup
+*/
+
+.mapboxgl-popup-content {
+    font-size: 15px;
+    background-color: #fbfbfb;
+    padding: 10px;
+}
+.desc{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }

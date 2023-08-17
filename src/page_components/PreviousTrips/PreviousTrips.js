@@ -46,7 +46,7 @@ function PreviousTrips() {
                                 <td>{i.fields.description}</td>
                                 <td>
                                     <a href={i.fields.url}>
-                                        <i class="fas fa-camera"></i>
+                                        <i className="fas fa-camera"></i>
                                     </a>
                                 </td>
                                 <td>{i.fields.rating}</td>

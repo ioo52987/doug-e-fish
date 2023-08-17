@@ -9,7 +9,6 @@ import PreviousTrips from './page_components/PreviousTrips/PreviousTrips';
 import Photos from './page_components/Photos/Photos';
 import HelpfulFishingInfo from './page_components/HelpfulFishingInfo/HelpfulFishingInfo';
 import Navigation from './reusable_components/Navigation/Navigation';
-import Footer from './reusable_components/Footer/Footer';
 
 function App() {
     return (
@@ -25,7 +24,6 @@ function App() {
                     <Route path="/photos" element={<Photos />} />
                     <Route path="/previous_trips" element={<PreviousTrips />} />
                 </Routes>
-               {/* <Footer /> */}
             </div>
         </div>
     );

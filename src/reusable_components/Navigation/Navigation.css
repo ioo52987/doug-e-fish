@@ -55,6 +55,12 @@ body {
     width: 80%;
     margin-left: 20px;
 }
+#jeriIcon {
+    position: absolute;
+    bottom: 0;
+    width: 90%;
+    margin-left: 20px;
+}
 #sidebarMenu{
     padding-top: 100px;
 }
@@ -77,13 +83,17 @@ a.list-group-item:hover{
     padding: 0px;
 }
 .navbar-nav{
-    margin-bottom: auto;
+    align-items: flex-end;
+    margin-top: auto;
+    padding-bottom: 5px;
 }
 #nav-1{
     width: 175px;
+    padding-bottom: 7px;
 }
 #nav-2{
-    width: 200px;
+    width: 260px;
+    padding-bottom: 7px;
 }
 #nav-3{
     width: 275px;
