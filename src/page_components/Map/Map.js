@@ -16,11 +16,11 @@ function Map() {
 
     // custom icons
     let icon = {
-        url: 'https://i.ibb.co/2ZqBZgV/clipart693648.png',
+        url: 'https://i.ibb.co/mR0q7Nq/clipart1128170.png',
         id: 'custom-marker'
-    };
+    }; 
     let stationIcon = {
-        url: 'https://i.ibb.co/VvfdYjG/placeholder-684908.png',
+        url: 'https://i.ibb.co/NCd9C20/placeholder-2.png',
         id: 'station-custom-marker'
     };
 
@@ -79,8 +79,9 @@ function Map() {
             siteMapProperties.push({
                 'type': 'Feature',
                 'properties': {
-                    'title': recordsArr[i].fields.pierName,
-                    'description': `<strong>${recordsArr[i].fields.pierName} 9/10</strong><p>${recordsArr[i].fields.description}</p>`
+                    'pierName': recordsArr[i].fields.pierName,
+                    'rating': recordsArr[i].fields.overallRating,
+                    'description': recordsArr[i].fields.description
                 },
                 'geometry': {
                     'type': 'Point',
@@ -141,7 +142,7 @@ function Map() {
                 source: 'fishing-sites',
                 layout: {
                     'icon-image': 'custom-marker',
-                    'icon-size': 0.06
+                    'icon-size': 0.04
                 }
             });
 
@@ -152,7 +153,7 @@ function Map() {
                 source: 'noaa-stations',
                 layout: {
                     'icon-image': 'station-custom-marker',
-                    'icon-size': 0.06
+                    'icon-size': 0.07
                 }
             });
 
@@ -170,7 +171,17 @@ function Map() {
 
                 // Copy coordinates array.
                 const coordinates = e.features[0].geometry.coordinates.slice();
+                const pierName = e.features[0].properties.pierName;
+                const rating = e.features[0].properties.rating;
                 const description = e.features[0].properties.description;
+
+                let content =   `
+                                <b>${pierName}</b><br>
+                                <b>Overall Rating: ${rating}/5</b><br>
+                                <div className='desc'>
+                                ${description}
+                                </div>
+                                `;
 
                 // Ensure that if the map is zoomed out such that multiple
                 // copies of the feature are visible, the popup appears
@@ -181,7 +192,7 @@ function Map() {
 
                 // Populate the popup and set its coordinates
                 // based on the feature found.
-                popup.setLngLat(coordinates).setHTML(description).addTo(map.current);
+                popup.setLngLat(coordinates).setHTML(content).addTo(map.current);
             });
 
             map.current.on('mouseleave', 'fishing-sites', () => {
