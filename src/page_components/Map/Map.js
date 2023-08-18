@@ -16,11 +16,11 @@ function Map() {
 
     // custom icons
     let icon = {
-        url: 'https://i.ibb.co/mR0q7Nq/clipart1128170.png',
+        url: 'https://i.ibb.co/DfQyp9M/icons8-fish-100-1.png',
         id: 'custom-marker'
     }; 
     let stationIcon = {
-        url: 'https://i.ibb.co/NCd9C20/placeholder-2.png',
+        url: 'https://i.ibb.co/P5W4M4x/icons8-float-64.png',
         id: 'station-custom-marker'
     };
 
@@ -29,35 +29,35 @@ function Map() {
     let noaaStationMapProperties = [
         {
             'type': 'Feature',
-            'properties': { 'title': 'NOAA Station 8637689:<br>Yorktown USCG Training Center' },
+            'properties': { 'stationNo': 8637689, 'name': 'Yorktown USCG Training Center' },
             'geometry': {
                 'type': 'Point',
                 'coordinates': [-76.47881, 37.22650]
             }
         }, {
             'type': 'Feature',
-            'properties': { 'title': 'NOAA Station 8632200:<br>Kiptopeke' },
+            'properties': { 'stationNo': 8632200, 'name' : 'Kiptopeke' },
             'geometry': {
                 'type': 'Point',
                 'coordinates': [-75.98830, 37.16670]
             }
         }, {
             'type': 'Feature',
-            'properties': { 'title': 'NOAA Station 8638901:<br>Chesapeake Channel CBBT' },
+            'properties': { 'stationNo': 8638901, 'name': 'Chesapeake Channel CBBT' },
             'geometry': {
                 'type': 'Point',
                 'coordinates': [-76.08330, 37.03290]
             }
         }, {
             'type': 'Feature',
-            'properties': { 'title': 'NOAA Station 8638610:<br>Sewells Point' },
+            'properties': { 'stationNo': 8638610, 'name': 'Sewells Point' },
             'geometry': {
                 'type': 'Point',
                 'coordinates': [-76.33000, 36.94667]
             }
         }, {
             'type': 'Feature',
-            'properties': { 'title': 'NOAA Station 8639348:<br>Money Point' },
+            'properties': { 'stationNo': 8639348, 'name': 'Money Point' },
             'geometry': {
                 'type': 'Point',
                 'coordinates': [-76.30169, 36.77831]
@@ -142,7 +142,7 @@ function Map() {
                 source: 'fishing-sites',
                 layout: {
                     'icon-image': 'custom-marker',
-                    'icon-size': 0.04
+                    'icon-size': 0.55
                 }
             });
 
@@ -153,12 +153,18 @@ function Map() {
                 source: 'noaa-stations',
                 layout: {
                     'icon-image': 'station-custom-marker',
-                    'icon-size': 0.07
+                    'icon-size': 0.6
                 }
             });
 
             // Create a popup, but don't add it to the map yet
             const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false
+            });
+
+            const popupStation = new mapboxgl.Popup({
+                className: 'station-popup',
                 closeButton: false,
                 closeOnClick: false
             });
@@ -174,13 +180,10 @@ function Map() {
                 const pierName = e.features[0].properties.pierName;
                 const rating = e.features[0].properties.rating;
                 const description = e.features[0].properties.description;
-
                 let content =   `
                                 <b>${pierName}</b><br>
-                                <b>Overall Rating: ${rating}/5</b><br>
-                                <div className='desc'>
-                                ${description}
-                                </div>
+                                <h6>Overall Rating: ${rating}/5</h6>
+                                <p>${description}</p>
                                 `;
 
                 // Ensure that if the map is zoomed out such that multiple
@@ -200,6 +203,8 @@ function Map() {
                 popup.remove();
             });
 
+
+
             // pop-up pointer logic for noaa-stations
             map.current.on('mouseenter', 'noaa-stations', (e) => {
 
@@ -208,7 +213,12 @@ function Map() {
 
                 // Copy coordinates array.
                 const coordinates = e.features[0].geometry.coordinates.slice();
-                const title = e.features[0].properties.title;
+                const stationNo= e.features[0].properties.stationNo;
+                const name= e.features[0].properties.name;
+                let content =   `
+                                <b>${name}</b><br>
+                                <h6>NOAA Station: ${stationNo}</h6>
+                                `;
 
                 // Ensure that if the map is zoomed out such that multiple
                 // copies of the feature are visible, the popup appears
@@ -219,12 +229,12 @@ function Map() {
 
                 // Populate the popup and set its coordinates
                 // based on the feature found.
-                popup.setLngLat(coordinates).setHTML(title).addTo(map.current);
+                popupStation.setLngLat(coordinates).setHTML(content).addTo(map.current);
             });
 
             map.current.on('mouseleave', 'noaa-stations', () => {
                 map.current.getCanvas().style.cursor = '';
-                popup.remove();
+                popupStation.remove();
             });
         });
     }, [data]); /* useEffect() */
