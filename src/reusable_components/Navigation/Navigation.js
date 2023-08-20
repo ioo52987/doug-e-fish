@@ -58,11 +58,18 @@ function Navigation() {
         if (d[i].type === 'H') {
           let dateTime = (d[i].t).split(" ");
           let hour = dateTime[1].split(":");
-          if (hour[0] <= 12) {
-            times.push(`${dateTime[1]}am`);
+          if (hour[0] <= 11) {
+            if (hour[0] === '00') {
+              times.push(`12:${hour[1]}am`);
+            } else {
+              times.push(`${dateTime[1]}am`);
+            }
           } else {
             let converted_hr = null;
             switch (hour[0]) {
+              case '12':
+                converted_hr = '12';
+                break;
               case '13':
                 converted_hr = '1';
                 break;

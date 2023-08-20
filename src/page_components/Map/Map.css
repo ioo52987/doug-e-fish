@@ -13,25 +13,19 @@
     font-family: 'Architects Daughter', cursive;
 }
 
-/*
-look at this link
-https://gis.stackexchange.com/questions/279127/how-to-add-css-styling-in-mapbox-gl-popup
-*/
-
-
-/* fish-site formatting*/
-.mapboxgl-popup-content {
+/* fish-site popup formatting*/
+.fish-site-popup .mapboxgl-popup-content {
     width: 450px;
     font-size: 18px;
     background-color: #fbfbfb;
     padding: 12px;
 }
-.mapboxgl-popup-content h6{
+.fish-site-popup .mapboxgl-popup-content h6{
     margin-top: 3px;
     font-size: 15px;
 }
-.mapboxgl-popup-content p{
-    background-color: #e3e5ed; /* #e3e5ed */
+.fish-site-popup .mapboxgl-popup-content p{
+    background-color: #e3e5ed;
     padding: 7px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -40,14 +34,19 @@ https://gis.stackexchange.com/questions/279127/how-to-add-css-styling-in-mapbox-
     border-radius: 5px;
 }
 
-/* station popup formatting */
+/* noaa-station popup formatting */
 .station-popup .mapboxgl-popup-content {
     width: 300px;
     font-size: 18px;
-    background-color: #fbfbfb;
+    background-color: #f37c7e;
     padding: 12px;
 }
 .station-popup .mapboxgl-popup-content h6{
-    margin-top: 3px;
+    background-color: #e3e5ed;
+    padding: 7px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
     font-size: 15px;
+    border-radius: 3px;
 }
