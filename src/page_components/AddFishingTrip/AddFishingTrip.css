@@ -2,6 +2,12 @@
     margin: 1px;
 }
 
+/* not working -need autocomplete and scrollable-dropdown, also requiredness not working because of the pre-selected option*/
+.scrollable-dropdown {
+    height: auto;
+    max-height: 100px;
+    overflow-x: hidden;
+}
 
 
 

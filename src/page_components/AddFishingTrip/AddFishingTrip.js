@@ -16,7 +16,6 @@ function AddFishingTrip() {
     let [url, setUrl] = useState("");
 
     /* FIELD (VALID || INVALID) STATES */
-    let [startDateValid, setStartDateValid] = useState(false);
     let [pierNamesValid, setPierNamesValid] = useState(false);
     let [fishCaughtValid, setFishCaughtValid] = useState(false);
     let [ratingValid, setRatingValid] = useState(false);
@@ -26,7 +25,7 @@ function AddFishingTrip() {
     /* FORM VALID? STATE */
     let [formState, setFormState] = useState();
     /* TEXT ERRORS (IF ANY) */
-    let [formErrors, setFormErrors] = useState({ date: '', pierName: '', fishCaught: '', rating: '', description: '', url: '' });
+    let [formErrors, setFormErrors] = useState({ pierName: '', fishCaught: '', rating: '', description: '', url: '' });
 
     // GET site names for dropdown field
     useEffect(() => {
@@ -42,9 +41,6 @@ function AddFishingTrip() {
     // form validation
     const validateField = (fieldName, value) => {
         switch (fieldName) {
-            case 'date':
-                startDateValid = true;
-                break;
             case 'pierName':
                 pierNames = true;
                 break;
@@ -58,13 +54,14 @@ function AddFishingTrip() {
                 formErrors.description = descriptionValid ? '' : ' Description required to be between 25-1500 characters.';
                 break;
             case 'url':
+                urlValid = (/^https:\/\//).test(value);
+                formErrors.url = urlValid ? '' : 'url requried to begin with \'https://\'.';
                 break;
             default:
                 break;
         }
 
         setFormErrors(formErrors);
-        setStartDate(startDateValid);
         setPierNamesValid(pierNamesValid);
         setFishCaught(fishCaughtValid);
         setRating(ratingValid);
@@ -76,7 +73,7 @@ function AddFishingTrip() {
     const handleSubmit = (event) => {
 
         event.preventDefault();
-        formState = (startDateValid && pierNamesValid && fishCaughtValid && ratingValid && descriptionValid && urlValid);
+        formState = (pierNamesValid && fishCaughtValid && ratingValid && descriptionValid && urlValid);
 
         if (formState) {
             axios.post("/tblZXiWg0iGnfIucV/",
@@ -122,17 +119,13 @@ function AddFishingTrip() {
                             aria-describedby="basic-addon2"
                             onChange={(e) => {
                                 setStartDate(e.target.value);
-                                validateField("date", e.target.value);
                             }}
                             required
                         ></input>
-                        <div className='panel panel-default'>
-                            <FormErrors formErrors={formErrors} fieldName="date" />
-                        </div>
                     </div>
                     <div className="col-3">
                         <select
-                            className="custom-select form-control"
+                            className="custom-select form-control scrollable-dropdown"
                             id="pierName"
                             required
                         >
@@ -209,7 +202,10 @@ function AddFishingTrip() {
                             placeholder="Enter an https:// to a public photo album of trip"
                             aria-label={url}
                             aria-describedby="basic-addon1"
-                            onChange={(e) => setUrl(e.target.value)}
+                            onChange={(e) => {
+                                setUrl(e.target.value);
+                                validateField("url", e.target.value);
+                            }}
                         ></input>
                         <div className='panel panel-default'>
                             <FormErrors formErrors={formErrors} fieldName="url" />

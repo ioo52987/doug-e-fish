@@ -140,8 +140,6 @@ function Map() {
                 fishingSites[key] = 'No entries for this site today.';
             }
         });
-
-        // then display results on the popup
     }
 
     useEffect(() => {
