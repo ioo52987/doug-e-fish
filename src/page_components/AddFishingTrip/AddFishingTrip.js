@@ -46,6 +46,8 @@ function AddFishingTrip() {
                 break;
             case 'fishCaught':
                 // convert string to a number and throw warning.
+                fishCaughtValid = (/^[\d]+$/).test(value);
+                formErrors.fishCaught = fishCaughtValid ? '' : ' Integers only.';
                 break;
             case 'rating':
                 break;
@@ -55,7 +57,7 @@ function AddFishingTrip() {
                 break;
             case 'url':
                 urlValid = (/^https:\/\//).test(value);
-                formErrors.url = urlValid ? '' : 'url requried to begin with \'https://\'.';
+                formErrors.url = urlValid ? '' : 'URL requried to begin with \'https://\'.';
                 break;
             default:
                 break;
@@ -63,8 +65,8 @@ function AddFishingTrip() {
 
         setFormErrors(formErrors);
         setPierNamesValid(pierNamesValid);
-        setFishCaught(fishCaughtValid);
-        setRating(ratingValid);
+        setFishCaughtValid(fishCaughtValid);
+        setRatingValid(ratingValid);
         setDescriptionValid(descriptionValid);
         setUrlValid(urlValid);
     }
@@ -145,12 +147,13 @@ function AddFishingTrip() {
                             id="fishCaught"
                             value={fishCaught}
                             placeholder="No. Fish Caught"
-                            aria-label={fishCaught}
+                            aria-label= "No. Fish Caught"
                             aria-describedby="basic-addon2"
                             onChange={(e) => {
                                 setFishCaught(e.target.value);
                                 validateField("fishCaught", e.target.value);
                             }}
+                            min="0" max="500"
                             required
                         ></input>
                         <div className='panel panel-default'>
