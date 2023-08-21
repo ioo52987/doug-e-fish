@@ -237,8 +237,6 @@ export default AddFishingTrip;
 
 
 // notes
-// foreign key requirements to link pier to trips with primary key (pk)
-// not sure this is even possible with AirTable (1:many) ratio - I'll look into it later
 // 
 // right now the form is letting me submit with no actual selection of the dropdown
 // and does not mark the <select> input as invalid with the css pseudo class pink outline
@@ -246,5 +244,7 @@ export default AddFishingTrip;
 // https://jqueryvalidation.org/ per this https://stackoverflow.com/questions/20137036/first-option-of-dropdown-not-an-option-force-to-use-other-options
 // I need the form not to submit if the diabled option is selected.
 // 
-// Also dropdown box auto complete option
-// Airtable has a field type called 'link to another record' AKA foreign key
+// zero fish caught different then no entry
+// sometimes there is only one high tide returned from NOAA because the next high tide is 12am sometime.
+// maybe put the day the tide data is being draw on with the tide data
+// tide data for any day should be accessible on the 'helpful info' page

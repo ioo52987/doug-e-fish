@@ -12,15 +12,20 @@ function Map() {
     const [lng, setLng] = useState(-76.362954);
     const [lat, setLat] = useState(37.078133);
     const [zoom, setZoom] = useState(10);
-    let [data, setData] = useState({});
+
+    // axios response state data
+    let [fishingSiteData, setFishingSiteData] = useState({});
+    let [dailyFishingTripData, setDailyFishingTripData] = useState({});
+
+    let fishingSites = {};
 
     // custom icons
     let icon = {
-        url: 'https://i.ibb.co/mR0q7Nq/clipart1128170.png',
+        url: 'https://i.ibb.co/DfQyp9M/icons8-fish-100-1.png',
         id: 'custom-marker'
     }; 
     let stationIcon = {
-        url: 'https://i.ibb.co/NCd9C20/placeholder-2.png',
+        url: 'https://i.ibb.co/P5W4M4x/icons8-float-64.png',
         id: 'station-custom-marker'
     };
 
@@ -29,35 +34,35 @@ function Map() {
     let noaaStationMapProperties = [
         {
             'type': 'Feature',
-            'properties': { 'title': 'NOAA Station 8637689:<br>Yorktown USCG Training Center' },
+            'properties': { 'stationNo': 8637689, 'name': 'Yorktown USCG Training Center' },
             'geometry': {
                 'type': 'Point',
                 'coordinates': [-76.47881, 37.22650]
             }
         }, {
             'type': 'Feature',
-            'properties': { 'title': 'NOAA Station 8632200:<br>Kiptopeke' },
+            'properties': { 'stationNo': 8632200, 'name' : 'Kiptopeke' },
             'geometry': {
                 'type': 'Point',
                 'coordinates': [-75.98830, 37.16670]
             }
         }, {
             'type': 'Feature',
-            'properties': { 'title': 'NOAA Station 8638901:<br>Chesapeake Channel CBBT' },
+            'properties': { 'stationNo': 8638901, 'name': 'Chesapeake Channel CBBT' },
             'geometry': {
                 'type': 'Point',
                 'coordinates': [-76.08330, 37.03290]
             }
         }, {
             'type': 'Feature',
-            'properties': { 'title': 'NOAA Station 8638610:<br>Sewells Point' },
+            'properties': { 'stationNo': 8638610, 'name': 'Sewells Point' },
             'geometry': {
                 'type': 'Point',
                 'coordinates': [-76.33000, 36.94667]
             }
         }, {
             'type': 'Feature',
-            'properties': { 'title': 'NOAA Station 8639348:<br>Money Point' },
+            'properties': { 'stationNo': 8639348, 'name': 'Money Point' },
             'geometry': {
                 'type': 'Point',
                 'coordinates': [-76.30169, 36.77831]
@@ -68,14 +73,21 @@ function Map() {
     useEffect(() => {
         // GET latest fishing-site data
         axios.get('/tbl73KANXAAstm4Kr')
-            .then(response => setData(response.data));
+            .then(response => setFishingSiteData(response.data));
+        // GET daily fishing-trip data
+        axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=pierName') 
+            .then(response => setDailyFishingTripData(response.data));
     }, []);
 
     // create geoJSON data structure for fishing-sites
-    if (data.records) {
-        let recordsArr = data.records;
+    if (fishingSiteData.records) {
+        let recordsArr = fishingSiteData.records;
         let len = recordsArr.length;
         for (let i = 0; i < len; i++) {
+
+            // stuffing site obj
+            fishingSites[recordsArr[i].fields.pierName] = null;
+
             siteMapProperties.push({
                 'type': 'Feature',
                 'properties': {
@@ -89,6 +101,25 @@ function Map() {
                 }
             });
         }
+    }
+
+    // calculate daily fish caught per fishing-site
+    if(dailyFishingTripData.records){
+        let arr = dailyFishingTripData.records;
+        let talliesPerSite = {};
+        let totalPerSite = {};
+        let currentDate = new Date().toJSON().slice(0, 10);
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i].fields.date === currentDate) {
+                talliesPerSite['arr[i].fields.pierName'].push(arr[i].fields.fishCaught);
+            }
+        }
+        // total the count in the arr
+
+
+        // then compare to the global fishingSites obj to determine 0 or no entry
+
+        // then display results on the popup
     }
 
     useEffect(() => {
@@ -142,7 +173,7 @@ function Map() {
                 source: 'fishing-sites',
                 layout: {
                     'icon-image': 'custom-marker',
-                    'icon-size': 0.04
+                    'icon-size': 0.55
                 }
             });
 
@@ -153,81 +184,79 @@ function Map() {
                 source: 'noaa-stations',
                 layout: {
                     'icon-image': 'station-custom-marker',
-                    'icon-size': 0.07
+                    'icon-size': 0.6
                 }
             });
 
-            // Create a popup, but don't add it to the map yet
-            const popup = new mapboxgl.Popup({
+            // Create a popups, but don't add them to the map yet
+            const popupFishSite = new mapboxgl.Popup({
+                className: 'fish-site-popup ',
                 closeButton: false,
                 closeOnClick: false
             });
 
-            // pop-up pointer logic for fishing-sites
+            const popupStation = new mapboxgl.Popup({
+                className: 'station-popup',
+                closeButton: false,
+                closeOnClick: false
+            });
+
+            // popup pointer logic for fishing-sites
             map.current.on('mouseenter', 'fishing-sites', (e) => {
 
                 // Change the cursor style as a UI indicator.
                 map.current.getCanvas().style.cursor = 'pointer';
 
-                // Copy coordinates array.
                 const coordinates = e.features[0].geometry.coordinates.slice();
                 const pierName = e.features[0].properties.pierName;
                 const rating = e.features[0].properties.rating;
                 const description = e.features[0].properties.description;
-
                 let content =   `
                                 <b>${pierName}</b><br>
-                                <b>Overall Rating: ${rating}/5</b><br>
-                                <div className='desc'>
-                                ${description}
-                                </div>
+                                <h6>Overall Rating: ${rating}/5</br>
+                                Fish Caught Today: 0</h6>
+                                <p>${description}</p>
                                 `;
 
                 // Ensure that if the map is zoomed out such that multiple
-                // copies of the feature are visible, the popup appears
-                // over the copy being pointed to.
+                // copies of the feature are visible, the popup appears over the copy being pointed to.
                 while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                 }
 
-                // Populate the popup and set its coordinates
-                // based on the feature found.
-                popup.setLngLat(coordinates).setHTML(content).addTo(map.current);
+                // Populate the popup and set its coordinates based on the feature found.
+                popupFishSite.setLngLat(coordinates).setHTML(content).addTo(map.current);
             });
 
             map.current.on('mouseleave', 'fishing-sites', () => {
                 map.current.getCanvas().style.cursor = '';
-                popup.remove();
+                popupFishSite.remove();
             });
 
-            // pop-up pointer logic for noaa-stations
+
+            // popup pointer logic for noaa-stations
             map.current.on('mouseenter', 'noaa-stations', (e) => {
 
-                // Change the cursor style as a UI indicator.
                 map.current.getCanvas().style.cursor = 'pointer';
 
-                // Copy coordinates array.
                 const coordinates = e.features[0].geometry.coordinates.slice();
-                const title = e.features[0].properties.title;
+                const stationNo= e.features[0].properties.stationNo;
+                const name= e.features[0].properties.name;
+                let content =   `<b>${name}</b><br>
+                                 <h6>NOAA Station: ${stationNo}</h6>`;
 
-                // Ensure that if the map is zoomed out such that multiple
-                // copies of the feature are visible, the popup appears
-                // over the copy being pointed to.
                 while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                 }
-
-                // Populate the popup and set its coordinates
-                // based on the feature found.
-                popup.setLngLat(coordinates).setHTML(title).addTo(map.current);
+                popupStation.setLngLat(coordinates).setHTML(content).addTo(map.current);
             });
 
             map.current.on('mouseleave', 'noaa-stations', () => {
                 map.current.getCanvas().style.cursor = '';
-                popup.remove();
+                popupStation.remove();
             });
         });
-    }, [data]); /* useEffect() */
+    }, [fishingSiteData]); /* useEffect() */
 
 return (
     <div>
@@ -237,14 +266,3 @@ return (
 }
 
 export default Map;
-
-
-// maybe show bounding box on the map
-
-// Ideally I need to re-engineer this yet again. Where instead of invoking useEffect() api call per component
-// I have an endpoints component that can send props with all specific info to each "page" component.
-// This way there are less calls to APIs. Only when someone initially enters the site will the enpoints component be called.
-// https://www.freecodecamp.org/news/how-to-consume-rest-apis-in-react/
-
-// actually not sure if this is better. You just make the calls you need when you access the sections of the
-// site you navigate too. It depends on how the site is used.
