@@ -23,7 +23,7 @@ function Map() {
     let icon = {
         url: 'https://i.ibb.co/DfQyp9M/icons8-fish-100-1.png',
         id: 'custom-marker'
-    }; 
+    };
     let stationIcon = {
         url: 'https://i.ibb.co/P5W4M4x/icons8-float-64.png',
         id: 'station-custom-marker'
@@ -41,7 +41,7 @@ function Map() {
             }
         }, {
             'type': 'Feature',
-            'properties': { 'stationNo': 8632200, 'name' : 'Kiptopeke' },
+            'properties': { 'stationNo': 8632200, 'name': 'Kiptopeke' },
             'geometry': {
                 'type': 'Point',
                 'coordinates': [-75.98830, 37.16670]
@@ -75,7 +75,7 @@ function Map() {
         axios.get('/tbl73KANXAAstm4Kr')
             .then(response => setFishingSiteData(response.data));
         // GET daily fishing-trip data
-        axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=pierName') 
+        axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=pierName')
             .then(response => setDailyFishingTripData(response.data));
     }, []);
 
@@ -104,27 +104,49 @@ function Map() {
     }
 
     // calculate daily fish caught per fishing-site
-    if(dailyFishingTripData.records){
+    if (dailyFishingTripData.records) {
         let arr = dailyFishingTripData.records;
         let talliesPerSite = {};
         let totalPerSite = {};
         let currentDate = new Date().toJSON().slice(0, 10);
+
         for (let i = 0; i < arr.length; i++) {
             if (arr[i].fields.date === currentDate) {
-                talliesPerSite['arr[i].fields.pierName'].push(arr[i].fields.fishCaught);
+                if(arr[i].fields.pierName in talliesPerSite){
+                    talliesPerSite[arr[i].fields.pierName].push(arr[i].fields.fishCaught);
+                }else{
+                    talliesPerSite[arr[i].fields.pierName] = [];
+                    talliesPerSite[arr[i].fields.pierName].push(arr[i].fields.fishCaught);
+                }
             }
         }
-        // total the count in the arr
 
+        // total the count in the arr
+        Object.entries(talliesPerSite).forEach(entry => {
+            let total = 0;
+            let key = entry[0];
+            let value = entry[1];
+            for (let i = 0; i < value.length; i++) {
+                total = total + value[i];
+            }
+            totalPerSite[key] = total;
+        });
 
         // then compare to the global fishingSites obj to determine 0 or no entry
+        Object.keys(fishingSites).forEach(key =>{
+            if(key in totalPerSite){
+                fishingSites[key] = totalPerSite[key];
+            }else{
+                fishingSites[key] = 'No entries for this site today.';
+            }
+        });
 
         // then display results on the popup
     }
 
     useEffect(() => {
 
-        if(siteMapProperties.length === 0) return;
+        if (siteMapProperties.length === 0) return;
 
         // initialize NEW map
         if (map.current) return; // initialize map only once
@@ -211,10 +233,10 @@ function Map() {
                 const pierName = e.features[0].properties.pierName;
                 const rating = e.features[0].properties.rating;
                 const description = e.features[0].properties.description;
-                let content =   `
+                let content = `
                                 <b>${pierName}</b><br>
                                 <h6>Overall Rating: ${rating}/5</br>
-                                Fish Caught Today: 0</h6>
+                                Fish Caught Today: ${fishingSites[pierName]}</h6>
                                 <p>${description}</p>
                                 `;
 
@@ -240,9 +262,9 @@ function Map() {
                 map.current.getCanvas().style.cursor = 'pointer';
 
                 const coordinates = e.features[0].geometry.coordinates.slice();
-                const stationNo= e.features[0].properties.stationNo;
-                const name= e.features[0].properties.name;
-                let content =   `<b>${name}</b><br>
+                const stationNo = e.features[0].properties.stationNo;
+                const name = e.features[0].properties.name;
+                let content = `<b>${name}</b><br>
                                  <h6>NOAA Station: ${stationNo}</h6>`;
 
                 while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
@@ -258,11 +280,11 @@ function Map() {
         });
     }, [fishingSiteData]); /* useEffect() */
 
-return (
-    <div>
-        <div ref={mapContainer} className='map-container' />
-    </div>
-);
+    return (
+        <div>
+            <div ref={mapContainer} className='map-container' />
+        </div>
+    );
 }
 
 export default Map;
