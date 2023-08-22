@@ -1,0 +1,22 @@
+<select
+                            className="custom-select form-control scroll"
+                            id="pierName"
+                            required
+                        >
+                            <option disabled selected>Choose Fishing Site</option>
+                            {recordsArr.map((i) =>
+                                (<option key={i.fields.pierName}>{i.fields.pierName}</option>)
+                            )}
+                        </select>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="pierName" />
+                        </div>
+
+                        /* these aren't working by nature of the <select> tag currently */
+                            select:invalid {
+                                outline: 2px solid #fe8498;
+                            }
+                            select:valid {
+                                background-color: #ffffff;
+                                outline: none;
+                            }

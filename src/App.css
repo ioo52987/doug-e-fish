@@ -20,10 +20,10 @@
 }
 
 /* CLIENT-SIDE FORM VALIDATION */
-input:invalid, textarea:invalid{
+input:invalid, textarea:invalid, select:invalid{
     outline: 2px solid #fe8498;
 }
-input:valid, textarea:valid{
+input:valid, textarea:valid, select:valid{
     background-color: #ffffff;
     outline: none;
 }

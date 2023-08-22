@@ -16,6 +16,7 @@ function AddFishingTrip() {
     let [url, setUrl] = useState("");
 
     /* FIELD (VALID || INVALID) STATES */
+    let [dateValid, setDateValid] = useState(false);
     let [pierNamesValid, setPierNamesValid] = useState(false);
     let [fishCaughtValid, setFishCaughtValid] = useState(false);
     let [ratingValid, setRatingValid] = useState(false);
@@ -25,7 +26,9 @@ function AddFishingTrip() {
     /* FORM VALID? STATE */
     let [formState, setFormState] = useState();
     /* TEXT ERRORS (IF ANY) */
-    let [formErrors, setFormErrors] = useState({ pierName: '', fishCaught: '', rating: '', description: '', url: '' });
+    let [formErrors, setFormErrors] = useState({ date: '', pierName: '', fishCaught: '', rating: '', description: '', url: '' });
+    /* DROPDOWN MENU SIZING */
+    let [size, setSize] = useState(1);
 
     // GET site names for dropdown field
     useEffect(() => {
@@ -38,32 +41,50 @@ function AddFishingTrip() {
         recordsArr = pierNames.records;
     }
 
+    // alphabetize pierNames
+    let pN = [];
+    recordsArr.map((i) => (pN.push(i.fields.pierName)));
+    let orderedPn = pN.sort();
+
+    // handle dropdown menu shrinking
+    let shrinkEvent = () => {
+        setSize(1);
+        //blur();
+    }
+
     // form validation
     const validateField = (fieldName, value) => {
         switch (fieldName) {
+            case 'date':
+                dateValid = (/^(0?[1-9]|1[0-2])\/(0?[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/).test(value);
+                formErrors.date = dateValid ? '' : ' Format mm/dd/yyyy';
+                break;
             case 'pierName':
-                pierNames = true;
+                /* not working I thought I was passing value="" */
+                pierNamesValid = !(/^$/).test(value);
+                formErrors.pierName = pierNamesValid ? '' : ' Location required';
                 break;
             case 'fishCaught':
-                // convert string to a number and throw warning.
                 fishCaughtValid = (/^[\d]+$/).test(value);
-                formErrors.fishCaught = fishCaughtValid ? '' : ' Integers only.';
+                formErrors.fishCaught = fishCaughtValid ? '' : ' Integers only';
                 break;
             case 'rating':
                 break;
             case 'description':
                 descriptionValid = (value.length >= 25 && value.length <= 1500);
-                formErrors.description = descriptionValid ? '' : ' Description required to be between 25-1500 characters.';
+                formErrors.description = descriptionValid ? '' : ' Description required to be between 25-1500 characters';
                 break;
             case 'url':
+                // maybe look into html input type 'url'
                 urlValid = (/^https:\/\//).test(value);
-                formErrors.url = urlValid ? '' : 'URL requried to begin with \'https://\'.';
+                formErrors.url = urlValid ? '' : ' URL requried to begin with \'https://\'';
                 break;
             default:
                 break;
         }
 
         setFormErrors(formErrors);
+        setDateValid(dateValid);
         setPierNamesValid(pierNamesValid);
         setFishCaughtValid(fishCaughtValid);
         setRatingValid(ratingValid);
@@ -121,19 +142,25 @@ function AddFishingTrip() {
                             aria-describedby="basic-addon2"
                             onChange={(e) => {
                                 setStartDate(e.target.value);
+                                validateField("date", e.target.value);
                             }}
                             required
                         ></input>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="date" />
+                        </div>
                     </div>
-                    <div className="col-3">
+                    <div className="col-3 wrapper">
                         <select
-                            className="custom-select form-control scrollable-dropdown"
+                            className="custom-select form-control"
                             id="pierName"
+                            size={size}
+                            onFocus={()=>setSize(7)} onBlur={()=>setSize(1)} onChange={shrinkEvent}
                             required
                         >
-                            <option disabled selected>Choose Fishing Site</option>
-                            {recordsArr.map((i) =>
-                                (<option key={i.fields.pierName}>{i.fields.pierName}</option>)
+                            <option value="">Choose Fishing Site</option>
+                            {orderedPn.map((i) =>
+                                (<option key={i} value={i}>{i}</option>)
                             )}
                         </select>
                         <div className='panel panel-default'>
@@ -147,7 +174,7 @@ function AddFishingTrip() {
                             id="fishCaught"
                             value={fishCaught}
                             placeholder="No. Fish Caught"
-                            aria-label= "No. Fish Caught"
+                            aria-label="No. Fish Caught"
                             aria-describedby="basic-addon2"
                             onChange={(e) => {
                                 setFishCaught(e.target.value);
@@ -176,7 +203,7 @@ function AddFishingTrip() {
                         <textarea
                             rows="5"
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="description"
                             value={description}
                             placeholder="Describe the fishing trip!"
