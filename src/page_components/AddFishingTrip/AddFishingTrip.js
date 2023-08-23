@@ -32,6 +32,12 @@ function AddFishingTrip() {
     let [formErrors, setFormErrors] = useState({ date: '', pierName: '', fishCaught: '', rating: '', description: '', url: '' });
     /* DROPDOWN MENU SIZING */
     let [size, setSize] = useState(1);
+    /* DYNAMIC ACTIVE CLASS - OVERALL RATING */
+    let [active1, setActive1] = useState('undefined');
+    let [active2, setActive2] = useState('undefined');
+    let [active3, setActive3] = useState('undefined');
+    let [active4, setActive4] = useState('undefined');
+    let [active5, setActive5] = useState('undefined');
 
     // GET site names for dropdown field
     useEffect(() => {
@@ -49,10 +55,80 @@ function AddFishingTrip() {
     recordsArr.map((i) => (pN.push(i.fields.pierName)));
     let orderedPn = pN.sort();
 
-    // handle dropdown menu shrinking
-    let shrinkEvent = () => {
-        //setSize(1);
-        //blur();
+    // handling overall rating field
+    const handleClickActivation = (event) => {
+        event.preventDefault();
+
+        // special toggle
+        if(event.target.id === 'star-one'){
+            (active1==='undefined') ? setActive1('active') : setActive1('undefined');
+            setActive2('undefined');
+            setActive3('undefined')
+            setActive4('undefined')
+            setActive5('undefined')
+        }
+
+        if(event.target.id === 'star-two'){
+            if(active2==='undefined'){
+                setActive1('active');
+                setActive2('active');
+            }else{
+                setActive1('undefined');
+                setActive2('undefined');
+                setActive3('undefined');
+                setActive4('undefined');
+                setActive5('undefined');
+            }
+        }
+
+        if(event.target.id === 'star-three'){
+            if(active3==='undefined'){
+                setActive1('active');
+                setActive2('active');
+                setActive3('active');
+            }else{
+                setActive1('undefined');
+                setActive2('undefined');
+                setActive3('undefined');
+                setActive4('undefined');
+                setActive5('undefined');
+            }
+        }
+
+        if(event.target.id === 'star-four'){
+            if(active4==='undefined'){
+                setActive1('active');
+                setActive2('active');
+                setActive3('active');
+                setActive4('active');
+            }else{
+                setActive1('undefined');
+                setActive2('undefined');
+                setActive3('undefined');
+                setActive4('undefined');
+                setActive5('undefined');
+            }
+        }
+
+        if(event.target.id === 'star-five'){
+            if(active5==='undefined'){
+                setActive1('active');
+                setActive2('active');
+                setActive3('active');
+                setActive4('active');
+                setActive5('active');
+            }else{
+                setActive1('undefined');
+                setActive2('undefined');
+                setActive3('undefined');
+                setActive4('undefined');
+                setActive5('undefined');
+            }
+        }
+
+        // would like to add logic to click back down on the selection
+        // also I'd like to consolidate this logic.... it's irritating me
+        // include the star icon in being able to select
     }
 
     // form validation
@@ -133,7 +209,7 @@ function AddFishingTrip() {
             <form className="form-content" onSubmit={handleSubmit}>
                 <p id='pageTitle'>Add Fishing Trip</p>
                 <div className="row input-group">
-                    <div className="col-2">
+                    <div className="col-2 pad">
                         <input
                             type="date"
                             className="form-control"
@@ -152,7 +228,7 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="date" />
                         </div>
                     </div>
-                    <div className="col-3 wrapper">
+                    <div className="col-3 pad">
                         <select
                             className="custom-select form-control"
                             id="pierName"
@@ -179,7 +255,7 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="pierName" />
                         </div>
                     </div>
-                    <div className="col-2">
+                    <div className="col-2 pad">
                         <input
                             type="number"
                             className="form-control"
@@ -200,12 +276,32 @@ function AddFishingTrip() {
                         </div>
                     </div>
                     <div className="col-3">
-                        <div className="btn-group btn-group" role="group" aria-label="Basic example" id="rating">
-                            <button type="button" className="btn btn-secondary star-btn" id="star-one"><i className="fa fa-star"></i></button>
-                            <button type="button" className="btn btn-secondary star-btn" id="star-two"><i className="fa fa-star"></i></button>
-                            <button type="button" className="btn btn-secondary star-btn" id="star-three"><i className="fa fa-star"></i></button>
-                            <button type="button" className="btn btn-secondary star-btn" id="star-four"><i className="fa fa-star"></i></button>
-                            <button type="button" className="btn btn-secondary star-btn" id="star-five"><i className="fa fa-star"></i></button>
+                        <div className="btn-group btn-group" role="group" aria-label="rating" id="rating">
+                            <button type="button" 
+                                    className={`btn btn-secondary star-btn ${active1}`}
+                                    id="star-one"
+                                    onClick={handleClickActivation}
+                                    ><i className="fa fa-star"></i></button>
+                            <button type="button" 
+                                    className={`btn btn-secondary star-btn ${active2}`} 
+                                    id="star-two"
+                                    onClick={handleClickActivation}
+                                    ><i className="fa fa-star"></i></button>
+                            <button type="button" 
+                                    className={`btn btn-secondary star-btn ${active3}`}  
+                                    id="star-three"
+                                    onClick={handleClickActivation}
+                                    ><i className="fa fa-star"></i></button>
+                            <button type="button" 
+                                    className={`btn btn-secondary star-btn ${active4}`}  
+                                    id="star-four"
+                                    onClick={handleClickActivation}
+                                    ><i className="fa fa-star"></i></button>
+                            <button type="button" 
+                                    className={`btn btn-secondary star-btn ${active5}`}  
+                                    id="star-five"
+                                    onClick={handleClickActivation}
+                                    ><i className="fa fa-star"></i></button>
                         </div>
                     </div>
                 </div> {/* close row */}
