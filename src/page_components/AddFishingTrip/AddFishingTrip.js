@@ -33,11 +33,8 @@ function AddFishingTrip() {
     /* DROPDOWN MENU SIZING */
     let [size, setSize] = useState(1);
     /* DYNAMIC ACTIVE CLASS - OVERALL RATING */
-    let [active1, setActive1] = useState('undefined');
-    let [active2, setActive2] = useState('undefined');
-    let [active3, setActive3] = useState('undefined');
-    let [active4, setActive4] = useState('undefined');
-    let [active5, setActive5] = useState('undefined');
+    let [activeButtons, setActiveButtons] = useState({ active1: 'undefined', 'active2': 'undefined', 'active3': 'undefined', 'active4': 'undefined', 'active5': 'undefined' });
+    let [startTracker, setStarTracker] = useState(0);
 
     // GET site names for dropdown field
     useEffect(() => {
@@ -58,73 +55,32 @@ function AddFishingTrip() {
     // handling overall rating field
     const handleClickActivation = (event) => {
         event.preventDefault();
+        let eventID = Number(event.target.id);
 
         // special toggle
-        if(event.target.id === 'star-one'){
-            (active1==='undefined') ? setActive1('active') : setActive1('undefined');
-            setActive2('undefined');
-            setActive3('undefined')
-            setActive4('undefined')
-            setActive5('undefined')
-        }
+        if (eventID === 1) {
+            if (activeButtons.active1 === 'active') {
+                setActiveButtons({...activeButtons, 
+                                    active1:'undefined', 
+                                    active2:'undefined', 
+                                    active3:'undefined', 
+                                    active4:'undefined', 
+                                    active5:'undefined'});
+            }
+            if(activeButtons.active1 === 'undefined'){
+                setActiveButtons({...activeButtons, 
+                                    active1:'active',
+                                   // active2:'
+                                });
+            }
 
-        if(event.target.id === 'star-two'){
-            if(active2==='undefined'){
-                setActive1('active');
-                setActive2('active');
-            }else{
-                setActive1('undefined');
-                setActive2('undefined');
-                setActive3('undefined');
-                setActive4('undefined');
-                setActive5('undefined');
+            // working right here . made the starTracker to keep track of previous button clicked.
+            if(activeButtons.active1){
+
             }
         }
-
-        if(event.target.id === 'star-three'){
-            if(active3==='undefined'){
-                setActive1('active');
-                setActive2('active');
-                setActive3('active');
-            }else{
-                setActive1('undefined');
-                setActive2('undefined');
-                setActive3('undefined');
-                setActive4('undefined');
-                setActive5('undefined');
-            }
-        }
-
-        if(event.target.id === 'star-four'){
-            if(active4==='undefined'){
-                setActive1('active');
-                setActive2('active');
-                setActive3('active');
-                setActive4('active');
-            }else{
-                setActive1('undefined');
-                setActive2('undefined');
-                setActive3('undefined');
-                setActive4('undefined');
-                setActive5('undefined');
-            }
-        }
-
-        if(event.target.id === 'star-five'){
-            if(active5==='undefined'){
-                setActive1('active');
-                setActive2('active');
-                setActive3('active');
-                setActive4('active');
-                setActive5('active');
-            }else{
-                setActive1('undefined');
-                setActive2('undefined');
-                setActive3('undefined');
-                setActive4('undefined');
-                setActive5('undefined');
-            }
-        }
+ 
+        setStarTracker(eventID); // this needs to go at the bottom after doing logic
 
         // would like to add logic to click back down on the selection
         // also I'd like to consolidate this logic.... it's irritating me
@@ -234,8 +190,8 @@ function AddFishingTrip() {
                             id="pierName"
                             /* dropdown scroll handling */
                             size={size}
-                            onFocus={()=>setSize(7)}
-                            onBlur={()=>setSize(1)}
+                            onFocus={() => setSize(7)}
+                            onBlur={() => setSize(1)}
                             onClick={(e) => {
                                 setPierName(e.target.value);
                                 validateField("pierName", e.target.value);
@@ -275,33 +231,33 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="fishCaught" />
                         </div>
                     </div>
-                    <div className="col-3">
+                    <div className="col-3"> {/* use map() here */}
                         <div className="btn-group btn-group" role="group" aria-label="rating" id="rating">
-                            <button type="button" 
-                                    className={`btn btn-secondary star-btn ${active1}`}
-                                    id="star-one"
-                                    onClick={handleClickActivation}
-                                    ><i className="fa fa-star"></i></button>
-                            <button type="button" 
-                                    className={`btn btn-secondary star-btn ${active2}`} 
-                                    id="star-two"
-                                    onClick={handleClickActivation}
-                                    ><i className="fa fa-star"></i></button>
-                            <button type="button" 
-                                    className={`btn btn-secondary star-btn ${active3}`}  
-                                    id="star-three"
-                                    onClick={handleClickActivation}
-                                    ><i className="fa fa-star"></i></button>
-                            <button type="button" 
-                                    className={`btn btn-secondary star-btn ${active4}`}  
-                                    id="star-four"
-                                    onClick={handleClickActivation}
-                                    ><i className="fa fa-star"></i></button>
-                            <button type="button" 
-                                    className={`btn btn-secondary star-btn ${active5}`}  
-                                    id="star-five"
-                                    onClick={handleClickActivation}
-                                    ><i className="fa fa-star"></i></button>
+                            <button type="button"
+                                className={`btn btn-secondary star-btn ${activeButtons.active1}`}
+                                id="1"
+                                onClick={handleClickActivation}
+                            ><i className="fa fa-star"></i></button>
+                            <button type="button"
+                                className={`btn btn-secondary star-btn ${activeButtons.active2}`}
+                                id="2"
+                                onClick={handleClickActivation}
+                            ><i className="fa fa-star"></i></button>
+                            <button type="button"
+                                className={`btn btn-secondary star-btn ${activeButtons.active3}`}
+                                id="3"
+                                onClick={handleClickActivation}
+                            ><i className="fa fa-star"></i></button>
+                            <button type="button"
+                                className={`btn btn-secondary star-btn ${activeButtons.active4}`}
+                                id="4"
+                                onClick={handleClickActivation}
+                            ><i className="fa fa-star"></i></button>
+                            <button type="button"
+                                className={`btn btn-secondary star-btn ${activeButtons.active5}`}
+                                id="5"
+                                onClick={handleClickActivation}
+                            ><i className="fa fa-star"></i></button>
                         </div>
                     </div>
                 </div> {/* close row */}
