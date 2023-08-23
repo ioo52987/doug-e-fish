@@ -21,6 +21,8 @@ function Navigation() {
   let [tideData, setTideData] = useState({});
   let [stationValue, setStationValue] = useState("8637689");
 
+  let currentDate = new Date().toJSON().slice(0, 10);
+
   useEffect(() => {
 
     /* build NOAA api call*/
@@ -71,31 +73,31 @@ function Navigation() {
                 converted_hr = '12';
                 break;
               case '13':
-                converted_hr = '1';
+                converted_hr = '01';
                 break;
               case '14':
-                converted_hr = '2';
+                converted_hr = '02';
                 break;
               case '15':
-                converted_hr = '3';
+                converted_hr = '03';
                 break;
               case '16':
-                converted_hr = '4';
+                converted_hr = '04';
                 break;
               case '17':
-                converted_hr = '5';
+                converted_hr = '05';
                 break;
               case '18':
-                converted_hr = '6';
+                converted_hr = '06';
                 break;
               case '19':
-                converted_hr = '7';
+                converted_hr = '07';
                 break;
               case '20':
-                converted_hr = '8';
+                converted_hr = '08';
                 break;
               case '21':
-                converted_hr = '9';
+                converted_hr = '09';
                 break;
               case '22':
                 converted_hr = '10';
@@ -175,12 +177,15 @@ function Navigation() {
             {/* RIGHT ALIGNED LINKS */}
             <ul className="navbar-nav ms-auto d-flex flex-row">
               <li className="nav-item" id="nav-1">
-                <span><i className="fas fa-fish"></i>&nbsp;Daily Fish Total:&nbsp;&nbsp;{getDailyFishCaught()}</span>
+                <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{currentDate}</span>
               </li>
               <li className="nav-item" id="nav-2">
-                <span><i className="fas fa-water"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>
+                <span><i className="fas fa-fish"></i>&nbsp;Daily Fish Total:&nbsp;&nbsp;{getDailyFishCaught()}</span>
               </li>
               <li className="nav-item" id="nav-3">
+                <span><i className="fas fa-water"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>
+              </li>
+              <li className="nav-item" id="nav-4">
                 <div className="input-group">
                   <select className="custom-select form-control" id="highTide" onClick={clickHandler}>
                     <option id="8637689" defaultValue>Yorktown USCG Training Center</option>

@@ -11,12 +11,3 @@
                         <div className='panel panel-default'>
                             <FormErrors formErrors={formErrors} fieldName="pierName" />
                         </div>
-
-                        /* these aren't working by nature of the <select> tag currently */
-                            select:invalid {
-                                outline: 2px solid #fe8498;
-                            }
-                            select:valid {
-                                background-color: #ffffff;
-                                outline: none;
-                            }

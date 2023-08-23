@@ -7,9 +7,12 @@ import FormErrors from '../../reusable_components/FormErrors/FormErrors.js';
 
 function AddFishingTrip() {
 
+    /* DROPDOWN VALUES */
+    let [pierName_s, setPierName_s] = useState({});
+
     /* FIELD INPUT VALUES */
     let [startDate, setStartDate] = useState(new Date());
-    let [pierNames, setPierNames] = useState({});
+    let [pierName, setPierName] = useState("");
     let [fishCaught, setFishCaught] = useState("");
     let [rating, setRating] = useState(""); // to be added later
     let [description, setDescription] = useState("");
@@ -17,7 +20,7 @@ function AddFishingTrip() {
 
     /* FIELD (VALID || INVALID) STATES */
     let [dateValid, setDateValid] = useState(false);
-    let [pierNamesValid, setPierNamesValid] = useState(false);
+    let [pierNameValid, setPierNameValid] = useState(false);
     let [fishCaughtValid, setFishCaughtValid] = useState(false);
     let [ratingValid, setRatingValid] = useState(false);
     let [descriptionValid, setDescriptionValid] = useState(false);
@@ -25,7 +28,7 @@ function AddFishingTrip() {
 
     /* FORM VALID? STATE */
     let [formState, setFormState] = useState();
-    /* TEXT ERRORS (IF ANY) */
+    /* FORM ERRORS (IF ANY) */
     let [formErrors, setFormErrors] = useState({ date: '', pierName: '', fishCaught: '', rating: '', description: '', url: '' });
     /* DROPDOWN MENU SIZING */
     let [size, setSize] = useState(1);
@@ -33,12 +36,12 @@ function AddFishingTrip() {
     // GET site names for dropdown field
     useEffect(() => {
         axios.get('/tbl73KANXAAstm4Kr')
-            .then(response => setPierNames(response.data));
+            .then(response => setPierName_s(response.data));
     }, []);
 
     let recordsArr = [];
-    if (pierNames.records) {
-        recordsArr = pierNames.records;
+    if (pierName_s.records) {
+        recordsArr = pierName_s.records;
     }
 
     // alphabetize pierNames
@@ -48,24 +51,23 @@ function AddFishingTrip() {
 
     // handle dropdown menu shrinking
     let shrinkEvent = () => {
-        setSize(1);
+        //setSize(1);
         //blur();
     }
 
     // form validation
     const validateField = (fieldName, value) => {
         switch (fieldName) {
-            case 'date':
+            case 'date': /* check on this validator again, not working quite right */
                 dateValid = (/^(0?[1-9]|1[0-2])\/(0?[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/).test(value);
                 formErrors.date = dateValid ? '' : ' Format mm/dd/yyyy';
                 break;
             case 'pierName':
-                /* not working I thought I was passing value="" */
-                pierNamesValid = !(/^$/).test(value);
-                formErrors.pierName = pierNamesValid ? '' : ' Location required';
+                pierNameValid = !(/^$/).test(value);
+                formErrors.pierName = pierNameValid ? '' : ' Location required';
                 break;
             case 'fishCaught':
-                fishCaughtValid = (/^[\d]+$/).test(value);
+                fishCaughtValid = !(/[\.]+/).test(value);
                 formErrors.fishCaught = fishCaughtValid ? '' : ' Integers only';
                 break;
             case 'rating':
@@ -77,7 +79,7 @@ function AddFishingTrip() {
             case 'url':
                 // maybe look into html input type 'url'
                 urlValid = (/^https:\/\//).test(value);
-                formErrors.url = urlValid ? '' : ' URL requried to begin with \'https://\'';
+                formErrors.url = urlValid ? '' : ' URL requried to begin with https:// ';
                 break;
             default:
                 break;
@@ -85,7 +87,7 @@ function AddFishingTrip() {
 
         setFormErrors(formErrors);
         setDateValid(dateValid);
-        setPierNamesValid(pierNamesValid);
+        setPierNameValid(pierNameValid);
         setFishCaughtValid(fishCaughtValid);
         setRatingValid(ratingValid);
         setDescriptionValid(descriptionValid);
@@ -96,7 +98,7 @@ function AddFishingTrip() {
     const handleSubmit = (event) => {
 
         event.preventDefault();
-        formState = (pierNamesValid && fishCaughtValid && ratingValid && descriptionValid && urlValid);
+        formState = (dateValid && pierNameValid && fishCaughtValid && ratingValid && descriptionValid && urlValid);
 
         if (formState) {
             axios.post("/tblZXiWg0iGnfIucV/",
@@ -154,13 +156,23 @@ function AddFishingTrip() {
                         <select
                             className="custom-select form-control"
                             id="pierName"
+                            /* dropdown scroll handling */
                             size={size}
-                            onFocus={()=>setSize(7)} onBlur={()=>setSize(1)} onChange={shrinkEvent}
+                            onFocus={()=>setSize(7)}
+                            onBlur={()=>setSize(1)}
+                            onClick={(e) => {
+                                setPierName(e.target.value);
+                                validateField("pierName", e.target.value);
+                            }}
+                            onChange={(e) => {
+                                setSize(1);
+                                e.target.blur();
+                            }}
                             required
                         >
                             <option value="">Choose Fishing Site</option>
                             {orderedPn.map((i) =>
-                                (<option key={i} value={i}>{i}</option>)
+                                (<option key={i}>{i}</option>)
                             )}
                         </select>
                         <div className='panel panel-default'>
@@ -260,17 +272,3 @@ function AddFishingTrip() {
 }
 
 export default AddFishingTrip;
-
-
-// notes
-// 
-// right now the form is letting me submit with no actual selection of the dropdown
-// and does not mark the <select> input as invalid with the css pseudo class pink outline
-// This is I've preselected the 'choice' vernacular.... not sure how to handle this
-// https://jqueryvalidation.org/ per this https://stackoverflow.com/questions/20137036/first-option-of-dropdown-not-an-option-force-to-use-other-options
-// I need the form not to submit if the diabled option is selected.
-// 
-// zero fish caught different then no entry
-// sometimes there is only one high tide returned from NOAA because the next high tide is 12am sometime.
-// maybe put the day the tide data is being draw on with the tide data
-// tide data for any day should be accessible on the 'helpful info' page
