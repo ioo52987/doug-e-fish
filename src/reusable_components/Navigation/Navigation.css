@@ -87,14 +87,20 @@ a.list-group-item:hover{
     margin-top: auto;
     padding-bottom: 5px;
 }
+
 #nav-1{
-    width: 175px;
-    padding-bottom: 7px;
+    width: 225px;
+    padding-bottom: 5px;
 }
 #nav-2{
-    width: 260px;
-    padding-bottom: 7px;
+    width: 175px;
+    padding-bottom: 5px;
 }
 #nav-3{
-    width: 275px;
+    width: 250px;
+    padding-bottom: 5px;
+}
+#nav-4{
+    width: 290px;
+    padding-bottom: 5px;
 }

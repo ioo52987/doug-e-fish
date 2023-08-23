@@ -20,20 +20,20 @@
 }
 
 /* CLIENT-SIDE FORM VALIDATION */
-input:invalid, textarea:invalid{
-    outline: 2px solid #fe8498;
+input:invalid, textarea:invalid, select:invalid{
+    outline: 2px solid #f37e98;
 }
-input:valid, textarea:valid{
+input:valid, textarea:valid, select:valid{
     background-color: #ffffff;
     outline: none;
 }
 
 /* SUBMIT BUTTON FORMATTING */
-.submit-btn {
-    background-color: #70d3a9;
+button.btn.submit-btn {
     font-family: 'Architects Daughter', cursive;
-    font-size: 20px;
+    font-size: 15px;
+    border-radius: 5px;
 }
 .submit-btn:hover {
-    background-color: #eab7ed;
+    background-color: #f37e98;
 }

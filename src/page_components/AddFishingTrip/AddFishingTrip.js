@@ -7,17 +7,20 @@ import FormErrors from '../../reusable_components/FormErrors/FormErrors.js';
 
 function AddFishingTrip() {
 
+    /* DROPDOWN VALUES */
+    let [pierName_s, setPierName_s] = useState({});
+
     /* FIELD INPUT VALUES */
     let [startDate, setStartDate] = useState(new Date());
-    let [pierNames, setPierNames] = useState({});
+    let [pierName, setPierName] = useState("");
     let [fishCaught, setFishCaught] = useState("");
     let [rating, setRating] = useState(""); // to be added later
     let [description, setDescription] = useState("");
     let [url, setUrl] = useState("");
 
     /* FIELD (VALID || INVALID) STATES */
-    let [startDateValid, setStartDateValid] = useState(false);
-    let [pierNamesValid, setPierNamesValid] = useState(false);
+    let [dateValid, setDateValid] = useState(false);
+    let [pierNameValid, setPierNameValid] = useState(false);
     let [fishCaughtValid, setFishCaughtValid] = useState(false);
     let [ratingValid, setRatingValid] = useState(false);
     let [descriptionValid, setDescriptionValid] = useState(false);
@@ -25,49 +28,144 @@ function AddFishingTrip() {
 
     /* FORM VALID? STATE */
     let [formState, setFormState] = useState();
-    /* TEXT ERRORS (IF ANY) */
+    /* FORM ERRORS (IF ANY) */
     let [formErrors, setFormErrors] = useState({ date: '', pierName: '', fishCaught: '', rating: '', description: '', url: '' });
+    /* DROPDOWN MENU SIZING */
+    let [size, setSize] = useState(1);
+    /* DYNAMIC ACTIVE CLASS - OVERALL RATING */
+    let [active1, setActive1] = useState('undefined');
+    let [active2, setActive2] = useState('undefined');
+    let [active3, setActive3] = useState('undefined');
+    let [active4, setActive4] = useState('undefined');
+    let [active5, setActive5] = useState('undefined');
 
     // GET site names for dropdown field
     useEffect(() => {
         axios.get('/tbl73KANXAAstm4Kr')
-            .then(response => setPierNames(response.data));
+            .then(response => setPierName_s(response.data));
     }, []);
 
     let recordsArr = [];
-    if (pierNames.records) {
-        recordsArr = pierNames.records;
+    if (pierName_s.records) {
+        recordsArr = pierName_s.records;
+    }
+
+    // alphabetize pierNames
+    let pN = [];
+    recordsArr.map((i) => (pN.push(i.fields.pierName)));
+    let orderedPn = pN.sort();
+
+    // handling overall rating field
+    const handleClickActivation = (event) => {
+        event.preventDefault();
+
+        // special toggle
+        if(event.target.id === 'star-one'){
+            (active1==='undefined') ? setActive1('active') : setActive1('undefined');
+            setActive2('undefined');
+            setActive3('undefined')
+            setActive4('undefined')
+            setActive5('undefined')
+        }
+
+        if(event.target.id === 'star-two'){
+            if(active2==='undefined'){
+                setActive1('active');
+                setActive2('active');
+            }else{
+                setActive1('undefined');
+                setActive2('undefined');
+                setActive3('undefined');
+                setActive4('undefined');
+                setActive5('undefined');
+            }
+        }
+
+        if(event.target.id === 'star-three'){
+            if(active3==='undefined'){
+                setActive1('active');
+                setActive2('active');
+                setActive3('active');
+            }else{
+                setActive1('undefined');
+                setActive2('undefined');
+                setActive3('undefined');
+                setActive4('undefined');
+                setActive5('undefined');
+            }
+        }
+
+        if(event.target.id === 'star-four'){
+            if(active4==='undefined'){
+                setActive1('active');
+                setActive2('active');
+                setActive3('active');
+                setActive4('active');
+            }else{
+                setActive1('undefined');
+                setActive2('undefined');
+                setActive3('undefined');
+                setActive4('undefined');
+                setActive5('undefined');
+            }
+        }
+
+        if(event.target.id === 'star-five'){
+            if(active5==='undefined'){
+                setActive1('active');
+                setActive2('active');
+                setActive3('active');
+                setActive4('active');
+                setActive5('active');
+            }else{
+                setActive1('undefined');
+                setActive2('undefined');
+                setActive3('undefined');
+                setActive4('undefined');
+                setActive5('undefined');
+            }
+        }
+
+        // would like to add logic to click back down on the selection
+        // also I'd like to consolidate this logic.... it's irritating me
+        // include the star icon in being able to select
     }
 
     // form validation
     const validateField = (fieldName, value) => {
         switch (fieldName) {
-            case 'date':
-                startDateValid = true;
+            case 'date': /* check on this validator again, not working quite right */
+                dateValid = (/^(0?[1-9]|1[0-2])\/(0?[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/).test(value);
+                formErrors.date = dateValid ? '' : ' Format mm/dd/yyyy';
                 break;
             case 'pierName':
-                pierNames = true;
+                pierNameValid = !(/^$/).test(value);
+                formErrors.pierName = pierNameValid ? '' : ' Location required';
                 break;
             case 'fishCaught':
-                // convert string to a number and throw warning.
+                fishCaughtValid = !(/[\.]+/).test(value);
+                formErrors.fishCaught = fishCaughtValid ? '' : ' Integers only';
                 break;
             case 'rating':
                 break;
             case 'description':
                 descriptionValid = (value.length >= 25 && value.length <= 1500);
-                formErrors.description = descriptionValid ? '' : ' Description required to be between 25-1500 characters.';
+                formErrors.description = descriptionValid ? '' : ' Description required to be between 25-1500 characters';
                 break;
             case 'url':
+                // maybe look into html input type 'url'
+                urlValid = (/^https:\/\//).test(value);
+                formErrors.url = urlValid ? '' : ' URL requried to begin with https:// ';
                 break;
             default:
                 break;
         }
 
         setFormErrors(formErrors);
-        setStartDate(startDateValid);
-        setPierNamesValid(pierNamesValid);
-        setFishCaught(fishCaughtValid);
-        setRating(ratingValid);
+        setDateValid(dateValid);
+        setPierNameValid(pierNameValid);
+        setFishCaughtValid(fishCaughtValid);
+        setRatingValid(ratingValid);
         setDescriptionValid(descriptionValid);
         setUrlValid(urlValid);
     }
@@ -76,7 +174,7 @@ function AddFishingTrip() {
     const handleSubmit = (event) => {
 
         event.preventDefault();
-        formState = (startDateValid && pierNamesValid && fishCaughtValid && ratingValid && descriptionValid && urlValid);
+        formState = (dateValid && pierNameValid && fishCaughtValid && ratingValid && descriptionValid && urlValid);
 
         if (formState) {
             axios.post("/tblZXiWg0iGnfIucV/",
@@ -111,7 +209,7 @@ function AddFishingTrip() {
             <form className="form-content" onSubmit={handleSubmit}>
                 <p id='pageTitle'>Add Fishing Trip</p>
                 <div className="row input-group">
-                    <div className="col-2">
+                    <div className="col-2 pad">
                         <input
                             type="date"
                             className="form-control"
@@ -130,34 +228,47 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="date" />
                         </div>
                     </div>
-                    <div className="col-3">
+                    <div className="col-3 pad">
                         <select
                             className="custom-select form-control"
                             id="pierName"
+                            /* dropdown scroll handling */
+                            size={size}
+                            onFocus={()=>setSize(7)}
+                            onBlur={()=>setSize(1)}
+                            onClick={(e) => {
+                                setPierName(e.target.value);
+                                validateField("pierName", e.target.value);
+                            }}
+                            onChange={(e) => {
+                                setSize(1);
+                                e.target.blur();
+                            }}
                             required
                         >
-                            <option disabled selected>Choose Fishing Site</option>
-                            {recordsArr.map((i) =>
-                                (<option key={i.fields.pierName}>{i.fields.pierName}</option>)
+                            <option value="">Choose Fishing Site</option>
+                            {orderedPn.map((i) =>
+                                (<option key={i}>{i}</option>)
                             )}
                         </select>
                         <div className='panel panel-default'>
                             <FormErrors formErrors={formErrors} fieldName="pierName" />
                         </div>
                     </div>
-                    <div className="col-2">
+                    <div className="col-2 pad">
                         <input
                             type="number"
                             className="form-control"
                             id="fishCaught"
                             value={fishCaught}
                             placeholder="No. Fish Caught"
-                            aria-label={fishCaught}
+                            aria-label="No. Fish Caught"
                             aria-describedby="basic-addon2"
                             onChange={(e) => {
                                 setFishCaught(e.target.value);
                                 validateField("fishCaught", e.target.value);
                             }}
+                            min="0" max="500"
                             required
                         ></input>
                         <div className='panel panel-default'>
@@ -165,12 +276,32 @@ function AddFishingTrip() {
                         </div>
                     </div>
                     <div className="col-3">
-                        <div className="btn-group btn-group" role="group" aria-label="Basic example" id="rating">
-                            <button type="button" className="btn btn-secondary star-btn" id="star-one"><i className="fa fa-star"></i></button>
-                            <button type="button" className="btn btn-secondary star-btn" id="star-two"><i className="fa fa-star"></i></button>
-                            <button type="button" className="btn btn-secondary star-btn" id="star-three"><i className="fa fa-star"></i></button>
-                            <button type="button" className="btn btn-secondary star-btn" id="star-four"><i className="fa fa-star"></i></button>
-                            <button type="button" className="btn btn-secondary star-btn" id="star-five"><i className="fa fa-star"></i></button>
+                        <div className="btn-group btn-group" role="group" aria-label="rating" id="rating">
+                            <button type="button" 
+                                    className={`btn btn-secondary star-btn ${active1}`}
+                                    id="star-one"
+                                    onClick={handleClickActivation}
+                                    ><i className="fa fa-star"></i></button>
+                            <button type="button" 
+                                    className={`btn btn-secondary star-btn ${active2}`} 
+                                    id="star-two"
+                                    onClick={handleClickActivation}
+                                    ><i className="fa fa-star"></i></button>
+                            <button type="button" 
+                                    className={`btn btn-secondary star-btn ${active3}`}  
+                                    id="star-three"
+                                    onClick={handleClickActivation}
+                                    ><i className="fa fa-star"></i></button>
+                            <button type="button" 
+                                    className={`btn btn-secondary star-btn ${active4}`}  
+                                    id="star-four"
+                                    onClick={handleClickActivation}
+                                    ><i className="fa fa-star"></i></button>
+                            <button type="button" 
+                                    className={`btn btn-secondary star-btn ${active5}`}  
+                                    id="star-five"
+                                    onClick={handleClickActivation}
+                                    ><i className="fa fa-star"></i></button>
                         </div>
                     </div>
                 </div> {/* close row */}
@@ -180,7 +311,7 @@ function AddFishingTrip() {
                         <textarea
                             rows="5"
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             id="description"
                             value={description}
                             placeholder="Describe the fishing trip!"
@@ -209,7 +340,10 @@ function AddFishingTrip() {
                             placeholder="Enter an https:// to a public photo album of trip"
                             aria-label={url}
                             aria-describedby="basic-addon1"
-                            onChange={(e) => setUrl(e.target.value)}
+                            onChange={(e) => {
+                                setUrl(e.target.value);
+                                validateField("url", e.target.value);
+                            }}
                         ></input>
                         <div className='panel panel-default'>
                             <FormErrors formErrors={formErrors} fieldName="url" />
@@ -234,17 +368,3 @@ function AddFishingTrip() {
 }
 
 export default AddFishingTrip;
-
-
-// notes
-// 
-// right now the form is letting me submit with no actual selection of the dropdown
-// and does not mark the <select> input as invalid with the css pseudo class pink outline
-// This is I've preselected the 'choice' vernacular.... not sure how to handle this
-// https://jqueryvalidation.org/ per this https://stackoverflow.com/questions/20137036/first-option-of-dropdown-not-an-option-force-to-use-other-options
-// I need the form not to submit if the diabled option is selected.
-// 
-// zero fish caught different then no entry
-// sometimes there is only one high tide returned from NOAA because the next high tide is 12am sometime.
-// maybe put the day the tide data is being draw on with the tide data
-// tide data for any day should be accessible on the 'helpful info' page

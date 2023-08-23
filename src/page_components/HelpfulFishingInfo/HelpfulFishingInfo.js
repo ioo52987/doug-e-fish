@@ -94,3 +94,7 @@ function HelpfulFishingInfo() {
 }
 
 export default HelpfulFishingInfo;
+
+
+// notes
+// tide data for any day should be accessible on the 'helpful info' page
