@@ -34,7 +34,7 @@ function AddFishingTrip() {
     let [size, setSize] = useState(1);
     /* DYNAMIC ACTIVE CLASS - OVERALL RATING */
     let [activeButtons, setActiveButtons] = useState({ active1: 'undefined', 'active2': 'undefined', 'active3': 'undefined', 'active4': 'undefined', 'active5': 'undefined' });
-    let [startTracker, setStarTracker] = useState(0);
+    let [starTracker, setStarTracker] = useState(0);
 
     // GET site names for dropdown field
     useEffect(() => {
@@ -54,37 +54,52 @@ function AddFishingTrip() {
 
     // handling overall rating field
     const handleClickActivation = (event) => {
+
         event.preventDefault();
         let eventID = Number(event.target.id);
 
-        // special toggle
         if (eventID === 1) {
             if (activeButtons.active1 === 'active') {
-                setActiveButtons({...activeButtons, 
-                                    active1:'undefined', 
-                                    active2:'undefined', 
-                                    active3:'undefined', 
-                                    active4:'undefined', 
-                                    active5:'undefined'});
+                setActiveButtons({
+                    ...activeButtons,
+                    active1: 'undefined',
+                    active2: 'undefined',
+                    active3: 'undefined',
+                    active4: 'undefined',
+                    active5: 'undefined'
+                });
             }
-            if(activeButtons.active1 === 'undefined'){
-                setActiveButtons({...activeButtons, 
-                                    active1:'active',
-                                   // active2:'
-                                });
+            if (activeButtons.active1 === 'undefined') { // this is supposed to accout for reverse selection
+                setActiveButtons({ ...activeButtons, active1: 'active' });
             }
-
-            // working right here . made the starTracker to keep track of previous button clicked.
-            if(activeButtons.active1){
-
+            if ((activeButtons.active1 === 'active' && eventID < starTracker)) { // might need to reorder these if statements, put in switch with breaks
+                setActiveButtons({ ...activeButtons, active1: 'undefined' });
             }
         }
- 
-        setStarTracker(eventID); // this needs to go at the bottom after doing logic
+        if (eventID === 2) {
+            if (activeButtons.active2 === 'active') {
+                setActiveButtons({
+                    ...activeButtons,
+                    active2: 'undefined',
+                    active3: 'undefined',
+                    active4: 'undefined',
+                    active5: 'undefined'
+                });
+            }
+            if (activeButtons.active2 === 'undefined') { // this is supposed to accout for reverse selection
+                setActiveButtons({
+                    ...activeButtons,
+                    active1: 'active',
+                    active2: 'active'
+                });
+            }
+            if ((activeButtons.active2 === 'active') && (eventID < starTracker)) {
+                setActiveButtons({ ...activeButtons, active2: 'undefined' });
+            }
+        }
 
-        // would like to add logic to click back down on the selection
-        // also I'd like to consolidate this logic.... it's irritating me
-        // include the star icon in being able to select
+
+        setStarTracker(eventID); // stores previous btn click
     }
 
     // form validation
@@ -324,3 +339,6 @@ function AddFishingTrip() {
 }
 
 export default AddFishingTrip;
+
+// notes
+// include the star icon in being able to select
