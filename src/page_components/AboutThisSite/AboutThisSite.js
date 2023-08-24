@@ -32,7 +32,7 @@ function AboutThisSite() {
             <div className='form-content'>
                 <p id='pageTitle'>Welcome!</p>
                 This web app is created for people who like to fish in the Greater Hampton Roads Area.
-                My hope is that it is used and enjoyed by everyone who loves all things fishing! <i>Enjoy!</i>
+                Our hope is that it is used and enjoyed by everyone who loves all things fishing! <i>Enjoy!</i>
                 <br></br>
                 <br></br>
                 This application's build aim is to serve the community. By design, I intentionally, left out user logins.
