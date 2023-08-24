@@ -4,13 +4,14 @@ import './AddFishingTrip.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import FormErrors from '../../reusable_components/FormErrors/FormErrors.js';
+import OverallRating from '../../reusable_components/OverallRating/OverallRating.js';
 
 function AddFishingTrip() {
 
     /* DROPDOWN VALUES */
     let [pierName_s, setPierName_s] = useState({});
 
-    /* FIELD INPUT VALUES */
+    /* FIELD INPUT VALUES --- need to be re-written into one obj*/
     let [startDate, setStartDate] = useState(new Date());
     let [pierName, setPierName] = useState("");
     let [fishCaught, setFishCaught] = useState("");
@@ -18,7 +19,7 @@ function AddFishingTrip() {
     let [description, setDescription] = useState("");
     let [url, setUrl] = useState("");
 
-    /* FIELD (VALID || INVALID) STATES */
+    /* FIELD (VALID || INVALID) STATES --- need to be re-written into one obj*/
     let [dateValid, setDateValid] = useState(false);
     let [pierNameValid, setPierNameValid] = useState(false);
     let [fishCaughtValid, setFishCaughtValid] = useState(false);
@@ -32,9 +33,8 @@ function AddFishingTrip() {
     let [formErrors, setFormErrors] = useState({ date: '', pierName: '', fishCaught: '', rating: '', description: '', url: '' });
     /* DROPDOWN MENU SIZING */
     let [size, setSize] = useState(1);
-    /* DYNAMIC ACTIVE CLASS - OVERALL RATING */
-    let [activeButtons, setActiveButtons] = useState({ active1: 'undefined', 'active2': 'undefined', 'active3': 'undefined', 'active4': 'undefined', 'active5': 'undefined' });
-    let [starTracker, setStarTracker] = useState(0);
+    /* data passed back from child component via callback function */
+    let eventhandler;
 
     // GET site names for dropdown field
     useEffect(() => {
@@ -51,56 +51,6 @@ function AddFishingTrip() {
     let pN = [];
     recordsArr.map((i) => (pN.push(i.fields.pierName)));
     let orderedPn = pN.sort();
-
-    // handling overall rating field
-    const handleClickActivation = (event) => {
-
-        event.preventDefault();
-        let eventID = Number(event.target.id);
-
-        if (eventID === 1) {
-            if (activeButtons.active1 === 'active') {
-                setActiveButtons({
-                    ...activeButtons,
-                    active1: 'undefined',
-                    active2: 'undefined',
-                    active3: 'undefined',
-                    active4: 'undefined',
-                    active5: 'undefined'
-                });
-            }
-            if (activeButtons.active1 === 'undefined') { // this is supposed to accout for reverse selection
-                setActiveButtons({ ...activeButtons, active1: 'active' });
-            }
-            if ((activeButtons.active1 === 'active' && eventID < starTracker)) { // might need to reorder these if statements, put in switch with breaks
-                setActiveButtons({ ...activeButtons, active1: 'undefined' });
-            }
-        }
-        if (eventID === 2) {
-            if (activeButtons.active2 === 'active') {
-                setActiveButtons({
-                    ...activeButtons,
-                    active2: 'undefined',
-                    active3: 'undefined',
-                    active4: 'undefined',
-                    active5: 'undefined'
-                });
-            }
-            if (activeButtons.active2 === 'undefined') { // this is supposed to accout for reverse selection
-                setActiveButtons({
-                    ...activeButtons,
-                    active1: 'active',
-                    active2: 'active'
-                });
-            }
-            if ((activeButtons.active2 === 'active') && (eventID < starTracker)) {
-                setActiveButtons({ ...activeButtons, active2: 'undefined' });
-            }
-        }
-
-
-        setStarTracker(eventID); // stores previous btn click
-    }
 
     // form validation
     const validateField = (fieldName, value) => {
@@ -246,34 +196,8 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="fishCaught" />
                         </div>
                     </div>
-                    <div className="col-3"> {/* use map() here */}
-                        <div className="btn-group btn-group" role="group" aria-label="rating" id="rating">
-                            <button type="button"
-                                className={`btn btn-secondary star-btn ${activeButtons.active1}`}
-                                id="1"
-                                onClick={handleClickActivation}
-                            ><i className="fa fa-star"></i></button>
-                            <button type="button"
-                                className={`btn btn-secondary star-btn ${activeButtons.active2}`}
-                                id="2"
-                                onClick={handleClickActivation}
-                            ><i className="fa fa-star"></i></button>
-                            <button type="button"
-                                className={`btn btn-secondary star-btn ${activeButtons.active3}`}
-                                id="3"
-                                onClick={handleClickActivation}
-                            ><i className="fa fa-star"></i></button>
-                            <button type="button"
-                                className={`btn btn-secondary star-btn ${activeButtons.active4}`}
-                                id="4"
-                                onClick={handleClickActivation}
-                            ><i className="fa fa-star"></i></button>
-                            <button type="button"
-                                className={`btn btn-secondary star-btn ${activeButtons.active5}`}
-                                id="5"
-                                onClick={handleClickActivation}
-                            ><i className="fa fa-star"></i></button>
-                        </div>
+                    <div className="col-3">
+                        <OverallRating onClick={eventhandler}/>
                     </div>
                 </div> {/* close row */}
                 <br />
@@ -342,3 +266,5 @@ export default AddFishingTrip;
 
 // notes
 // include the star icon in being able to select
+// create a custom component for overall rating, 
+// let the parent get the child state by passing a callback function
