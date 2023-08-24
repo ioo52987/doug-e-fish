@@ -24,39 +24,41 @@ function PreviousTrips() {
     // then display trips down here
     return (
         <div>
-            <div className='table-content'>
-                <p id='pageTitle'>PreviousTrips</p>
-                <table className="table" id='myTable'>
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Site</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Photos</th>
-                            <th scope="col">Rating</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {recordsArr.map((i) => (
+            <div className="table-wrapper-scroll-y my-custom-scrollbar">
+                <div className='table-content'>
+                    <p id='pageTitle'>PreviousTrips</p>
+                    <table className="table table-bordered table-striped mb-0">
+                        <thead>
                             <tr>
-                                <td>{i.fields.pk}</td>
-                                <td>{i.fields.date}</td>
-                                <td>{i.fields.pierName}</td>
-                                <td>{i.fields.description}</td>
-                                <td>
-                                    <a href={i.fields.url}>
-                                        <i className="fas fa-camera"></i>
-                                    </a>
-                                </td>
-                                <td>{i.fields.rating}</td>
+                                <th scope="col">#</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Site</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Photos</th>
+                                <th scope="col">Rating</th>
                             </tr>
+                        </thead>
+                        <tbody>
+                            {recordsArr.map((i) => (
+                                <tr>
+                                    <td>{i.fields.pk}</td>
+                                    <td>{i.fields.date}</td>
+                                    <td>{i.fields.pierName}</td>
+                                    <td>{i.fields.description}</td>
+                                    <td>
+                                        <a href={i.fields.url}>
+                                            <i className="fas fa-camera"></i>
+                                        </a>
+                                    </td>
+                                    <td>{i.fields.rating}</td>
+                                </tr>
 
-                        ))}
-                    </tbody>
-                </table>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        </div >
     );
 }
 

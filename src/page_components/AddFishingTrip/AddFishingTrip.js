@@ -56,7 +56,8 @@ function AddFishingTrip() {
     const validateField = (fieldName, value) => {
         switch (fieldName) {
             case 'date': /* check on this validator again, not working quite right */
-                dateValid = (/^(0?[1-9]|1[0-2])\/(0?[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/).test(value);
+                //dateValid = (/^(0?[1-9]|1[0-2])\/(0?[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/).test(value);
+                dateValid = true;
                 formErrors.date = dateValid ? '' : ' Format mm/dd/yyyy';
                 break;
             case 'pierName':
@@ -68,6 +69,7 @@ function AddFishingTrip() {
                 formErrors.fishCaught = fishCaughtValid ? '' : ' Integers only';
                 break;
             case 'rating':
+                ratingValid = true;
                 break;
             case 'description':
                 descriptionValid = (value.length >= 25 && value.length <= 1500);
