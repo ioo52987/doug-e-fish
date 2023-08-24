@@ -1,9 +1,5 @@
-#star-one,
-#star-two,
-#star-three,
-#star-four,
-#star-five {
-    margin: 1px;
+button.btn.btn-secondary.star-btn {
+    margin: 3px;
 }
 .pad{
     padding-top: 7px;

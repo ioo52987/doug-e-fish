@@ -4,13 +4,14 @@ import './AddFishingTrip.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import FormErrors from '../../reusable_components/FormErrors/FormErrors.js';
+import OverallRating from '../../reusable_components/OverallRating/OverallRating.js';
 
 function AddFishingTrip() {
 
     /* DROPDOWN VALUES */
     let [pierName_s, setPierName_s] = useState({});
 
-    /* FIELD INPUT VALUES */
+    /* FIELD INPUT VALUES --- need to be re-written into one obj*/
     let [startDate, setStartDate] = useState(new Date());
     let [pierName, setPierName] = useState("");
     let [fishCaught, setFishCaught] = useState("");
@@ -18,7 +19,7 @@ function AddFishingTrip() {
     let [description, setDescription] = useState("");
     let [url, setUrl] = useState("");
 
-    /* FIELD (VALID || INVALID) STATES */
+    /* FIELD (VALID || INVALID) STATES --- need to be re-written into one obj*/
     let [dateValid, setDateValid] = useState(false);
     let [pierNameValid, setPierNameValid] = useState(false);
     let [fishCaughtValid, setFishCaughtValid] = useState(false);
@@ -32,12 +33,8 @@ function AddFishingTrip() {
     let [formErrors, setFormErrors] = useState({ date: '', pierName: '', fishCaught: '', rating: '', description: '', url: '' });
     /* DROPDOWN MENU SIZING */
     let [size, setSize] = useState(1);
-    /* DYNAMIC ACTIVE CLASS - OVERALL RATING */
-    let [active1, setActive1] = useState('undefined');
-    let [active2, setActive2] = useState('undefined');
-    let [active3, setActive3] = useState('undefined');
-    let [active4, setActive4] = useState('undefined');
-    let [active5, setActive5] = useState('undefined');
+    /* data passed back from child component via callback function */
+    let eventhandler;
 
     // GET site names for dropdown field
     useEffect(() => {
@@ -55,87 +52,12 @@ function AddFishingTrip() {
     recordsArr.map((i) => (pN.push(i.fields.pierName)));
     let orderedPn = pN.sort();
 
-    // handling overall rating field
-    const handleClickActivation = (event) => {
-        event.preventDefault();
-
-        // special toggle
-        if(event.target.id === 'star-one'){
-            (active1==='undefined') ? setActive1('active') : setActive1('undefined');
-            setActive2('undefined');
-            setActive3('undefined')
-            setActive4('undefined')
-            setActive5('undefined')
-        }
-
-        if(event.target.id === 'star-two'){
-            if(active2==='undefined'){
-                setActive1('active');
-                setActive2('active');
-            }else{
-                setActive1('undefined');
-                setActive2('undefined');
-                setActive3('undefined');
-                setActive4('undefined');
-                setActive5('undefined');
-            }
-        }
-
-        if(event.target.id === 'star-three'){
-            if(active3==='undefined'){
-                setActive1('active');
-                setActive2('active');
-                setActive3('active');
-            }else{
-                setActive1('undefined');
-                setActive2('undefined');
-                setActive3('undefined');
-                setActive4('undefined');
-                setActive5('undefined');
-            }
-        }
-
-        if(event.target.id === 'star-four'){
-            if(active4==='undefined'){
-                setActive1('active');
-                setActive2('active');
-                setActive3('active');
-                setActive4('active');
-            }else{
-                setActive1('undefined');
-                setActive2('undefined');
-                setActive3('undefined');
-                setActive4('undefined');
-                setActive5('undefined');
-            }
-        }
-
-        if(event.target.id === 'star-five'){
-            if(active5==='undefined'){
-                setActive1('active');
-                setActive2('active');
-                setActive3('active');
-                setActive4('active');
-                setActive5('active');
-            }else{
-                setActive1('undefined');
-                setActive2('undefined');
-                setActive3('undefined');
-                setActive4('undefined');
-                setActive5('undefined');
-            }
-        }
-
-        // would like to add logic to click back down on the selection
-        // also I'd like to consolidate this logic.... it's irritating me
-        // include the star icon in being able to select
-    }
-
     // form validation
     const validateField = (fieldName, value) => {
         switch (fieldName) {
             case 'date': /* check on this validator again, not working quite right */
-                dateValid = (/^(0?[1-9]|1[0-2])\/(0?[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/).test(value);
+                //dateValid = (/^(0?[1-9]|1[0-2])\/(0?[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/).test(value);
+                dateValid = true;
                 formErrors.date = dateValid ? '' : ' Format mm/dd/yyyy';
                 break;
             case 'pierName':
@@ -147,6 +69,7 @@ function AddFishingTrip() {
                 formErrors.fishCaught = fishCaughtValid ? '' : ' Integers only';
                 break;
             case 'rating':
+                ratingValid = true;
                 break;
             case 'description':
                 descriptionValid = (value.length >= 25 && value.length <= 1500);
@@ -234,8 +157,8 @@ function AddFishingTrip() {
                             id="pierName"
                             /* dropdown scroll handling */
                             size={size}
-                            onFocus={()=>setSize(7)}
-                            onBlur={()=>setSize(1)}
+                            onFocus={() => setSize(7)}
+                            onBlur={() => setSize(1)}
                             onClick={(e) => {
                                 setPierName(e.target.value);
                                 validateField("pierName", e.target.value);
@@ -276,33 +199,7 @@ function AddFishingTrip() {
                         </div>
                     </div>
                     <div className="col-3">
-                        <div className="btn-group btn-group" role="group" aria-label="rating" id="rating">
-                            <button type="button" 
-                                    className={`btn btn-secondary star-btn ${active1}`}
-                                    id="star-one"
-                                    onClick={handleClickActivation}
-                                    ><i className="fa fa-star"></i></button>
-                            <button type="button" 
-                                    className={`btn btn-secondary star-btn ${active2}`} 
-                                    id="star-two"
-                                    onClick={handleClickActivation}
-                                    ><i className="fa fa-star"></i></button>
-                            <button type="button" 
-                                    className={`btn btn-secondary star-btn ${active3}`}  
-                                    id="star-three"
-                                    onClick={handleClickActivation}
-                                    ><i className="fa fa-star"></i></button>
-                            <button type="button" 
-                                    className={`btn btn-secondary star-btn ${active4}`}  
-                                    id="star-four"
-                                    onClick={handleClickActivation}
-                                    ><i className="fa fa-star"></i></button>
-                            <button type="button" 
-                                    className={`btn btn-secondary star-btn ${active5}`}  
-                                    id="star-five"
-                                    onClick={handleClickActivation}
-                                    ><i className="fa fa-star"></i></button>
-                        </div>
+                        <OverallRating onClick={eventhandler}/>
                     </div>
                 </div> {/* close row */}
                 <br />
@@ -368,3 +265,8 @@ function AddFishingTrip() {
 }
 
 export default AddFishingTrip;
+
+// notes
+// include the star icon in being able to select
+// create a custom component for overall rating, 
+// let the parent get the child state by passing a callback function
