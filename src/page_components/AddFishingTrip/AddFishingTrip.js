@@ -9,28 +9,16 @@ import OverallRating from '../../reusable_components/OverallRating/OverallRating
 function AddFishingTrip() {
 
     /* DROPDOWN VALUES */
-    let [pierName_s, setPierName_s] = useState({});
-
-    /* FIELD INPUT VALUES --- need to be re-written into one obj*/
-    let [startDate, setStartDate] = useState(new Date());
-    let [pierName, setPierName] = useState("");
-    let [fishCaught, setFishCaught] = useState("");
-    let [rating, setRating] = useState(""); // to be added later
-    let [description, setDescription] = useState("");
-    let [url, setUrl] = useState("");
-
-    /* FIELD (VALID || INVALID) STATES --- need to be re-written into one obj*/
-    let [dateValid, setDateValid] = useState(false);
-    let [pierNameValid, setPierNameValid] = useState(false);
-    let [fishCaughtValid, setFishCaughtValid] = useState(false);
-    let [ratingValid, setRatingValid] = useState(false);
-    let [descriptionValid, setDescriptionValid] = useState(false);
-    let [urlValid, setUrlValid] = useState(false);
-
+    let [dropdownValues, setDropdownValues] = useState({});
+    /* FIELD VALUES */
+    let [fieldValues, setFieldValues] = useState({ date: new Date(), pierName: '', fishCaught: '', rating: '', description: '', url: ''});
+    /* FIELD VALUES VALID? */
+    let [fieldValuesValid, setFieldValuesValid] = useState({ date: false, pierName: false, fishCaught: false, rating: false, description: false, url: false});
+    /* ERROR TEXT (IF ANY) */
+    let [formErrors, setFormErrors] = useState({ date: '', pierName: '', fishCaught: '', rating: '', description: '', url: '' });
     /* FORM VALID? STATE */
     let [formState, setFormState] = useState();
-    /* FORM ERRORS (IF ANY) */
-    let [formErrors, setFormErrors] = useState({ date: '', pierName: '', fishCaught: '', rating: '', description: '', url: '' });
+    
     /* DROPDOWN MENU SIZING */
     let [size, setSize] = useState(1);
     /* data passed back from child component via callback function */
@@ -39,12 +27,12 @@ function AddFishingTrip() {
     // GET site names for dropdown field
     useEffect(() => {
         axios.get('/tbl73KANXAAstm4Kr')
-            .then(response => setPierName_s(response.data));
+            .then(response => setDropdownValues(response.data));
     }, []);
 
     let recordsArr = [];
-    if (pierName_s.records) {
-        recordsArr = pierName_s.records;
+    if (dropdownValues.records) {
+        recordsArr = dropdownValues.records;
     }
 
     // alphabetize pierNames
@@ -57,47 +45,42 @@ function AddFishingTrip() {
         switch (fieldName) {
             case 'date': /* check on this validator again, not working quite right */
                 //dateValid = (/^(0?[1-9]|1[0-2])\/(0?[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/).test(value);
-                dateValid = true;
-                formErrors.date = dateValid ? '' : ' Format mm/dd/yyyy';
+                fieldValuesValid.date = true;
+                formErrors.date = fieldValuesValid.date ? '' : ' Format mm/dd/yyyy';
                 break;
             case 'pierName':
-                pierNameValid = !(/^$/).test(value);
-                formErrors.pierName = pierNameValid ? '' : ' Location required';
+                fieldValuesValid.pierName = !(/^$/).test(value);
+                formErrors.pierName = fieldValuesValid.pierName ? '' : ' Location required';
                 break;
             case 'fishCaught':
-                fishCaughtValid = !(/[\.]+/).test(value);
-                formErrors.fishCaught = fishCaughtValid ? '' : ' Integers only';
+                fieldValuesValid.fishCaught = !(/[\.]+/).test(value);
+                formErrors.fishCaught = fieldValuesValid.fishCaught ? '' : ' Integers only';
                 break;
             case 'rating':
-                ratingValid = true;
+                fieldValuesValid.rating = true;
                 break;
             case 'description':
-                descriptionValid = (value.length >= 25 && value.length <= 1500);
-                formErrors.description = descriptionValid ? '' : ' Description required to be between 25-1500 characters';
+                fieldValuesValid.description = (value.length >= 25 && value.length <= 1500);
+                formErrors.description = fieldValuesValid.description ? '' : ' Description required to be between 25-1500 characters';
                 break;
             case 'url':
                 // maybe look into html input type 'url'
-                urlValid = (/^https:\/\//).test(value);
-                formErrors.url = urlValid ? '' : ' URL requried to begin with https:// ';
+                fieldValuesValid.url = (/^https:\/\//).test(value);
+                formErrors.url = fieldValuesValid.url ? '' : ' URL requried to begin with https:// ';
                 break;
             default:
                 break;
         }
 
         setFormErrors(formErrors);
-        setDateValid(dateValid);
-        setPierNameValid(pierNameValid);
-        setFishCaughtValid(fishCaughtValid);
-        setRatingValid(ratingValid);
-        setDescriptionValid(descriptionValid);
-        setUrlValid(urlValid);
+        setFieldValuesValid(fieldValuesValid);
     }
 
     // on form submission...
     const handleSubmit = (event) => {
 
         event.preventDefault();
-        formState = (dateValid && pierNameValid && fishCaughtValid && ratingValid && descriptionValid && urlValid);
+        formState = (fieldValuesValid.date && fieldValuesValid.pierName && fieldValuesValid.fishCaught && fieldValuesValid.rating && fieldValuesValid.description && fieldValuesValid.url);
 
         if (formState) {
             axios.post("/tblZXiWg0iGnfIucV/",
@@ -106,7 +89,7 @@ function AddFishingTrip() {
                         "date": document.getElementById("date").value,
                         "pierName": document.getElementById("pierName").value,
                         "fishCaught": Number(document.getElementById("fishCaught").value),
-                        //"rating": document.getElementById("rating").value,
+                        "rating": document.getElementById("rating").value,
                         "description": document.getElementById("description").value,
                         "url": document.getElementById("url").value,
                     }
@@ -137,12 +120,12 @@ function AddFishingTrip() {
                             type="date"
                             className="form-control"
                             id="date"
-                            value={startDate}
+                            value={fieldValues.date}
                             placeholder="Date Format: ##/##/####"
-                            aria-label={startDate}
+                            aria-label={fieldValues.date}
                             aria-describedby="basic-addon2"
                             onChange={(e) => {
-                                setStartDate(e.target.value);
+                                setFieldValues({ ...fieldValues, date: e.target.value });
                                 validateField("date", e.target.value);
                             }}
                             required
@@ -160,7 +143,7 @@ function AddFishingTrip() {
                             onFocus={() => setSize(7)}
                             onBlur={() => setSize(1)}
                             onClick={(e) => {
-                                setPierName(e.target.value);
+                                setFieldValues({ ...fieldValues, pierName: e.target.value });
                                 validateField("pierName", e.target.value);
                             }}
                             onChange={(e) => {
@@ -183,12 +166,12 @@ function AddFishingTrip() {
                             type="number"
                             className="form-control"
                             id="fishCaught"
-                            value={fishCaught}
+                            value={fieldValues.fishCaught}
                             placeholder="No. Fish Caught"
                             aria-label="No. Fish Caught"
                             aria-describedby="basic-addon2"
                             onChange={(e) => {
-                                setFishCaught(e.target.value);
+                                setFieldValues({ ...fieldValues, fishCaught: e.target.value });;
                                 validateField("fishCaught", e.target.value);
                             }}
                             min="0" max="500"
@@ -210,11 +193,11 @@ function AddFishingTrip() {
                             type="text"
                             className="form-control"
                             id="description"
-                            value={description}
+                            value={fieldValues.description}
                             placeholder="Describe the fishing trip!"
                             aria-label="Describe the fishing trip!"
                             onChange={(e) => {
-                                setDescription(e.target.value);
+                                setFieldValues({ ...fieldValues, description: e.target.value });
                                 validateField("description", e.target.value);
                             }}
                             minLength="25"
@@ -233,12 +216,12 @@ function AddFishingTrip() {
                             type="url"
                             className="form-control"
                             id="url"
-                            value={url}
+                            value={fieldValues.url}
                             placeholder="Enter an https:// to a public photo album of trip"
-                            aria-label={url}
+                            aria-label={fieldValues.url}
                             aria-describedby="basic-addon1"
                             onChange={(e) => {
-                                setUrl(e.target.value);
+                                setFieldValues({ ...fieldValues, url: e.target.value });
                                 validateField("url", e.target.value);
                             }}
                         ></input>
