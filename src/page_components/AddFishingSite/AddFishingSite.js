@@ -20,7 +20,7 @@ function AddFishingSite() {
         switch (fieldName) {
             case 'siteName':
                 fieldValuesValid.siteName = (value.length >= 3 && value.length <= 75);
-                formErrors.siteName = fieldValuesValid.siteName ? '' : 'Site name required to be between 3-75 characters.';
+                formErrors.siteName = fieldValuesValid.siteName ? '' : ' Requires 3-75 characters';
                 break;
             case 'siteType':
                 fieldValuesValid.siteType = (value !== '');
@@ -28,15 +28,15 @@ function AddFishingSite() {
                 break;
             case 'longitude':
                 fieldValuesValid.longitude = (value >= -77.58 && value <= -75.2);
-                formErrors.longitude = fieldValuesValid.longitude ? '' : 'Range is -77.58 to -75.2';
+                formErrors.longitude = fieldValuesValid.longitude ? '' : ' Range is -77.58 to -75.2';
                 break;
             case 'latitude':
                 fieldValuesValid.latitude = (value >= 36.56 && value <= 37.60);
-                formErrors.latitude = fieldValuesValid.latitude ? '' : 'Range is 36.56 to 37.60';
+                formErrors.latitude = fieldValuesValid.latitude ? '' : ' Range is 36.56 to 37.60';
                 break;
             case 'description':
                 fieldValuesValid.description = (value.length >= 25 && value.length <= 1500);
-                formErrors.description = fieldValuesValid.description ? '' : ' Description required to be between 25-1500 characters.';
+                formErrors.description = fieldValuesValid.description ? '' : ' Description required to be between 25-1500 characters';
                 break;
             default:
                 break;
@@ -88,7 +88,7 @@ function AddFishingSite() {
             <form className="form-content" onSubmit={handleSubmit} >
                 <p id='pageTitle'>Add Fishing Site</p>
                 <div className="row input-group">
-                    <div className="col-4">
+                    <div className="col-3">
                         <input
                             type="text"
                             className="form-control"
@@ -107,9 +107,9 @@ function AddFishingSite() {
                             <FormErrors formErrors={formErrors} fieldName="siteName" />
                         </div>
                     </div>
-                    <div className="col-3">
+                    <div className="col-2">
                         <select
-                            className="form-control"
+                            className="custom-select form-control"
                             id="siteType"
                             onClick={(e) => {
                                 setFieldValues({ ...fieldValues, siteType: e.target.value });
@@ -166,7 +166,7 @@ function AddFishingSite() {
                 </div> {/* close row */}
                 <br />
                 <div className="row input-group">
-                    <div className="col-11">
+                    <div className="col-9">
                         <textarea
                             rows="5"
                             type="text"

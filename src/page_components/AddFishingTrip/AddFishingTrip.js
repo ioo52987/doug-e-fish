@@ -4,25 +4,52 @@ import './AddFishingTrip.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import FormErrors from '../../reusable_components/FormErrors/FormErrors.js';
-import OverallRating from '../../reusable_components/OverallRating/OverallRating.js';
+import RatingButton from '../../reusable_components/RatingButton/RatingButton.js';
 
 function AddFishingTrip() {
 
     /* DROPDOWN VALUES */
     let [dropdownValues, setDropdownValues] = useState({});
     /* FIELD VALUES */
-    let [fieldValues, setFieldValues] = useState({ date: new Date(), siteName: '', tideType: '', fishCaught: '', rating: '', description: '', url: '' });
+    let [fieldValues, setFieldValues] = useState({
+        date: new Date(),
+        siteName: '',
+        tideType: '',
+        fishCaught: '',
+        rating: '',
+        description: '',
+        url: ''
+    });
     /* FIELD VALUES VALID? */
-    let [fieldValuesValid, setFieldValuesValid] = useState({ date: false, siteName: false, tideType: false, fishCaught: false, rating: false, description: false, url: false });
+    let [fieldValuesValid, setFieldValuesValid] = useState({
+        date: false,
+        siteName: false,
+        tideType: false,
+        fishCaught: false,
+        rating: false,
+        description: false,
+        url: false
+    });
     /* ERROR TEXT (IF ANY) */
-    let [formErrors, setFormErrors] = useState({ date: '', siteName: '', tideType: '', fishCaught: '', rating: '', description: '', url: '' });
+    let [formErrors, setFormErrors] = useState({
+        date: '',
+        siteName: '',
+        tideType: '',
+        fishCaught: '',
+        rating: '',
+        description: '',
+        url: ''
+    });
     /* FORM VALID? STATE */
     let [formState, setFormState] = useState();
 
     /* DROPDOWN MENU SIZING */
     let [size, setSize] = useState(1);
-    /* data passed back from child component via callback function */
-    let eventhandler;
+    /* data passed back from child component via callback function ??????*/
+    const eventhandler = (data) => {
+        console.log('parent');
+        //console.log(data);
+    }
 
     // GET site names for dropdown field
     useEffect(() => {
@@ -44,7 +71,7 @@ function AddFishingTrip() {
     const validateField = (fieldName, value) => {
         switch (fieldName) {
             case 'date': /* check on this validator again, not working quite right */
-                //dateValid = (/^(0?[1-9]|1[0-2])\/(0?[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/).test(value);
+                //dateValid = (/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/).test(value);
                 fieldValuesValid.date = true;
                 formErrors.date = fieldValuesValid.date ? '' : ' Format mm/dd/yyyy';
                 break;
@@ -57,7 +84,7 @@ function AddFishingTrip() {
                 formErrors.tideType = fieldValuesValid.tideType ? '' : ' Required';
                 break;
             case 'fishCaught':
-                fieldValuesValid.fishCaught = !(/[\.]+/).test(value);
+                fieldValuesValid.fishCaught = (/^[^.]*$/).test(value); // why doesn't (in the input field) a period throw an error?
                 formErrors.fishCaught = fieldValuesValid.fishCaught ? '' : ' Integers only';
                 break;
             case 'rating':
@@ -68,7 +95,6 @@ function AddFishingTrip() {
                 formErrors.description = fieldValuesValid.description ? '' : ' Description required to be between 25-1500 characters';
                 break;
             case 'url':
-                // maybe look into html input type 'url'
                 fieldValuesValid.url = (/^https:\/\//).test(value);
                 formErrors.url = fieldValuesValid.url ? '' : ' URL requried to begin with https:// ';
                 break;
@@ -84,13 +110,13 @@ function AddFishingTrip() {
     const handleSubmit = (event) => {
 
         event.preventDefault();
-        formState = (fieldValuesValid.date && 
-                    fieldValuesValid.siteName &&
-                    fieldValuesValid.tideType &&
-                    fieldValuesValid.fishCaught && 
-                    fieldValuesValid.rating && 
-                    fieldValuesValid.description && 
-                    fieldValuesValid.url);
+        formState = (fieldValuesValid.date &&
+            fieldValuesValid.siteName &&
+            fieldValuesValid.tideType &&
+            fieldValuesValid.fishCaught &&
+            fieldValuesValid.rating &&
+            fieldValuesValid.description &&
+            fieldValuesValid.url);
 
         if (formState) {
             axios.post("/tblZXiWg0iGnfIucV/",
@@ -125,6 +151,12 @@ function AddFishingTrip() {
         <div>
             <form className="form-content" onSubmit={handleSubmit}>
                 <p id='pageTitle'>Add Fishing Trip</p>
+                <div className='row input-group'>
+                    <div className='col-9'>
+                        <RatingButton onClick={eventhandler} />
+                    </div>
+                </div> {/* close row */}
+                <br />
                 <div className="row input-group">
                     <div className="col-2 pad">
                         <input
@@ -192,9 +224,6 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="tideType" />
                         </div>
                     </div>
-                </div> {/* close row */}
-                <br />
-                <div className='row input-group'>
                     <div className="col-2 pad">
                         <input
                             type="number"
@@ -214,9 +243,6 @@ function AddFishingTrip() {
                         <div className='panel panel-default'>
                             <FormErrors formErrors={formErrors} fieldName="fishCaught" />
                         </div>
-                    </div>
-                    <div className='col-3'>
-                        <OverallRating onClick={eventhandler} />
                     </div>
                 </div> {/* close row */}
                 <br />
@@ -284,6 +310,4 @@ function AddFishingTrip() {
 export default AddFishingTrip;
 
 // notes
-// include the star icon in being able to select
-// create a custom component for overall rating, 
 // let the parent get the child state by passing a callback function
