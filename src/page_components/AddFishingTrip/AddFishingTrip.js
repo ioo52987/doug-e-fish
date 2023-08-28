@@ -11,14 +11,14 @@ function AddFishingTrip() {
     /* DROPDOWN VALUES */
     let [dropdownValues, setDropdownValues] = useState({});
     /* FIELD VALUES */
-    let [fieldValues, setFieldValues] = useState({ date: new Date(), siteName: '', fishCaught: '', rating: '', description: '', url: ''});
+    let [fieldValues, setFieldValues] = useState({ date: new Date(), siteName: '', tideType: '', fishCaught: '', rating: '', description: '', url: '' });
     /* FIELD VALUES VALID? */
-    let [fieldValuesValid, setFieldValuesValid] = useState({ date: false, siteName: false, fishCaught: false, rating: false, description: false, url: false});
+    let [fieldValuesValid, setFieldValuesValid] = useState({ date: false, siteName: false, tideType: false, fishCaught: false, rating: false, description: false, url: false });
     /* ERROR TEXT (IF ANY) */
-    let [formErrors, setFormErrors] = useState({ date: '', siteName: '', fishCaught: '', rating: '', description: '', url: '' });
+    let [formErrors, setFormErrors] = useState({ date: '', siteName: '', tideType: '', fishCaught: '', rating: '', description: '', url: '' });
     /* FORM VALID? STATE */
     let [formState, setFormState] = useState();
-    
+
     /* DROPDOWN MENU SIZING */
     let [size, setSize] = useState(1);
     /* data passed back from child component via callback function */
@@ -52,6 +52,10 @@ function AddFishingTrip() {
                 fieldValuesValid.siteName = !(/^$/).test(value);
                 formErrors.siteName = fieldValuesValid.siteName ? '' : ' Location required';
                 break;
+            case 'tideType':
+                fieldValuesValid.tideType = (value !== '');
+                formErrors.tideType = fieldValuesValid.tideType ? '' : ' Required';
+                break;
             case 'fishCaught':
                 fieldValuesValid.fishCaught = !(/[\.]+/).test(value);
                 formErrors.fishCaught = fieldValuesValid.fishCaught ? '' : ' Integers only';
@@ -80,7 +84,13 @@ function AddFishingTrip() {
     const handleSubmit = (event) => {
 
         event.preventDefault();
-        formState = (fieldValuesValid.date && fieldValuesValid.siteName && fieldValuesValid.fishCaught && fieldValuesValid.rating && fieldValuesValid.description && fieldValuesValid.url);
+        formState = (fieldValuesValid.date && 
+                    fieldValuesValid.siteName &&
+                    fieldValuesValid.tideType &&
+                    fieldValuesValid.fishCaught && 
+                    fieldValuesValid.rating && 
+                    fieldValuesValid.description && 
+                    fieldValuesValid.url);
 
         if (formState) {
             axios.post("/tblZXiWg0iGnfIucV/",
@@ -88,6 +98,7 @@ function AddFishingTrip() {
                     "fields": {
                         "date": document.getElementById("date").value,
                         "siteName": document.getElementById("siteName").value,
+                        "tideType": document.getElementById("tideType").value,
                         "fishCaught": Number(document.getElementById("fishCaught").value),
                         "rating": document.getElementById("rating").value,
                         "description": document.getElementById("description").value,
@@ -162,6 +173,29 @@ function AddFishingTrip() {
                         </div>
                     </div>
                     <div className="col-2 pad">
+                        <select
+                            className="custom-select form-control"
+                            id="tideType"
+                            onClick={(e) => {
+                                setFieldValues({ ...fieldValues, tideType: e.target.value });
+                                validateField("tideType", e.target.value);
+                            }}
+                            required
+                        >
+                            <option value="">Tidal Info</option>
+                            <option value="high tide">High Tide</option>
+                            <option value="low tide">Low Tide</option>
+                            <option value="ebb tide">Ebb Tide</option>
+                            <option value="na">Not Applicable</option>
+                        </select>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="tideType" />
+                        </div>
+                    </div>
+                </div> {/* close row */}
+                <br />
+                <div className='row input-group'>
+                    <div className="col-2 pad">
                         <input
                             type="number"
                             className="form-control"
@@ -181,13 +215,13 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="fishCaught" />
                         </div>
                     </div>
-                    <div className="col-3">
-                        <OverallRating onClick={eventhandler}/>
+                    <div className='col-3'>
+                        <OverallRating onClick={eventhandler} />
                     </div>
                 </div> {/* close row */}
                 <br />
                 <div className="row input-group">
-                    <div className="col-12">
+                    <div className="col-9">
                         <textarea
                             rows="5"
                             type="text"
@@ -211,7 +245,7 @@ function AddFishingTrip() {
                 </div> {/* close row */}
                 <br />
                 <div className="row input-group">
-                    <div className="col-12">
+                    <div className="col-9">
                         <input
                             type="url"
                             className="form-control"

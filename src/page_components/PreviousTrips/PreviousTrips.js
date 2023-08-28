@@ -43,7 +43,7 @@ function PreviousTrips() {
                                 <tr>
                                     <td>{i.fields.pk}</td>
                                     <td>{i.fields.date}</td>
-                                    <td>{i.fields.pierName}</td>
+                                    <td>{i.fields.siteName}</td>
                                     <td>{i.fields.description}</td>
                                     <td>
                                         <a href={i.fields.url}>
