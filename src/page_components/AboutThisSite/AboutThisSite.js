@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import "./AboutThisSite.css";
 import emailjs from '@emailjs/browser';
-import Message from '../../reusable_components/Message/Message';
+import Message from '../../reusable_components/Message/Message.js';
 
 function AboutThisSite() {
 

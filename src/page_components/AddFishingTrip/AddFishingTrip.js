@@ -11,11 +11,11 @@ function AddFishingTrip() {
     /* DROPDOWN VALUES */
     let [dropdownValues, setDropdownValues] = useState({});
     /* FIELD VALUES */
-    let [fieldValues, setFieldValues] = useState({ date: new Date(), pierName: '', fishCaught: '', rating: '', description: '', url: ''});
+    let [fieldValues, setFieldValues] = useState({ date: new Date(), siteName: '', fishCaught: '', rating: '', description: '', url: ''});
     /* FIELD VALUES VALID? */
-    let [fieldValuesValid, setFieldValuesValid] = useState({ date: false, pierName: false, fishCaught: false, rating: false, description: false, url: false});
+    let [fieldValuesValid, setFieldValuesValid] = useState({ date: false, siteName: false, fishCaught: false, rating: false, description: false, url: false});
     /* ERROR TEXT (IF ANY) */
-    let [formErrors, setFormErrors] = useState({ date: '', pierName: '', fishCaught: '', rating: '', description: '', url: '' });
+    let [formErrors, setFormErrors] = useState({ date: '', siteName: '', fishCaught: '', rating: '', description: '', url: '' });
     /* FORM VALID? STATE */
     let [formState, setFormState] = useState();
     
@@ -35,9 +35,9 @@ function AddFishingTrip() {
         recordsArr = dropdownValues.records;
     }
 
-    // alphabetize pierNames
+    // alphabetize siteNames
     let pN = [];
-    recordsArr.map((i) => (pN.push(i.fields.pierName)));
+    recordsArr.map((i) => (pN.push(i.fields.siteName)));
     let orderedPn = pN.sort();
 
     // form validation
@@ -48,9 +48,9 @@ function AddFishingTrip() {
                 fieldValuesValid.date = true;
                 formErrors.date = fieldValuesValid.date ? '' : ' Format mm/dd/yyyy';
                 break;
-            case 'pierName':
-                fieldValuesValid.pierName = !(/^$/).test(value);
-                formErrors.pierName = fieldValuesValid.pierName ? '' : ' Location required';
+            case 'siteName':
+                fieldValuesValid.siteName = !(/^$/).test(value);
+                formErrors.siteName = fieldValuesValid.siteName ? '' : ' Location required';
                 break;
             case 'fishCaught':
                 fieldValuesValid.fishCaught = !(/[\.]+/).test(value);
@@ -80,14 +80,14 @@ function AddFishingTrip() {
     const handleSubmit = (event) => {
 
         event.preventDefault();
-        formState = (fieldValuesValid.date && fieldValuesValid.pierName && fieldValuesValid.fishCaught && fieldValuesValid.rating && fieldValuesValid.description && fieldValuesValid.url);
+        formState = (fieldValuesValid.date && fieldValuesValid.siteName && fieldValuesValid.fishCaught && fieldValuesValid.rating && fieldValuesValid.description && fieldValuesValid.url);
 
         if (formState) {
             axios.post("/tblZXiWg0iGnfIucV/",
                 {
                     "fields": {
                         "date": document.getElementById("date").value,
-                        "pierName": document.getElementById("pierName").value,
+                        "siteName": document.getElementById("siteName").value,
                         "fishCaught": Number(document.getElementById("fishCaught").value),
                         "rating": document.getElementById("rating").value,
                         "description": document.getElementById("description").value,
@@ -137,14 +137,14 @@ function AddFishingTrip() {
                     <div className="col-3 pad">
                         <select
                             className="custom-select form-control"
-                            id="pierName"
+                            id="siteName"
                             /* dropdown scroll handling */
                             size={size}
                             onFocus={() => setSize(7)}
                             onBlur={() => setSize(1)}
                             onClick={(e) => {
-                                setFieldValues({ ...fieldValues, pierName: e.target.value });
-                                validateField("pierName", e.target.value);
+                                setFieldValues({ ...fieldValues, siteName: e.target.value });
+                                validateField("siteName", e.target.value);
                             }}
                             onChange={(e) => {
                                 setSize(1);
@@ -158,7 +158,7 @@ function AddFishingTrip() {
                             )}
                         </select>
                         <div className='panel panel-default'>
-                            <FormErrors formErrors={formErrors} fieldName="pierName" />
+                            <FormErrors formErrors={formErrors} fieldName="siteName" />
                         </div>
                     </div>
                     <div className="col-2 pad">

@@ -7,20 +7,24 @@ import FormErrors from '../../reusable_components/FormErrors/FormErrors.js';
 function AddFishingSite() {
 
     /* FIELD VALUES */
-    let [fieldValues, setFieldValues] = useState({ pierName: '', longitude: '', latitude: '', description: '' });
+    let [fieldValues, setFieldValues] = useState({ siteName: '', siteType: '', longitude: '', latitude: '', description: '' });
     /* FIELD VALUES VALID? */
-    let [fieldValuesValid, setFieldValuesValid] = useState({ pierName: false, longitude: false, latitude: false, description: false });
+    let [fieldValuesValid, setFieldValuesValid] = useState({ siteName: false, siteType: false, longitude: false, latitude: false, description: false });
     /* ERROR TEXT (IF ANY) */
-    let [formErrors, setFormErrors] = useState({ pierName: '', longitude: '', latitude: '', description: '' });
+    let [formErrors, setFormErrors] = useState({ siteName: '', siteType: '', longitude: '', latitude: '', description: '' });
     /* FORM VALIDED? STATE */
     let [formValid, setFormValid] = useState(false);
 
     // form validation
     const validateField = (fieldName, value) => {
         switch (fieldName) {
-            case 'pierName':
-                fieldValuesValid.pierName = (value.length >= 3 && value.length <= 75);
-                formErrors.pierName = fieldValuesValid.pierName ? '' : 'Site name required to be between 3-75 characters.';
+            case 'siteName':
+                fieldValuesValid.siteName = (value.length >= 3 && value.length <= 75);
+                formErrors.siteName = fieldValuesValid.siteName ? '' : 'Site name required to be between 3-75 characters.';
+                break;
+            case 'siteType':
+                fieldValuesValid.siteType = (value !== '');
+                formErrors.siteType = fieldValuesValid.siteType ? '' : ' Required';
                 break;
             case 'longitude':
                 fieldValuesValid.longitude = (value >= -77.58 && value <= -75.2);
@@ -46,13 +50,18 @@ function AddFishingSite() {
     const handleSubmit = (e) => {
 
         e.preventDefault();
-        formValid = (fieldValuesValid.pierName && fieldValuesValid.longitude && fieldValuesValid.latitude && fieldValuesValid.description);
+        formValid = (fieldValuesValid.siteName && 
+                    fieldValuesValid.siteType && 
+                    fieldValuesValid.longitude && 
+                    fieldValuesValid.latitude && 
+                    fieldValuesValid.description);
 
         if (formValid) {
             axios.post("/tbl73KANXAAstm4Kr/",
                 {
                     "fields": {
-                        "pierName": document.getElementById("pierName").value,
+                        "siteName": document.getElementById("siteName").value,
+                        "siteType": document.getElementById("siteType").value,
                         "longitude": Number(document.getElementById("longitude").value),
                         "latitude": Number(document.getElementById("latitude").value),
                         "description": document.getElementById("description").value,
@@ -79,26 +88,44 @@ function AddFishingSite() {
             <form className="form-content" onSubmit={handleSubmit} >
                 <p id='pageTitle'>Add Fishing Site</p>
                 <div className="row input-group">
-                    <div className="col-6">
+                    <div className="col-4">
                         <input
                             type="text"
                             className="form-control"
-                            id="pierName"
-                            value={fieldValues.pierName}
+                            id="siteName"
+                            value={fieldValues.siteName}
                             placeholder="Fishing Site Name"
                             onChange={(e) => {
-                                setFieldValues({ ...fieldValues, pierName: e.target.value });
-                                validateField("pierName", e.target.value);
+                                setFieldValues({ ...fieldValues, siteName: e.target.value });
+                                validateField("siteName", e.target.value);
                             }}
                             minLength="3"
                             maxLength="75"
                             required
                         ></input>
                         <div className='panel panel-default'>
-                            <FormErrors formErrors={formErrors} fieldName="pierName" />
+                            <FormErrors formErrors={formErrors} fieldName="siteName" />
                         </div>
                     </div>
                     <div className="col-3">
+                        <select
+                            className="form-control"
+                            id="siteType"
+                            onClick={(e) => {
+                                setFieldValues({ ...fieldValues, siteType: e.target.value });
+                                validateField("siteType", e.target.value);
+                            }}
+                            required
+                        >
+                            <option value="">Site Type</option>
+                            <option value="tidal">Tidal</option>
+                            <option value="non-tidal">Non-Tidal (Pond/Lake)</option>
+                        </select>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="siteType" />
+                        </div>
+                    </div>
+                    <div className="col-2">
                         <input
                             type="number"
                             className="form-control"
@@ -117,7 +144,7 @@ function AddFishingSite() {
                             <FormErrors formErrors={formErrors} fieldName="longitude" />
                         </div>
                     </div>
-                    <div className="col-3">
+                    <div className="col-2">
                         <input
                             type="number"
                             className="form-control"
@@ -139,7 +166,7 @@ function AddFishingSite() {
                 </div> {/* close row */}
                 <br />
                 <div className="row input-group">
-                    <div className="col-12">
+                    <div className="col-11">
                         <textarea
                             rows="5"
                             type="text"

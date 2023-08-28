@@ -1,14 +1,14 @@
 import React from 'react';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import Map from './page_components/Map/Map';
-import AboutThisSite from './page_components/AboutThisSite/AboutThisSite';
-import AddFishingTrip from './page_components/AddFishingTrip/AddFishingTrip';
-import AddFishingSite from './page_components/AddFishingSite/AddFishingSite';
-import PreviousTrips from './page_components/PreviousTrips/PreviousTrips';
-import Photos from './page_components/Photos/Photos';
-import HelpfulFishingInfo from './page_components/HelpfulFishingInfo/HelpfulFishingInfo';
-import Navigation from './reusable_components/Navigation/Navigation';
+import Map from './page_components/Map/Map.js';
+import AboutThisSite from './page_components/AboutThisSite/AboutThisSite.js';
+import AddFishingTrip from './page_components/AddFishingTrip/AddFishingTrip.js';
+import AddFishingSite from './page_components/AddFishingSite/AddFishingSite.js';
+import PreviousTrips from './page_components/PreviousTrips/PreviousTrips.js';
+import Photos from './page_components/Photos/Photos.js';
+import HelpfulFishingInfo from './page_components/HelpfulFishingInfo/HelpfulFishingInfo.js';
+import Navigation from './reusable_components/Navigation/Navigation.js';
 
 function App() {
     return (
