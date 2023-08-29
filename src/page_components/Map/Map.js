@@ -75,7 +75,7 @@ function Map() {
         axios.get('/tbl73KANXAAstm4Kr')
             .then(response => setFishingSiteData(response.data));
         // GET daily fishing-trip data
-        axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=pierName')
+        axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=siteName')
             .then(response => setDailyFishingTripData(response.data));
     }, []);
 
@@ -86,12 +86,12 @@ function Map() {
         for (let i = 0; i < len; i++) {
 
             // stuffing site obj
-            fishingSites[recordsArr[i].fields.pierName] = null;
+            fishingSites[recordsArr[i].fields.siteName] = null;
 
             siteMapProperties.push({
                 'type': 'Feature',
                 'properties': {
-                    'pierName': recordsArr[i].fields.pierName,
+                    'siteName': recordsArr[i].fields.siteName,
                     'rating': recordsArr[i].fields.overallRating,
                     'description': recordsArr[i].fields.description
                 },
@@ -112,11 +112,11 @@ function Map() {
 
         for (let i = 0; i < arr.length; i++) {
             if (arr[i].fields.date === currentDate) {
-                if(arr[i].fields.pierName in talliesPerSite){
-                    talliesPerSite[arr[i].fields.pierName].push(arr[i].fields.fishCaught);
+                if(arr[i].fields.siteName in talliesPerSite){
+                    talliesPerSite[arr[i].fields.siteName].push(arr[i].fields.fishCaught);
                 }else{
-                    talliesPerSite[arr[i].fields.pierName] = [];
-                    talliesPerSite[arr[i].fields.pierName].push(arr[i].fields.fishCaught);
+                    talliesPerSite[arr[i].fields.siteName] = [];
+                    talliesPerSite[arr[i].fields.siteName].push(arr[i].fields.fishCaught);
                 }
             }
         }
@@ -228,13 +228,13 @@ function Map() {
                 map.current.getCanvas().style.cursor = 'pointer';
 
                 const coordinates = e.features[0].geometry.coordinates.slice();
-                const pierName = e.features[0].properties.pierName;
+                const siteName = e.features[0].properties.siteName;
                 const rating = e.features[0].properties.rating;
                 const description = e.features[0].properties.description;
                 let content = `
-                                <b>${pierName}</b><br>
+                                <b>${siteName}</b><br>
                                 <h6>Overall Rating: ${rating}/5</br>
-                                Fish Caught Today: ${fishingSites[pierName]}</h6>
+                                Fish Caught Today: ${fishingSites[siteName]}</h6>
                                 <p>${description}</p>
                                 `;
 

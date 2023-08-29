@@ -6,66 +6,62 @@ import FormErrors from '../../reusable_components/FormErrors/FormErrors.js';
 
 function AddFishingSite() {
 
-    /* VARIABLE VALUES */
-    /* put these in a single useState obj - ... spread operator to update obj properties with setter?*/
-    let [pierName, setPierName] = useState("");
-    let [longitude, setLongitude] = useState("");
-    let [latitude, setLatitude] = useState("");
-    let [description, setDescription] = useState("");
-
-    /* VARIABLE (VALID || INVALID) STATES */
-    /* put these in a single useState obj - ... spread operator to update obj properties with setter?*/
-    let [pierNameValid, setPierNameValid] = useState(false);
-    let [longitudeValid, setLongitudeValid] = useState(false);
-    let [latitudeValid, setLatitudeValid] = useState(false);
-    let [descriptionValid, setDescriptionValid] = useState(false);
-
-    /* FORM VALIDATION STATE */
+    /* FIELD VALUES */
+    let [fieldValues, setFieldValues] = useState({ siteName: '', siteType: '', longitude: '', latitude: '', description: '' });
+    /* FIELD VALUES VALID? */
+    let [fieldValuesValid, setFieldValuesValid] = useState({ siteName: false, siteType: false, longitude: false, latitude: false, description: false });
+    /* ERROR TEXT (IF ANY) */
+    let [formErrors, setFormErrors] = useState({ siteName: '', siteType: '', longitude: '', latitude: '', description: '' });
+    /* FORM VALIDED? STATE */
     let [formValid, setFormValid] = useState(false);
-    /* TEXT ERRORS (IF ANY) */
-    let [formErrors, setFormErrors] = useState({ pierName: '', longitude: '', latitude: '', description: '' });
 
     // form validation
     const validateField = (fieldName, value) => {
         switch (fieldName) {
-            case 'pierName':
-                pierNameValid = (value.length >= 3 && value.length <= 75);
-                formErrors.pierName = pierNameValid ? '' : 'Site name required to be between 3-75 characters.';
+            case 'siteName':
+                fieldValuesValid.siteName = (value.length >= 3 && value.length <= 75);
+                formErrors.siteName = fieldValuesValid.siteName ? '' : ' Requires 3-75 characters';
+                break;
+            case 'siteType':
+                fieldValuesValid.siteType = (value !== '');
+                formErrors.siteType = fieldValuesValid.siteType ? '' : ' Required';
                 break;
             case 'longitude':
-                longitudeValid = (value >= -77.58 && value <= -75.2);
-                formErrors.longitude = longitudeValid ? '' : 'Range is -77.58 to -75.2';
+                fieldValuesValid.longitude = (value >= -77.58 && value <= -75.2);
+                formErrors.longitude = fieldValuesValid.longitude ? '' : ' Range is -77.58 to -75.2';
                 break;
             case 'latitude':
-                latitudeValid = (value >= 36.56 && value <= 37.60);
-                formErrors.latitude = latitudeValid ? '' : 'Range is 36.56 to 37.60';
+                fieldValuesValid.latitude = (value >= 36.56 && value <= 37.60);
+                formErrors.latitude = fieldValuesValid.latitude ? '' : ' Range is 36.56 to 37.60';
                 break;
             case 'description':
-                descriptionValid = (value.length >= 25 && value.length <= 1500);
-                formErrors.description = descriptionValid ? '' : ' Description required to be between 25-1500 characters.';
+                fieldValuesValid.description = (value.length >= 25 && value.length <= 1500);
+                formErrors.description = fieldValuesValid.description ? '' : ' Description required to be between 25-1500 characters';
                 break;
             default:
                 break;
         }
 
         setFormErrors(formErrors);
-        setPierNameValid(pierNameValid);
-        setLongitudeValid(longitudeValid);
-        setLatitudeValid(latitudeValid);
-        setDescriptionValid(descriptionValid);
+        setFieldValuesValid(fieldValuesValid);
     }
 
     // on form submission
     const handleSubmit = (e) => {
 
         e.preventDefault();
-        formValid = (pierNameValid && longitudeValid && latitudeValid && descriptionValid);
+        formValid = (fieldValuesValid.siteName && 
+                    fieldValuesValid.siteType && 
+                    fieldValuesValid.longitude && 
+                    fieldValuesValid.latitude && 
+                    fieldValuesValid.description);
 
         if (formValid) {
             axios.post("/tbl73KANXAAstm4Kr/",
                 {
                     "fields": {
-                        "pierName": document.getElementById("pierName").value,
+                        "siteName": document.getElementById("siteName").value,
+                        "siteType": document.getElementById("siteType").value,
                         "longitude": Number(document.getElementById("longitude").value),
                         "latitude": Number(document.getElementById("latitude").value),
                         "description": document.getElementById("description").value,
@@ -92,38 +88,52 @@ function AddFishingSite() {
             <form className="form-content" onSubmit={handleSubmit} >
                 <p id='pageTitle'>Add Fishing Site</p>
                 <div className="row input-group">
-                    <div className="col-6">
+                    <div className="col-3">
                         <input
                             type="text"
                             className="form-control"
-                            id="pierName"
-                            value={pierName}
+                            id="siteName"
+                            value={fieldValues.siteName}
                             placeholder="Fishing Site Name"
-                            aria-label="Fishing Site Name"
-                            aria-describedby="basic-addon2"
                             onChange={(e) => {
-                                setPierName(e.target.value);
-                                validateField("pierName", e.target.value);
+                                setFieldValues({ ...fieldValues, siteName: e.target.value });
+                                validateField("siteName", e.target.value);
                             }}
                             minLength="3"
                             maxLength="75"
                             required
                         ></input>
                         <div className='panel panel-default'>
-                            <FormErrors formErrors={formErrors} fieldName="pierName" />
+                            <FormErrors formErrors={formErrors} fieldName="siteName" />
                         </div>
                     </div>
-                    <div className="col-3">
+                    <div className="col-2">
+                        <select
+                            className="custom-select form-control"
+                            id="siteType"
+                            onClick={(e) => {
+                                setFieldValues({ ...fieldValues, siteType: e.target.value });
+                                validateField("siteType", e.target.value);
+                            }}
+                            required
+                        >
+                            <option value="">Site Type</option>
+                            <option value="tidal">Tidal</option>
+                            <option value="non-tidal">Non-Tidal (Pond/Lake)</option>
+                        </select>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="siteType" />
+                        </div>
+                    </div>
+                    <div className="col-2">
                         <input
                             type="number"
                             className="form-control"
                             id="longitude"
-                            value={longitude}
+                            value={fieldValues.longitude}
                             placeholder="Longitude"
-                            aria-label="Longitude"
-                            aria-describedby="basic-addon2"
                             onChange={(e) => {
-                                setLongitude(e.target.value);
+                                setFieldValues({ ...fieldValues, longitude: e.target.value });
                                 validateField("longitude", e.target.value);
                             }}
                             step=".0000001"
@@ -134,17 +144,15 @@ function AddFishingSite() {
                             <FormErrors formErrors={formErrors} fieldName="longitude" />
                         </div>
                     </div>
-                    <div className="col-3">
+                    <div className="col-2">
                         <input
                             type="number"
                             className="form-control"
                             id="latitude"
-                            value={latitude}
+                            value={fieldValues.latitude}
                             placeholder="Latitude"
-                            aria-label="Latitude"
-                            aria-describedby="basic-addon2"
                             onChange={(e) => {
-                                setLatitude(e.target.value);
+                                setFieldValues({ ...fieldValues, latitude: e.target.value });
                                 validateField("latitude", e.target.value);
                             }}
                             step=".0000001"
@@ -158,17 +166,16 @@ function AddFishingSite() {
                 </div> {/* close row */}
                 <br />
                 <div className="row input-group">
-                    <div className="col-12">
+                    <div className="col-9">
                         <textarea
                             rows="5"
                             type="text"
                             className="form-control"
                             id="description"
-                            value={description}
+                            value={fieldValues.description}
                             placeholder="Describe the new fishing site!"
-                            aria-label="Describe the new fishing site!"
                             onChange={(e) => {
-                                setDescription(e.target.value);
+                                setFieldValues({ ...fieldValues, description: e.target.value });
                                 validateField("description", e.target.value);
                             }}
                             minLength="25"
@@ -199,11 +206,3 @@ function AddFishingSite() {
 }
 
 export default AddFishingSite;
-
-
-
-// notes
-// 1. check in place so people will not duplicate locations
-// 2. bounding box
-//      latitude range 36.5610543 - 37.6024947 => 36.56 - 37.60
-//      longitude range -75.4199042 - -77.5756627 => -75.2 - -77.58
