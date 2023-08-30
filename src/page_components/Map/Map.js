@@ -73,10 +73,12 @@ function Map() {
     useEffect(() => {
         // GET latest fishing-site data
         axios.get('/tbl73KANXAAstm4Kr')
-            .then(response => setFishingSiteData(response.data));
+            .then(response => setFishingSiteData(response.data))
+            .catch(function (error) {console.log(error);});
         // GET daily fishing-trip data
         axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=siteName')
-            .then(response => setDailyFishingTripData(response.data));
+            .then(response => setDailyFishingTripData(response.data))
+            .catch(function (error) {console.log(error);});
     }, []);
 
     // create geoJSON data structure for fishing-sites

@@ -54,7 +54,8 @@ function AddFishingTrip() {
     // GET site names for dropdown field
     useEffect(() => {
         axios.get('/tbl73KANXAAstm4Kr')
-            .then(response => setDropdownValues(response.data));
+            .then(response => setDropdownValues(response.data))
+            .catch(function (error) {console.log(error);});
     }, []);
 
     let recordsArr = [];

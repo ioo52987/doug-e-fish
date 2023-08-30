@@ -10,7 +10,8 @@ function PreviousTrips() {
     useEffect(() => {
         // GET from airtable all of the trips in the database with an axios call, might need to handle 'Pages'
         axios.get('/tblZXiWg0iGnfIucV')
-            .then(response => setData(response.data));
+            .then(response => setData(response.data))
+            .catch(function (error) { console.log(error); });
     }, []);
 
     let recordsArr = [];
@@ -46,9 +47,13 @@ function PreviousTrips() {
                                     <td>{i.fields.siteName}</td>
                                     <td>{i.fields.description}</td>
                                     <td>
-                                        <a href={i.fields.url}>
-                                            <i className="fas fa-camera"></i>
-                                        </a>
+                                        {(i.fields.url) ?
+                                            <a href={i.fields.url}>
+                                                <i className="fas fa-camera"></i>
+                                            </a>
+                                            :
+                                            <i className="fas fa-ban"></i>
+                                        }
                                     </td>
                                     <td>{i.fields.rating}</td>
                                 </tr>

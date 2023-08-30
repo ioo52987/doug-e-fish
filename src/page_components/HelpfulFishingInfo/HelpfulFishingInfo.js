@@ -49,14 +49,17 @@ function HelpfulFishingInfo() {
 
     /* calling API */
     axios.get(tideAPIcall)
-        .then(response => setTideData(response.data));
+        .then(response => setTideData(response.data))
+        .catch(function (error) {console.log(error);});
     axios.get(airAPIcall)
-        .then(response => setAirTemperature(response.data));
+        .then(response => setAirTemperature(response.data))
+        .catch(function (error) {console.log(error);});
     axios.get(waterAPIcall)
-        .then(response => setWaterTemperature(response.data));
+        .then(response => setWaterTemperature(response.data))
+        .catch(function (error) {console.log(error);});
     axios.get(windAPIcall)
-        .then(response => setWind(response.data));
-
+        .then(response => setWind(response.data))
+        .catch(function (error) {console.log(error);});
 
     let recordsArr = [];
     if (tideData.predictions) {
