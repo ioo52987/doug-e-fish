@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './RatingButton.css';
 
-function RatingButton(props) {
+function RatingButton() {
 
     /* DYNAMIC ACTIVE CLASS - RATING */
     let [activeButtons, setActiveButtons] = useState({
@@ -10,14 +10,8 @@ function RatingButton(props) {
         active3: 'undefined',
         active4: 'undefined',
         active5: 'undefined',
-    }, () => {
-        /* callback() --- looks like it's not being called?*/
-        console.log('child1');
-        if (props.onClick) {
-            props.onClick(activeButtons);
-            console.log('child2');
-        }
     });
+
     let [noRating, setNoRating] = useState(0);
     let [star, setStar] = useState('stars');
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Message from '../../reusable_components/Message/Message.js';
 import './AddFishingSite.css';
 import axios from 'axios';

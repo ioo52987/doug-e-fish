@@ -1,4 +1,3 @@
-import React from 'react';
 import './FormErrors.css';
 
 function FormErrors({formErrors, fieldName}) {
