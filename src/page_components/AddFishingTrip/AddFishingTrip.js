@@ -42,14 +42,8 @@ function AddFishingTrip() {
     });
     /* FORM VALID? STATE */
     let [formState, setFormState] = useState();
-
     /* DROPDOWN MENU SIZING */
     let [size, setSize] = useState(1);
-    /* data passed back from child component via callback function ??????*/
-    const eventhandler = (data) => {
-        console.log('parent');
-        //console.log(data);
-    }
 
     // GET site names for dropdown field
     useEffect(() => {
@@ -154,7 +148,7 @@ function AddFishingTrip() {
                 <p id='pageTitle'>Add Fishing Trip</p>
                 <div className='row input-group'>
                     <div className='col-9'>
-                        <RatingButton onClick={eventhandler} />
+                        <RatingButton fieldValues={fieldValues} setFieldValues={setFieldValues} />
                     </div>
                 </div> {/* close row */}
                 <br />
@@ -312,3 +306,4 @@ export default AddFishingTrip;
 
 // notes
 // let the parent get the child state by passing a callback function
+// should child or parent handle form errors for rating component
