@@ -84,7 +84,7 @@ function AddFishingTrip() {
                 fieldValuesValid.description = (value.length >= 25 && value.length <= 1500);
                 formErrors.description = fieldValuesValid.description ? '' : ' Description required to be between 25-1500 characters';
                 break;
-            case 'url': 
+            case 'url':
                 fieldValuesValid.url = (/(^https:\/\/)|(^\s*$)/).test(value);
                 formErrors.url = fieldValuesValid.url ? '' : ' URL requried to begin with https:// ';
                 break;
@@ -109,6 +109,30 @@ function AddFishingTrip() {
 
         if (formState) {
 
+            // get prior tripTotal and rSum record for specific fishingSite
+            let newTripTotal = 0;
+            let newRSum = 0;
+            let recordID = '';
+            for (let i = 0; i < recordsArr.length; i++) {
+                if (fieldValues.siteName === recordsArr[i].fields.siteName) {
+                    newTripTotal = recordsArr[i].fields.tripTotal + 1;
+                    newRSum = recordsArr[i].fields.rSum + fieldValues.rating;
+                    recordID = recordsArr[i].id;
+                }
+            }
+            // PATCH(update) fishingSite with new totals based on the fishingTrip user input
+            axios.patch(`/tbl73KANXAAstm4Kr/${recordID}/`,
+                {
+                    "fields": {
+                        "tripTotal": newTripTotal,
+                        "rSum": newRSum,
+                    }
+                }
+            )
+                .then(response => console.log("PATCH success!"))
+                .catch(function (error) { console.log(error) });
+
+            // POST new fishingTrip data
             axios.post("/tblZXiWg0iGnfIucV/",
                 {
                     "fields": {
@@ -123,7 +147,7 @@ function AddFishingTrip() {
                 }
             )
                 .then((resp) => {
-                    console.log("success!");
+                    console.log("POST success!");
                     setFormState(true);
                     const delay = 5000; // milliseconds
                     setTimeout(() => {

@@ -231,12 +231,16 @@ function Map() {
 
                 const coordinates = e.features[0].geometry.coordinates.slice();
                 const siteName = e.features[0].properties.siteName;
-                const rating = e.features[0].properties.rating;
+                let rating = (Number(e.features[0].properties.rating)).toFixed(2);
                 const description = e.features[0].properties.description;
+
+                // handling NaN (for new fishingSites with no ratings)
+                isNaN(rating) ? rating = 0 : rating = rating; //-weird
+
                 let content = `
                                 <b>${siteName}</b><br>
-                                <h6>Overall Rating: ${rating}/5</br>
-                                Fish Caught Today: ${fishingSites[siteName]}</h6>
+                                <div>Overall Rating: <div style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">${rating}</div></br>
+                                Fish Caught Today: <div style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">${fishingSites[siteName]}</div></br>
                                 <p>${description}</p>
                                 `;
 
