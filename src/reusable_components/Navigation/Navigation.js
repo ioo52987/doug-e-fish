@@ -31,9 +31,11 @@ function Navigation() {
     let tideAPIcall = `${frontOfAPIcall}date=today&station=${stationValue}&product=predictions&datum=MLLW&${endOfAPIcall}`;
 
     axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date')
-      .then(response => setFishCaughtData(response.data));
+      .then(response => setFishCaughtData(response.data))
+      .catch(function (error) {console.log(error);});
     axios.get(tideAPIcall)
-      .then(response => setTideData(response.data));
+      .then(response => setTideData(response.data))
+      .catch(function (error) {console.log(error);});
   }, [stationValue]);
 
   /* extract daily caught fish from response data */

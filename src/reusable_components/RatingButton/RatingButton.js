@@ -1,27 +1,30 @@
 import { useState } from 'react';
 import './RatingButton.css';
 
-function RatingButton() {
+function RatingButton({ fieldValues }) {
 
     /* DYNAMIC ACTIVE CLASS - RATING */
     let [activeButtons, setActiveButtons] = useState({
-        active1: 'undefined',
+        active1: 'active',
         active2: 'undefined',
         active3: 'undefined',
         active4: 'undefined',
         active5: 'undefined',
     });
 
-    let [noRating, setNoRating] = useState(0);
-    let [star, setStar] = useState('stars');
+    let [rating, setChildRating] = useState(1); // shows rating on the page
+    let [star, setStar] = useState('star');
 
-    // the event passed to parent event would also need to handle formErrors
+    const setParentRating = eventID => {
+        fieldValues.rating = eventID;
+    };
 
     // handle rating field button group -- could do some basic arithmetic to make this cleaner (future work)
     const handleClickActivation = (event) => {
-        event.preventDefault();
+
         let eventID = Number(event.target.id);
-        setNoRating(eventID);
+        setChildRating(eventID);
+        setParentRating(eventID);
         eventID === 1 ? setStar('star') : setStar('stars');
 
         switch (eventID) {
@@ -107,7 +110,7 @@ function RatingButton() {
                     onClick={handleClickActivation}
                 ><i className="fa fa-star"></i></button>
 
-                <div className='noRating'>{noRating} {star}</div>
+                <div className='rating'>{rating} {star}</div>
             </div>
         </div>
     );

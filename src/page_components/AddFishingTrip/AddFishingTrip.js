@@ -26,9 +26,8 @@ function AddFishingTrip() {
         siteName: false,
         tideType: false,
         fishCaught: false,
-        rating: false,
         description: false,
-        url: false
+        url: true // field isn't required and can submit empty
     });
     /* ERROR TEXT (IF ANY) */
     let [formErrors, setFormErrors] = useState({
@@ -36,25 +35,19 @@ function AddFishingTrip() {
         siteName: '',
         tideType: '',
         fishCaught: '',
-        rating: '',
         description: '',
         url: ''
     });
     /* FORM VALID? STATE */
     let [formState, setFormState] = useState();
-
     /* DROPDOWN MENU SIZING */
     let [size, setSize] = useState(1);
-    /* data passed back from child component via callback function ??????*/
-    const eventhandler = (data) => {
-        console.log('parent');
-        //console.log(data);
-    }
 
     // GET site names for dropdown field
     useEffect(() => {
         axios.get('/tbl73KANXAAstm4Kr')
-            .then(response => setDropdownValues(response.data));
+            .then(response => setDropdownValues(response.data))
+            .catch(function (error) { console.log(error); });
     }, []);
 
     let recordsArr = [];
@@ -87,15 +80,12 @@ function AddFishingTrip() {
                 fieldValuesValid.fishCaught = (/^[^.]*$/).test(value); // why doesn't (in the input field) a period throw an error?
                 formErrors.fishCaught = fieldValuesValid.fishCaught ? '' : ' Integers only';
                 break;
-            case 'rating':
-                fieldValuesValid.rating = true;
-                break;
             case 'description':
                 fieldValuesValid.description = (value.length >= 25 && value.length <= 1500);
                 formErrors.description = fieldValuesValid.description ? '' : ' Description required to be between 25-1500 characters';
                 break;
-            case 'url':
-                fieldValuesValid.url = (/^https:\/\//).test(value);
+            case 'url': 
+                fieldValuesValid.url = (/(^https:\/\/)|(^\s*$)/).test(value);
                 formErrors.url = fieldValuesValid.url ? '' : ' URL requried to begin with https:// ';
                 break;
             default:
@@ -114,7 +104,6 @@ function AddFishingTrip() {
             fieldValuesValid.siteName &&
             fieldValuesValid.tideType &&
             fieldValuesValid.fishCaught &&
-            fieldValuesValid.rating &&
             fieldValuesValid.description &&
             fieldValuesValid.url);
 
@@ -122,13 +111,13 @@ function AddFishingTrip() {
             axios.post("/tblZXiWg0iGnfIucV/",
                 {
                     "fields": {
-                        "date": document.getElementById("date").value,
-                        "siteName": document.getElementById("siteName").value,
-                        "tideType": document.getElementById("tideType").value,
-                        "fishCaught": Number(document.getElementById("fishCaught").value),
-                        "rating": document.getElementById("rating").value,
-                        "description": document.getElementById("description").value,
-                        "url": document.getElementById("url").value,
+                        "date": fieldValues.date,
+                        "siteName": fieldValues.siteName,
+                        "tideType": fieldValues.tideType,
+                        "fishCaught": Number(fieldValues.fishCaught),
+                        "rating": fieldValues.rating,
+                        "description": fieldValues.description,
+                        "url": fieldValues.url,
                     }
                 }
             )
@@ -152,8 +141,8 @@ function AddFishingTrip() {
             <form className="form-content" onSubmit={handleSubmit}>
                 <p id='pageTitle'>Add Fishing Trip</p>
                 <div className='row input-group'>
-                    <div className='col-9'>
-                        <RatingButton onClick={eventhandler} />
+                    <div id='rating' className='col-9'>
+                        <RatingButton fieldValues={fieldValues} />
                     </div>
                 </div> {/* close row */}
                 <br />
@@ -163,7 +152,6 @@ function AddFishingTrip() {
                             type="date"
                             className="form-control"
                             id="date"
-                            value={fieldValues.date}
                             placeholder="Date Format: ##/##/####"
                             aria-label={fieldValues.date}
                             aria-describedby="basic-addon2"
@@ -229,7 +217,6 @@ function AddFishingTrip() {
                             type="number"
                             className="form-control"
                             id="fishCaught"
-                            value={fieldValues.fishCaught}
                             placeholder="No. Fish Caught"
                             aria-label="No. Fish Caught"
                             aria-describedby="basic-addon2"
@@ -253,10 +240,10 @@ function AddFishingTrip() {
                             type="text"
                             className="form-control"
                             id="description"
-                            value={fieldValues.description}
                             placeholder="Describe the fishing trip!"
                             aria-label="Describe the fishing trip!"
                             onChange={(e) => {
+                                setFieldValuesValid({ ...fieldValuesValid, 'url': false })
                                 setFieldValues({ ...fieldValues, description: e.target.value });
                                 validateField("description", e.target.value);
                             }}
@@ -276,7 +263,6 @@ function AddFishingTrip() {
                             type="url"
                             className="form-control"
                             id="url"
-                            value={fieldValues.url}
                             placeholder="Enter an https:// to a public photo album of trip"
                             aria-label={fieldValues.url}
                             aria-describedby="basic-addon1"
@@ -308,6 +294,3 @@ function AddFishingTrip() {
 }
 
 export default AddFishingTrip;
-
-// notes
-// let the parent get the child state by passing a callback function
