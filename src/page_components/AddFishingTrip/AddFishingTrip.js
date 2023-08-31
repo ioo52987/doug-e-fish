@@ -108,6 +108,7 @@ function AddFishingTrip() {
             fieldValuesValid.url);
 
         if (formState) {
+
             axios.post("/tblZXiWg0iGnfIucV/",
                 {
                     "fields": {
@@ -147,7 +148,7 @@ function AddFishingTrip() {
                 </div> {/* close row */}
                 <br />
                 <div className="row input-group">
-                    <div className="col-2 pad">
+                    <div className="col-2">
                         <input
                             type="date"
                             className="form-control"
@@ -165,7 +166,7 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="date" />
                         </div>
                     </div>
-                    <div className="col-3 pad">
+                    <div className="col-3">
                         <select
                             className="custom-select form-control"
                             id="siteName"
@@ -192,7 +193,7 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="siteName" />
                         </div>
                     </div>
-                    <div className="col-2 pad">
+                    <div className="col-2">
                         <select
                             className="custom-select form-control"
                             id="tideType"
@@ -212,7 +213,7 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="tideType" />
                         </div>
                     </div>
-                    <div className="col-2 pad">
+                    <div className="col-2">
                         <input
                             type="number"
                             className="form-control"
@@ -281,9 +282,9 @@ function AddFishingTrip() {
                     <div className="col-2">
                         <button className="btn submit-btn" type="submit">Submit</button>
                     </div>
-                    <div className="col-10 message">
+                    <div className="col-7 message">
                         <Message
-                            formState={formState}
+                            formValid={formState}
                             message="Success! Thanks for submitting a fishing trip!  :)"
                         />
                     </div>
