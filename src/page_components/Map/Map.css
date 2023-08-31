@@ -20,7 +20,7 @@
     background-color: #fbfbfb;
     padding: 12px;
 }
-.fish-site-popup .mapboxgl-popup-content h6{
+.fish-site-popup .mapboxgl-popup-content div{
     margin-top: 3px;
     font-size: 15px;
 }

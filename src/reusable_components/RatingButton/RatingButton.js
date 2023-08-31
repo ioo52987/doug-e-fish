@@ -18,6 +18,7 @@ function RatingButton({ fieldValues }) {
     const setParentRating = eventID => {
         fieldValues.rating = eventID;
     };
+    setParentRating(rating); // passes page load rating (1), without a click event
 
     // handle rating field button group -- could do some basic arithmetic to make this cleaner (future work)
     const handleClickActivation = (event) => {
