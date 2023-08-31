@@ -1,29 +1,27 @@
 import { useState } from 'react';
 import './RatingButton.css';
 
-function RatingButton( {fieldValues, setFieldValues} ) {
+function RatingButton({ fieldValues }) {
 
     /* DYNAMIC ACTIVE CLASS - RATING */
     let [activeButtons, setActiveButtons] = useState({
-        active1: 'undefined',
+        active1: 'active',
         active2: 'undefined',
         active3: 'undefined',
         active4: 'undefined',
         active5: 'undefined',
     });
 
-    let [rating, setChildRating] = useState(0); // shows rating on the page
-    let [star, setStar] = useState('stars');
+    let [rating, setChildRating] = useState(1); // shows rating on the page
+    let [star, setStar] = useState('star');
 
     const setParentRating = eventID => {
-        setFieldValues({ ...fieldValues, rating: eventID });
+        fieldValues.rating = eventID;
     };
 
     // handle rating field button group -- could do some basic arithmetic to make this cleaner (future work)
     const handleClickActivation = (event) => {
-        
-        // event.preventDefault();
-        
+
         let eventID = Number(event.target.id);
         setChildRating(eventID);
         setParentRating(eventID);
