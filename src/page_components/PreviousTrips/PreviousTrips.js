@@ -1,28 +1,28 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./PreviousTrips.css";
-//import {DataTable} from "simple-datatables";
 
 function PreviousTrips() {
 
-    let [data, setData] = useState({});
+    let [offsetID, setOffset] = useState('');
+    let ALL_PreviousTrips = [];
 
     useEffect(() => {
-        // GET from airtable all of the trips in the database with an axios call, might need to handle 'Pages'
-        axios.get('/tblZXiWg0iGnfIucV')
-            .then(response => setData(response.data))
+
+        // GET from airtable all fishingTrips - Airtable limits api calls to 100 records 
+        axios.get(`/tblZXiWg0iGnfIucV?offset=${offsetID}`)
+            .then(res => {
+                ALL_PreviousTrips.concat(res.data.records);
+                if (res.data.offset) {
+                    setOffset(res.data.offset);
+                }
+            })
             .catch(function (error) { console.log(error); });
-    }, []);
 
-    let recordsArr = [];
-    if (data.records) {
-        recordsArr = data.records;
-    }
-
-    //const dataTable = new DataTable("#myTable");
+    }, [offsetID]);
 
 
-    // then display trips down here
+    // display previousTrips in a table
     return (
         <div>
             <div className="table-wrapper-scroll-y my-custom-scrollbar">
@@ -40,7 +40,7 @@ function PreviousTrips() {
                             </tr>
                         </thead>
                         <tbody>
-                            {recordsArr.map((i) => (
+                            {ALL_PreviousTrips.map((i) => (
                                 <tr>
                                     <td>{i.fields.pk}</td>
                                     <td>{i.fields.date}</td>
