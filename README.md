@@ -2,9 +2,19 @@
 
 
 <p id='pageTitle'>Welcome!</p>
-This web app is created for people who like to fish in the Greater Hampton Roads Area.
+This is a web app created for people who like to fish in the Greater Hampton Roads Area.
 My hope is that it is used and enjoyed by everyone who loves all things fishing! <i>Enjoy!</i>
-<br></br>
+
+
+#### Design and Architecture
+Doug-E-Fish is a serverless app with full CRUD operations. 
+Airtable's documentation is weak, but the cloud db allows my dad (a non-coder) to easily 
+maintain the website. If functionality increases, the next app version will be to swap out
+Airtable with an actual database. We've already maxed out Airtable functionality without spending
+copious amounts of time studying their software. Workflow Management Software and CRMs (in my opinion) are becoming more
+trouble than they are worth, because of their large learning curve. Also, the reliance on 3rd party software can be somewhat risky and
+in the long run more costly. Rapid changes in technology require that more people know how to code (seems obvious). Intermediary software 
+solutions (though well intended) cripple this avenue. Learn coding! It's fun and empowering!
 
 Powered by the following techonologies: \
 \
