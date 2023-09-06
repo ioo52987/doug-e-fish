@@ -4,22 +4,20 @@ import "./PreviousTrips.css";
 
 function PreviousTrips() {
 
-    let [offsetID, setOffset] = useState('');
-    let ALL_PreviousTrips = [];
-
+    // GET previousTrips
+    let [offset, setOffset] = useState('');
+    let [previousTrips, setPreviousTrips] = useState([]);
     useEffect(() => {
-
-        // GET from airtable all fishingTrips - Airtable limits api calls to 100 records 
-        axios.get(`/tblZXiWg0iGnfIucV?offset=${offsetID}`)
-            .then(res => {
-                ALL_PreviousTrips.concat(res.data.records);
-                if (res.data.offset) {
-                    setOffset(res.data.offset);
+        axios.get(`/tblZXiWg0iGnfIucV?offset=${offset}`)
+            .then(response => {
+                let data = response.data.records;
+                setPreviousTrips([...previousTrips, ...data]);
+                if (response.data.offset) {
+                    setOffset(response.data.offset)
                 }
             })
             .catch(function (error) { console.log(error); });
-
-    }, [offsetID]);
+    }, [offset])
 
 
     // display previousTrips in a table
@@ -40,25 +38,25 @@ function PreviousTrips() {
                             </tr>
                         </thead>
                         <tbody>
-                            {ALL_PreviousTrips.map((i) => (
-                                <tr>
-                                    <td>{i.fields.pk}</td>
-                                    <td>{i.fields.date}</td>
-                                    <td>{i.fields.siteName}</td>
-                                    <td>{i.fields.description}</td>
-                                    <td>
-                                        {(i.fields.url) ?
-                                            <a href={i.fields.url}>
-                                                <i className="fas fa-camera"></i>
-                                            </a>
-                                            :
-                                            <i className="fas fa-ban"></i>
-                                        }
-                                    </td>
-                                    <td>{i.fields.rating}</td>
-                                </tr>
-
-                            ))}
+                            {
+                                previousTrips.map((i) => (
+                                    <tr>
+                                        <td key="1">{i.fields.pk}</td>
+                                        <td key='2'>{i.fields.date}</td>
+                                        <td key='3'>{i.fields.siteName}</td>
+                                        <td key='4'>{i.fields.description}</td>
+                                        <td key='5'>
+                                            {(i.fields.url) ?
+                                                <a href={i.fields.url}>
+                                                    <i className="fas fa-camera"></i>
+                                                </a>
+                                                :
+                                                <i className="fas fa-ban"></i>
+                                            }
+                                        </td>
+                                        <td key='6'>{i.fields.rating}</td>
+                                    </tr>
+                                ))}
                         </tbody>
                     </table>
                 </div>

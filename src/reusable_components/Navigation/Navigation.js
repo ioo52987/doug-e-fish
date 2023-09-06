@@ -17,9 +17,10 @@ function Navigation() {
   ];
 
   /* states */
-  let [fishCaughtData, setFishCaughtData] = useState({});
+  let [fishCaughtData, setFishCaughtData] = useState([]);
   let [tideData, setTideData] = useState({});
   let [stationValue, setStationValue] = useState("8637689");
+  let [offset, setOffset] = useState('');
 
   let currentDate = new Date().toJSON().slice(0, 10);
 
@@ -30,19 +31,25 @@ function Navigation() {
     let endOfAPIcall = `time_zone=lst_ldt&interval=hilo&units=english&application=dougEfish&format=json`;
     let tideAPIcall = `${frontOfAPIcall}date=today&station=${stationValue}&product=predictions&datum=MLLW&${endOfAPIcall}`;
 
-    axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date')
-      .then(response => setFishCaughtData(response.data))
+    axios.get(`/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date&offset=${offset}`)
+      .then(response => {
+        let data = response.data.records;
+        setFishCaughtData([...fishCaughtData, ...data]);
+        if(response.data.offset){
+          setOffset(response.data.offset);
+        }
+      })
       .catch(function (error) {console.log(error);});
     axios.get(tideAPIcall)
       .then(response => setTideData(response.data))
       .catch(function (error) {console.log(error);});
-  }, [stationValue]);
+  }, [stationValue, offset]);
 
   /* extract daily caught fish from response data */
   const getDailyFishCaught = () => {
     let totalFishCaughtToday = 0;
-    if (fishCaughtData.records) {
-      let d = fishCaughtData.records;
+    if (fishCaughtData) {
+      let d = fishCaughtData;
       let currentDate = new Date().toJSON().slice(0, 10);
       for (let i = 0; i < d.length; i++) {
         if (d[i].fields.date === currentDate) {
