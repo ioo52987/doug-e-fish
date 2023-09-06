@@ -8,10 +8,10 @@ function PreviousTrips() {
     let [offset, setOffset] = useState('');
     let [previousTrips, setPreviousTrips] = useState([]);
     useEffect(() => {
-        axios.get(`/tblZXiWg0iGnfIucV?offset=${offset}`)
+        axios.get(`/` + process.env.REACT_APP_FISHING_TRIPS_AIRTABLE + `?offset=${offset}`)
             .then(response => {
                 let data = response.data.records;
-                setPreviousTrips([...previousTrips, ...data]);
+                setPreviousTrips(previousTrips=>[...previousTrips, ...data]);
                 if (response.data.offset) {
                     setOffset(response.data.offset)
                 }

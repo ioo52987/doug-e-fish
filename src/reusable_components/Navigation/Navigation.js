@@ -31,10 +31,10 @@ function Navigation() {
     let endOfAPIcall = `time_zone=lst_ldt&interval=hilo&units=english&application=dougEfish&format=json`;
     let tideAPIcall = `${frontOfAPIcall}date=today&station=${stationValue}&product=predictions&datum=MLLW&${endOfAPIcall}`;
 
-    axios.get(`/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date&offset=${offset}`)
+    axios.get(`/` + process.env.REACT_APP_FISHING_TRIPS_AIRTABLE + `?fields%5B%5D=fishCaught&fields%5B%5D=date&offset=${offset}`)
       .then(response => {
         let data = response.data.records;
-        setFishCaughtData([...fishCaughtData, ...data]);
+        setFishCaughtData(fishCaughtData => [...fishCaughtData, ...data]);
         if(response.data.offset){
           setOffset(response.data.offset);
         }

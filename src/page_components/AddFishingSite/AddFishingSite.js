@@ -57,7 +57,7 @@ function AddFishingSite() {
                     fieldValuesValid.description);
 
         if (formValid) {
-            axios.post("/tbl73KANXAAstm4Kr/",
+            axios.post(`/` + process.env.REACT_APP_FISHING_SITES_AIRTABLE + `/`,
                 {
                     "fields": {
                         "siteName": document.getElementById("siteName").value,
