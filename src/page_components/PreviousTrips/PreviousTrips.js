@@ -1,28 +1,26 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./PreviousTrips.css";
-//import {DataTable} from "simple-datatables";
 
 function PreviousTrips() {
 
-    let [data, setData] = useState({});
-
+    // GET previousTrips
+    let [offset, setOffset] = useState('');
+    let [previousTrips, setPreviousTrips] = useState([]);
     useEffect(() => {
-        // GET from airtable all of the trips in the database with an axios call, might need to handle 'Pages'
-        axios.get('/tblZXiWg0iGnfIucV')
-            .then(response => setData(response.data))
+        axios.get(`/tblZXiWg0iGnfIucV?offset=${offset}`)
+            .then(response => {
+                let data = response.data.records;
+                setPreviousTrips([...previousTrips, ...data]);
+                if (response.data.offset) {
+                    setOffset(response.data.offset)
+                }
+            })
             .catch(function (error) { console.log(error); });
-    }, []);
-
-    let recordsArr = [];
-    if (data.records) {
-        recordsArr = data.records;
-    }
-
-    //const dataTable = new DataTable("#myTable");
+    }, [offset])
 
 
-    // then display trips down here
+    // display previousTrips in a table
     return (
         <div>
             <div className="table-wrapper-scroll-y my-custom-scrollbar">
@@ -40,25 +38,25 @@ function PreviousTrips() {
                             </tr>
                         </thead>
                         <tbody>
-                            {recordsArr.map((i) => (
-                                <tr>
-                                    <td>{i.fields.pk}</td>
-                                    <td>{i.fields.date}</td>
-                                    <td>{i.fields.siteName}</td>
-                                    <td>{i.fields.description}</td>
-                                    <td>
-                                        {(i.fields.url) ?
-                                            <a href={i.fields.url}>
-                                                <i className="fas fa-camera"></i>
-                                            </a>
-                                            :
-                                            <i className="fas fa-ban"></i>
-                                        }
-                                    </td>
-                                    <td>{i.fields.rating}</td>
-                                </tr>
-
-                            ))}
+                            {
+                                previousTrips.map((i) => (
+                                    <tr>
+                                        <td key="1">{i.fields.pk}</td>
+                                        <td key='2'>{i.fields.date}</td>
+                                        <td key='3'>{i.fields.siteName}</td>
+                                        <td key='4'>{i.fields.description}</td>
+                                        <td key='5'>
+                                            {(i.fields.url) ?
+                                                <a href={i.fields.url}>
+                                                    <i className="fas fa-camera"></i>
+                                                </a>
+                                                :
+                                                <i className="fas fa-ban"></i>
+                                            }
+                                        </td>
+                                        <td key='6'>{i.fields.rating}</td>
+                                    </tr>
+                                ))}
                         </tbody>
                     </table>
                 </div>

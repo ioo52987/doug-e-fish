@@ -9,7 +9,7 @@ import RatingButton from '../../reusable_components/RatingButton/RatingButton.js
 function AddFishingTrip() {
 
     /* DROPDOWN VALUES */
-    let [dropdownValues, setDropdownValues] = useState({});
+    let [dropdownValues, setDropdownValues] = useState([]);
     /* FIELD VALUES */
     let [fieldValues, setFieldValues] = useState({
         date: new Date(),
@@ -43,21 +43,23 @@ function AddFishingTrip() {
     /* DROPDOWN MENU SIZING */
     let [size, setSize] = useState(1);
 
-    // GET site names for dropdown field
+    // GET fishingSite names for dropdown field
+    let [offset, setOffset] = useState('');
     useEffect(() => {
-        axios.get('/tbl73KANXAAstm4Kr')
-            .then(response => setDropdownValues(response.data))
+        axios.get(`/tbl73KANXAAstm4Kr?offset=${offset}`)
+            .then(response => {
+                let data = response.data.records;
+                setDropdownValues([...dropdownValues, ...data]);
+                if(response.data.offset) {
+                    setOffset(response.data.offset)
+                }
+            })
             .catch(function (error) { console.log(error); });
-    }, []);
-
-    let recordsArr = [];
-    if (dropdownValues.records) {
-        recordsArr = dropdownValues.records;
-    }
+    }, [offset]);
 
     // alphabetize siteNames
     let pN = [];
-    recordsArr.map((i) => (pN.push(i.fields.siteName)));
+    dropdownValues.map((i) => (pN.push(i.fields.siteName)));
     let orderedPn = pN.sort();
 
     // form validation
@@ -113,11 +115,11 @@ function AddFishingTrip() {
             let newTripTotal = 0;
             let newRSum = 0;
             let recordID = '';
-            for (let i = 0; i < recordsArr.length; i++) {
-                if (fieldValues.siteName === recordsArr[i].fields.siteName) {
-                    newTripTotal = recordsArr[i].fields.tripTotal + 1;
-                    newRSum = recordsArr[i].fields.rSum + fieldValues.rating;
-                    recordID = recordsArr[i].id;
+            for (let i = 0; i < dropdownValues.length; i++) {
+                if (fieldValues.siteName === dropdownValues[i].fields.siteName) {
+                    newTripTotal = dropdownValues[i].fields.tripTotal + 1;
+                    newRSum = dropdownValues[i].fields.rSum + fieldValues.rating;
+                    recordID = dropdownValues[i].id;
                 }
             }
             // PATCH(update) fishingSite with new totals based on the fishingTrip user input

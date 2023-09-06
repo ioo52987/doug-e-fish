@@ -4,7 +4,6 @@ import './index.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import reportWebVitals from './reportWebVitals.js';
 import { BrowserRouter } from 'react-router-dom';
-import Airtable from 'airtable';
 import axios from 'axios';
 import App from './App.js';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -22,9 +21,7 @@ root.render(
 
 
 
-// ********************************** AIRTABLE API DEFAULTS **********************************
-//create a new Airtable object in React 
-new Airtable({ apiKey: process.env.REACT_APP_AIRTABLE_APIKEY }).base('appZ344IY3438RjUG');
+// ********************************** SETUP AIRTABLE API DEFAULTS WITH AXIOS **********************************
 //base endpoint to call with each request
 axios.defaults.baseURL = 'https://api.airtable.com/v0/appZ344IY3438RjUG/';
 //content type to send with all POST requests 

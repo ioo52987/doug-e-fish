@@ -14,8 +14,8 @@ function Map() {
     const [zoom, setZoom] = useState(10);
 
     // axios response state data
-    let [fishingSiteData, setFishingSiteData] = useState({});
-    let [dailyFishingTripData, setDailyFishingTripData] = useState({});
+    let [fishingSiteData, setFishingSiteData] = useState([]);
+    let [dailyFishingTripData, setDailyFishingTripData] = useState([]);
 
     let fishingSites = {};
 
@@ -70,55 +70,70 @@ function Map() {
         }
     ];
 
+    let [offset1, setOffset1] = useState('');
     useEffect(() => {
         // GET latest fishing-site data
         axios.get('/tbl73KANXAAstm4Kr')
-            .then(response => setFishingSiteData(response.data))
+            .then(response => {
+                let data = response.data.records;
+                setFishingSiteData([...fishingSiteData, ...data]);
+                if(response.data.offset){
+                    setOffset1(response.data.offset)
+                }
+            })
             .catch(function (error) {console.log(error);});
+    }, [offset1]);
+
+    let [offset2, setOffset2] = useState('');
+    useEffect(() => {
         // GET daily fishing-trip data
         axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=siteName')
-            .then(response => setDailyFishingTripData(response.data))
-            .catch(function (error) {console.log(error);});
-    }, []);
+        .then(response => {
+            let data = response.data.records;
+            setDailyFishingTripData([...dailyFishingTripData, ...data]);
+            if(response.data.offset){
+                setOffset2(response.data.offset);
+            }
+        })
+        .catch(function (error) {console.log(error);});
+    }, [offset2])        
 
     // create geoJSON data structure for fishing-sites
-    if (fishingSiteData.records) {
-        let recordsArr = fishingSiteData.records;
-        let len = recordsArr.length;
+    if (fishingSiteData.length) {
+        let len = fishingSiteData.length;
         for (let i = 0; i < len; i++) {
 
             // stuffing site obj
-            fishingSites[recordsArr[i].fields.siteName] = null;
+            fishingSites[fishingSiteData[i].fields.siteName] = null;
 
             siteMapProperties.push({
                 'type': 'Feature',
                 'properties': {
-                    'siteName': recordsArr[i].fields.siteName,
-                    'rating': recordsArr[i].fields.overallRating,
-                    'description': recordsArr[i].fields.description
+                    'siteName': fishingSiteData[i].fields.siteName,
+                    'rating': fishingSiteData[i].fields.overallRating,
+                    'description': fishingSiteData[i].fields.description
                 },
                 'geometry': {
                     'type': 'Point',
-                    'coordinates': [recordsArr[i].fields.longitude, recordsArr[i].fields.latitude]
+                    'coordinates': [fishingSiteData[i].fields.longitude, fishingSiteData[i].fields.latitude]
                 }
             });
         }
     }
 
     // calculate daily fish caught per fishing-site
-    if (dailyFishingTripData.records) {
-        let arr = dailyFishingTripData.records;
+    if (dailyFishingTripData.length) {
         let talliesPerSite = {};
         let totalPerSite = {};
         let currentDate = new Date().toJSON().slice(0, 10);
 
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i].fields.date === currentDate) {
-                if(arr[i].fields.siteName in talliesPerSite){
-                    talliesPerSite[arr[i].fields.siteName].push(arr[i].fields.fishCaught);
+        for (let i = 0; i < dailyFishingTripData.length; i++) {
+            if (dailyFishingTripData[i].fields.date === currentDate) {
+                if(dailyFishingTripData[i].fields.siteName in talliesPerSite){
+                    talliesPerSite[dailyFishingTripData[i].fields.siteName].push(dailyFishingTripData[i].fields.fishCaught);
                 }else{
-                    talliesPerSite[arr[i].fields.siteName] = [];
-                    talliesPerSite[arr[i].fields.siteName].push(arr[i].fields.fishCaught);
+                    talliesPerSite[dailyFishingTripData[i].fields.siteName] = [];
+                    talliesPerSite[dailyFishingTripData[i].fields.siteName].push(dailyFishingTripData[i].fields.fishCaught);
                 }
             }
         }
