@@ -1,0 +1,9 @@
+pk - auto-generated
+siteName - Can be manually altered. HOWEVER, if the siteName is changed here manually, you will also need to make those same changes to the siteName in fishingTrips.
+siteType - Safe to manually alter at anytime. 
+longitude - Safe to manually alter at anytime. 
+latitude - Safe to manually alter at anytime. 
+description - Safe to manually alter at anytime. 
+overallRating - (rSum/tripTotal) This is auto-calculated and should NOT be manually altered.
+tripTotal - This increments the trip total per site every time a user enters a fishing trip into the app. Used to auto-calculate overallRating. This should NOT be manually altered.
+rSum - The sum of all ratings per site. Used in the auto-calculation of overallRating. This should NOT be manually altered.
