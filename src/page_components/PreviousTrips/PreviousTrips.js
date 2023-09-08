@@ -28,7 +28,7 @@ function PreviousTrips() {
             date: previousTrips[i].fields.date,
             site: previousTrips[i].fields.siteName,
             description: previousTrips[i].fields.description,
-            photos:  (previousTrips[i].fields.url) ?
+            photos: (previousTrips[i].fields.url) ?
                 <a target="_blank" href={previousTrips[i].fields.url}>
                     <i className="fas fa-camera"></i>
                 </a>
@@ -42,12 +42,12 @@ function PreviousTrips() {
     // make MDB table here
     const data = {
         columns: [
-            { label: '#', field: 'pk', sort: 'asc', width: 50 },
-            { label: 'Date', field: 'date', sort: 'asc', width: 50 },
-            { label: 'Site', field: 'site', sort: 'asc', width: 200 },
-            { label: 'Description', field: 'description', sort: '', width: 200 },
-            { label: 'Photos', field: 'photos', sort: '', width: 100 },
-            { label: 'Rating', field: 'rating', sort: 'asc', width: 100 }
+            { label: '#', field: 'pk', sort: 'asc', width: 25 }, /* these widths aren't working */
+            { label: 'Date', field: 'date', sort: 'asc', width: 65 },
+            { label: 'Site', field: 'site', sort: 'asc', width: 90 },
+            { label: 'Description', field: 'description', sort: '', width: 395 },
+            { label: 'Photos', field: 'photos', sort: '', width: 40 },
+            { label: 'Rating', field: 'rating', sort: 'asc', width: 40 }
         ],
         rows: rows
     };
@@ -55,15 +55,21 @@ function PreviousTrips() {
     // display previousTrips in a table
     return (
         <div>
-            <p id='pageTitle'>PreviousTrips</p>
-            <div className='wrapper'>
-                <MDBDataTable
-                    striped
-                    bordered
-                    small
-                    data={data}
-                />
-            </div>
+            <form className="form-content">
+                <p id='pageTitle'>PreviousTrips</p>
+                <div className='temp-hack-overFlw'>
+                    <MDBDataTable
+                        /*scrollY*/ 
+                        /* tired using MDB's overflow-y but the column headers wouldn't line up 
+                           even their online example had mis-aligned headers */
+                        maxHeight="45vh"
+                        striped
+                        bordered
+                        small
+                        data={data}
+                    />
+                </div>
+            </form>
         </div>
     );
 }

@@ -65,9 +65,9 @@ a{
     color: #e3e5ed;   /* purple grey */
     color: #fbfbfb;   /* off-white */
 
-    color: #f37e98;   /* rag color match */
-    color: #eab7ed;   /* <--- not sure what this goes too */
-    color: #9ceb78;
+    color: #f37e98;   /* rag color match (hover on submit btn), also outlines invalid input boxes */
+    color: #eab7ed;   /* form validator bubbles */
+    color: #9ceb78;   /* used to indicate successful form submission */
     color: #424d5c;
     color: #000000; /* black */
 
@@ -77,4 +77,7 @@ a{
 
     /* gainsboro was here */
     /* color: gainsboro - used for titles*/
+
+    /* missing the purple in the star icon rating button group */
+    /* I think the default is that purple - I didn't make them that color */
 }

@@ -1,14 +1,6 @@
-.my-custom-scrollbar {
-    position: relative;
-    /*height: 600px;*/
-    /*overflow: auto;*/
-}
-
-/*
-.table-wrapper-scroll-y {
+.temp-hack-overFlw{
     display: block;
-}*/
-
-.wrapper{
-    padding: 15px;
+    position: relative;
+    height: 500px;
+    overflow: auto;
 }

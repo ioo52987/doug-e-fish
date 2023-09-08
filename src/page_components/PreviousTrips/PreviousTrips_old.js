@@ -28,7 +28,7 @@ function PreviousTrips() {
     // display previousTrips in a table
     return (
         <div>
-            <div className="wrapper">
+            <div className="table-wrapper-scroll-y my-custom-scrollbar">
                 <div className='table-content'>
                     <p id='pageTitle'>PreviousTrips</p>
                     <table className="table table-bordered table-striped mb-0">
