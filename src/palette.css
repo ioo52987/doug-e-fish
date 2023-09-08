@@ -3,13 +3,13 @@
     background-color: #e3e5ed;
 }
 #pageTitle{
-    background-color: gainsboro;
+    background-color: #f2f2f2;
 }
 input:invalid, textarea:invalid, select:invalid{
     outline: 2px solid #f37e98;
 }
 input:valid, textarea:valid, select:valid{
-    background-color: #ffffff;;
+    background-color: #fbfbfb;;
 }
 .submit-btn:hover {
     background-color: #f37e98;
@@ -59,16 +59,22 @@ a.list-group-item:hover {
 
 
 /*
-List out unique colors on this palette (9) :
+List out unique colors on this palette (7) :
 */
 a{
-    color: #e3e5ed;
-    color: #fbfbfb;
-    color: gainsboro;
-    color: #ffffff; /* white */
-    color: #f37e98;
-    color: #eab7ed;
+    color: #e3e5ed;   /* purple grey */
+    color: #fbfbfb;   /* off-white */
+
+    color: #f37e98;   /* rag color match */
+    color: #eab7ed;   /* <--- not sure what this goes too */
     color: #9ceb78;
     color: #424d5c;
     color: #000000; /* black */
+
+    /* previous trips table (2) */
+    color: #f2f2f2; /* brown in table */
+    color: #ffffff  /* white in table */
+
+    /* gainsboro was here */
+    /* color: gainsboro - used for titles*/
 }

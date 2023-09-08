@@ -177,7 +177,7 @@ Get some android sizes.
     }
 
     p#top-subTitle-computer {
-        padding-bottom: 8px;
+        padding: 0px;
         margin: 0px;
     }
 
