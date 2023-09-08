@@ -158,6 +158,7 @@ Get some android sizes.
     }
     #navFooter{
         padding-top: 25px;
+        font-family: 'Architects Daughter', cursive;
     }
 
     /* DO NOT DISPLAY listed below */
@@ -202,7 +203,7 @@ Get some android sizes.
 }
 .overlay-content {
     position: relative;
-    top: 13%;
+    top: 11%;
     width: 100%;
     text-align: center;
     margin-top: 5px;

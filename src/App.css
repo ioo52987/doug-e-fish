@@ -1,12 +1,4 @@
-#pageContainer{
-    position: fixed;
-    height: 600px;
-    background-color: #e3e5ed;
-    top: 17%;
-    width: 84%;
-    margin-left: 245px;
-}
-.form-content, .table-content{
+.form-content {
     padding: 15px;
 }
 
@@ -36,4 +28,28 @@ button.btn.submit-btn {
 }
 .submit-btn:hover {
     background-color: #f37e98;
+}
+
+/* PHONE SCREEN DISPLAY */
+@media only screen and (min-width: 200px) and (max-width: 970px) {
+    #pageContainer{
+        position: fixed;
+        height: 700px;
+        background-color: #e3e5ed;
+        top: 12%;
+        width: 100%;
+        margin: 0px;
+    }
+}
+
+/* COMPUTER SCREEN DISPLAY */
+@media only screen and (min-width: 971px) {
+    #pageContainer{
+        position: fixed;
+        height: 600px;
+        background-color: #e3e5ed;
+        top: 17%;
+        width: 84%;
+        margin-left: 245px;
+    }
 }

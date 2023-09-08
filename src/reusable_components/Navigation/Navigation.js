@@ -272,7 +272,7 @@ function Navigation() {
         </nav>
       </header>
 
-      {/* MAIN CONTAINER */}
+      {/* MAIN CONTAINER ----- what the hell is this? MAIN CONTAINER?*/}
       <main style={{ marginTop: 58 + 'px' }}>
         <div className="container pt-4"></div>
       </main>
