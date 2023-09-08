@@ -1,0 +1,74 @@
+/* App.css */
+#pageContainer{
+    background-color: #e3e5ed;
+}
+#pageTitle{
+    background-color: gainsboro;
+}
+input:invalid, textarea:invalid, select:invalid{
+    outline: 2px solid #f37e98;
+}
+input:valid, textarea:valid, select:valid{
+    background-color: #ffffff;;
+}
+.submit-btn:hover {
+    background-color: #f37e98;
+}
+
+/* FormErrors.css */
+#w{
+    background-color: #eab7ed;
+}
+
+/* Message.css */
+.messageFormat {
+    color: black;
+    background-color: #9ceb78;
+}
+
+/* Navigation.css  */
+body {
+    background-color: #fbfbfb;
+}
+a.list-group-item {
+    background-color: #424d5c;
+}
+a.list-group-item:hover {
+    background-color: #000000;
+}
+#top-title-computer {
+    color: #000000;
+}
+#top-title-phone {
+    color: #000000;
+}
+
+/* Map.css */
+.fish-site-popup .mapboxgl-popup-content {
+    background-color: #fbfbfb;
+}
+.fish-site-popup .mapboxgl-popup-content p{
+    background-color: #e3e5ed;
+}
+.station-popup .mapboxgl-popup-content {
+    background-color: #e3e5ed;
+}
+.station-popup .mapboxgl-popup-content h6{
+    background-color: #e3e5ed;
+}
+
+
+/*
+List out unique colors on this palette (9) :
+*/
+a{
+    color: #e3e5ed;
+    color: #fbfbfb;
+    color: gainsboro;
+    color: #ffffff; /* white */
+    color: #f37e98;
+    color: #eab7ed;
+    color: #9ceb78;
+    color: #424d5c;
+    color: #000000; /* black */
+}

@@ -175,16 +175,19 @@ function Navigation() {
         <nav id="main-navbar" className="navbar navbar-expand-lg navbar-light bg-white fixed-top">
           <div className="container-fluid">
 
-            {/* TOGGLE BUTTON -- comeback to and look into for mobile design*/}
-
             {/* BRAND */}
-            <div className="navbar-brand">
-              <p id="title">Doug-E-Fish</p>
-              <p id="subTitle">A Greater Hampton Roads Fishing Tool</p>
+            <div id="title-computer"className="navbar-brand">
+              <p id="top-title-computer">Doug-E-Fish</p>
+              <p id="top-subTitle-computer">A Greater Hampton Roads Fishing Tool</p>
             </div>
 
-            {/* RIGHT ALIGNED LINKS */}
-            <ul className="navbar-nav ms-auto d-flex flex-row">
+            <div id="title-phone"className="navbar-brand">
+              <span id="top-title-phone"><i class="fas fa-bars"></i>&nbsp;&nbsp;Doug-E-Fish</span>
+              <p id="top-subTitle-phone">A Greater Hampton Roads Fishing Tool</p>
+            </div>
+
+            {/* RIGHT ALIGNED LINKS - Media query dependent */}
+            <ul id='top-nav-computer' className="navbar-nav ms-auto d-flex flex-row">
               <li className="nav-item" id="nav-1">
                 <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{currentDate}</span>
               </li>
@@ -192,7 +195,30 @@ function Navigation() {
                 <span><i className="fas fa-fish"></i>&nbsp;Daily Fish Total:&nbsp;&nbsp;{getDailyFishCaught()}</span>
               </li>
               <li className="nav-item" id="nav-3">
-                <span><i className="fas fa-water"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>
+                <span><i className="fas fa-ship"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>
+              </li>
+              <li className="nav-item" id="nav-4">
+                <div className="input-group">
+                  <select className="custom-select form-control" id="highTide" onClick={clickHandler}>
+                    <option id="8637689" defaultValue>Yorktown USCG Training Center</option>
+                    <option id="8632200">Kiptopeke</option>
+                    <option id="8638901">Chesapeake Channel CBBT</option>
+                    <option id="8638610">Sewells Point</option>
+                    <option id="8639348">Money Point</option>
+                  </select>
+                </div>
+              </li>
+            </ul>
+            {/* TOP ALIGNED LINKS - Media query dependent */}
+            <ul id='top-nav-phone' className="navbar-nav flex-column">
+              <li className="nav-item" id="nav-1">
+                <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{currentDate}</span>
+              </li>
+              <li className="nav-item" id="nav-2">
+                <span><i className="fas fa-fish"></i>&nbsp;Daily Fish Total:&nbsp;&nbsp;{getDailyFishCaught()}</span>
+              </li>
+              <li className="nav-item" id="nav-3">
+                <span><i className="fas fa-ship"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>
               </li>
               <li className="nav-item" id="nav-4">
                 <div className="input-group">

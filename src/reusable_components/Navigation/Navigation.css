@@ -49,58 +49,141 @@ body {
 .navbar-brand {
     width: 100%;
 }
+
 #dadIcon {
     position: absolute;
     bottom: 0;
     width: 80%;
     margin-left: 20px;
 }
+
 #jeriIcon {
     position: absolute;
     bottom: 0;
     width: 90%;
     margin-left: 20px;
 }
-#sidebarMenu{
+
+#sidebarMenu {
     padding-top: 100px;
 }
-a.list-group-item{
+
+a.list-group-item {
     font-family: 'Architects Daughter', cursive;
     background-color: #424d5c;
 }
-a.list-group-item:hover{
+
+a.list-group-item:hover {
     background-color: #000000;
 }
-#title{
+
+#top-title-computer {
     font-family: 'Reggae One', cursive;
     font-size: 40px;
     text-decoration: none;
     color: #000000;
     margin: 0px;
 }
-#subTitle{
+
+#top-title-phone {
+    font-family: 'Reggae One', cursive;
+    font-size: 25px;
+    text-decoration: none;
+    color: #000000;
     margin: 0px;
-    padding: 0px;
 }
-.navbar-nav{
+
+.navbar-nav {
     align-items: flex-end;
     margin-top: auto;
     padding-bottom: 5px;
 }
 
-#nav-1{
+#nav-1 {
     width: 225px;
     padding-bottom: 5px;
 }
-#nav-2{
+
+#nav-2 {
     width: 175px;
     padding-bottom: 5px;
 }
-#nav-3{
+
+#nav-3 {
     width: 250px;
     padding-bottom: 5px;
 }
-#nav-4{
+
+#nav-4 {
     width: 290px;
-    padding-bottom: 5px;
+    padding-bottom: 0px;
+}
+
+
+
+/* 
+Working on getting top navigation being appropriately responsive on phones.
+Apple iPhone 13 has viewport size 390 x 844 Pixels 
+v12      - 390px × 844px 
+v11      - 414px × 896px
+v10 (X)  - 375px × 812px
+
+Get some android sizes.
+*/
+
+/* PHONE SCREEN DISPLAY */
+@media only screen and (min-width: 200px) and (max-width: 970px) {
+
+    /* also put into full-page mobile navigation 
+    ul#top-nav-phone.navbar-nav.flex-column {
+        align-items: flex-start;
+    } */
+
+    #top-nav-phone {
+        /* put into full-page mobile navigation */
+        /*
+        background-color: aqua;
+        padding: 5px;
+        border-radius: 5px;
+        padding-right: 50px;
+        margin-left: 5px;
+        */
+        display: none;
+    }
+
+    #top-subTitle-phone {
+        padding-left: 40px;
+        margin: 0px;
+        font-size: 17px;
+    }
+
+
+    /* DO NOT DISPLAY listed below */
+    #top-nav-computer,
+    #title-computer {
+        display: none !important;
+    }
+}
+
+
+
+
+/* COMPUTER SCREEN DISPLAY */
+@media only screen and (min-width: 971px) {
+
+    #top-nav-computer,
+    #title-computer {
+        /* background-color: orange;*/
+    }
+
+    p#top-subTitle-computer {
+        padding-bottom: 8px;
+        margin: 0px;
+    }
+
+    /* DO NOT DISPLAY listed below */
+    #top-nav-phone,
+    #title-phone {
+        display: none !important;
+    }
 }
