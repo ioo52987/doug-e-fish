@@ -28,6 +28,8 @@ function PreviousTrips() {
             date: previousTrips[i].fields.date,
             site: previousTrips[i].fields.siteName,
             description: previousTrips[i].fields.description,
+            fishCaught: previousTrips[i].fields.fishCaught,
+            tideType: previousTrips[i].fields.tideType,
             photos: (previousTrips[i].fields.url) ?
                 <a target="_blank" href={previousTrips[i].fields.url}>
                     <i className="fas fa-camera"></i>
@@ -46,6 +48,8 @@ function PreviousTrips() {
             { label: 'Date', field: 'date', sort: 'asc', width: 65 },
             { label: 'Site', field: 'site', sort: 'asc', width: 90 },
             { label: 'Description', field: 'description', sort: '', width: 395 },
+            { label: 'No.Fish', field: 'fishCaught', sort: 'asc'},
+            { label: 'Tide', field: 'tideType', sort: 'asc'},
             { label: 'Photos', field: 'photos', sort: '', width: 40 },
             { label: 'Rating', field: 'rating', sort: 'asc', width: 40 }
         ],
