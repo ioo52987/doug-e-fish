@@ -128,39 +128,42 @@ v12      - 390px × 844px
 v11      - 414px × 896px
 v10 (X)  - 375px × 812px
 
+iphone SE -------
+I'm currently going to model it around the Iphone 12 Pro
+Find another resource to test phone screen sizes
 Get some android sizes.
 */
 
 /* PHONE SCREEN DISPLAY */
 @media only screen and (min-width: 200px) and (max-width: 970px) {
 
-    /* also put into full-page mobile navigation 
-    ul#top-nav-phone.navbar-nav.flex-column {
-        align-items: flex-start;
-    } */
-
     #top-nav-phone {
-        /* put into full-page mobile navigation */
-        /*
-        background-color: aqua;
+        background-color: #f2f2f2;
         padding: 5px;
         border-radius: 5px;
         padding-right: 50px;
         margin-left: 5px;
-        */
-        display: none;
+        align-items: flex-start;
     }
-
+    #nav-3{
+        padding-bottom: 10px;
+    }
+    #nav-4{
+        padding-bottom: 10px;
+    }
     #top-subTitle-phone {
         padding-left: 40px;
         margin: 0px;
         font-size: 17px;
     }
-
+    #navFooter{
+        padding-top: 25px;
+    }
 
     /* DO NOT DISPLAY listed below */
     #top-nav-computer,
-    #title-computer {
+    #title-computer,
+    #sidebarMenu {
         display: none !important;
     }
 }
@@ -171,11 +174,6 @@ Get some android sizes.
 /* COMPUTER SCREEN DISPLAY */
 @media only screen and (min-width: 971px) {
 
-    #top-nav-computer,
-    #title-computer {
-        /* background-color: orange;*/
-    }
-
     p#top-subTitle-computer {
         padding: 0px;
         margin: 0px;
@@ -183,7 +181,36 @@ Get some android sizes.
 
     /* DO NOT DISPLAY listed below */
     #top-nav-phone,
-    #title-phone {
+    #title-phone,
+    #overlayMenu {
         display: none !important;
     }
+}
+
+
+/* OVERLAY NAVIGATION (a work in progress)*/
+.overlay {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #f2f2f2;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+.overlay-content {
+    position: relative;
+    top: 13%;
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
+}
+.overlay a {
+    padding: 10px;
+    text-decoration: none;
+    font-size: 20px;
+    display: block;
+    transition: 0.4s;
 }
