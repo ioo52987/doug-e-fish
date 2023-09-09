@@ -134,6 +134,12 @@ function Navigation() {
     setStationValue(station);
   }
 
+  const clickHandlerSide = () => {
+    var options = document.getElementById("highTide-side").options;
+    var station = options[options.selectedIndex].id;
+    setStationValue(station);
+  }
+
   /* overlay functions */
   function toggleNavMenu() {
     if (navToggle === true) {
@@ -194,7 +200,7 @@ function Navigation() {
               </li>
               <li className="nav-item" id="nav-4">
                 <div className="input-group">
-                  <select className="custom-select form-control" id="highTide" onClick={clickHandler}>
+                  <select className="custom-select form-control" id="highTide-side" onClick={clickHandlerSide}>
                     <option id="8637689" defaultValue>Yorktown USCG Training Center</option>
                     <option id="8632200">Kiptopeke</option>
                     <option id="8638901">Chesapeake Channel CBBT</option>
@@ -239,7 +245,7 @@ function Navigation() {
               <p id="top-subTitle-computer">A Greater Hampton Roads Fishing Tool</p>
             </div>
             <div id="title-phone" className="navbar-brand">
-              <span id="top-title-phone"><i class="fas fa-bars" onClick={toggleNavMenu}></i>&nbsp;&nbsp;Doug-E-Fish</span>
+              <span id="top-title-phone"><i className="fas fa-bars" onClick={toggleNavMenu}></i>&nbsp;&nbsp;Doug-E-Fish</span>
               <p id="top-subTitle-phone">A Greater Hampton Roads Fishing Tool</p>
             </div>
             {/* ------------------------------------------------*/}
