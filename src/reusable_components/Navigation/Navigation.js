@@ -21,6 +21,7 @@ function Navigation() {
   let [tideData, setTideData] = useState({});
   let [stationValue, setStationValue] = useState("8637689");
   let [offset, setOffset] = useState('');
+  let [navToggle, setNavToggle] = useState(false);
 
   let currentDate = new Date().toJSON().slice(0, 10);
 
@@ -31,18 +32,18 @@ function Navigation() {
     let endOfAPIcall = `time_zone=lst_ldt&interval=hilo&units=english&application=dougEfish&format=json`;
     let tideAPIcall = `${frontOfAPIcall}date=today&station=${stationValue}&product=predictions&datum=MLLW&${endOfAPIcall}`;
 
-    axios.get(`/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date&offset=${offset}`)
+    axios.get(`/` + process.env.REACT_APP_FISHING_TRIPS_AIRTABLE + `?fields%5B%5D=fishCaught&fields%5B%5D=date&offset=${offset}`)
       .then(response => {
         let data = response.data.records;
-        setFishCaughtData([...fishCaughtData, ...data]);
-        if(response.data.offset){
+        setFishCaughtData(fishCaughtData => [...fishCaughtData, ...data]);
+        if (response.data.offset) {
           setOffset(response.data.offset);
         }
       })
-      .catch(function (error) {console.log(error);});
+      .catch(function (error) { console.log(error); });
     axios.get(tideAPIcall)
       .then(response => setTideData(response.data))
-      .catch(function (error) {console.log(error);});
+      .catch(function (error) { console.log(error); });
   }, [stationValue, offset]);
 
   /* extract daily caught fish from response data */
@@ -133,15 +134,30 @@ function Navigation() {
     setStationValue(station);
   }
 
+  const clickHandlerSide = () => {
+    var options = document.getElementById("highTide-side").options;
+    var station = options[options.selectedIndex].id;
+    setStationValue(station);
+  }
+
+  /* overlay functions */
+  function toggleNavMenu() {
+    if (navToggle === true) {
+      document.getElementById("overlayMenu").style.width = "0%";
+      setNavToggle(false);
+    } else {
+      document.getElementById("overlayMenu").style.width = "100%";
+      setNavToggle(true);
+    }
+  }
+
   return (
     <div>
-      {/* HEADER */}
       <header>
-        {/* SIDEBAR */}
+        {/* SIDE NAVIGATION */}
         <nav id="sidebarMenu" className="collapse d-lg-block sidebar collapse bg-white">
           <div className="position-sticky">
             <div className="list-group list-group-flush mx-3 mt-4">
-
               {navigationInfo.map((val) => (
                 <NavLink
                   key={val.id}
@@ -170,21 +186,9 @@ function Navigation() {
               : <img id="dadIcon" src="https://i.ibb.co/wRcmdxw/dad-hilton-pier.png" alt="dad-hilton-pier" border="0" />
           }
         </nav>
-
-        {/* NAVBAR */}
-        <nav id="main-navbar" className="navbar navbar-expand-lg navbar-light bg-white fixed-top">
-          <div className="container-fluid">
-
-            {/* TOGGLE BUTTON -- comeback to and look into for mobile design*/}
-
-            {/* BRAND */}
-            <div className="navbar-brand">
-              <p id="title">Doug-E-Fish</p>
-              <p id="subTitle">A Greater Hampton Roads Fishing Tool</p>
-            </div>
-
-            {/* RIGHT ALIGNED LINKS */}
-            <ul className="navbar-nav ms-auto d-flex flex-row">
+        <nav id="overlayMenu" className="overlay">
+          <div className="overlay-content">
+            <ul id='top-nav-phone' className="navbar-nav flex-column">
               <li className="nav-item" id="nav-1">
                 <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{currentDate}</span>
               </li>
@@ -192,7 +196,70 @@ function Navigation() {
                 <span><i className="fas fa-fish"></i>&nbsp;Daily Fish Total:&nbsp;&nbsp;{getDailyFishCaught()}</span>
               </li>
               <li className="nav-item" id="nav-3">
-                <span><i className="fas fa-water"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>
+                <span><i className="fas fa-ship"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>
+              </li>
+              <li className="nav-item" id="nav-4">
+                <div className="input-group">
+                  <select className="custom-select form-control" id="highTide-side" onClick={clickHandlerSide}>
+                    <option id="8637689" defaultValue>Yorktown USCG Training Center</option>
+                    <option id="8632200">Kiptopeke</option>
+                    <option id="8638901">Chesapeake Channel CBBT</option>
+                    <option id="8638610">Sewells Point</option>
+                    <option id="8639348">Money Point</option>
+                  </select>
+                </div>
+              </li>
+            </ul>
+            {navigationInfo.map((val) => (
+              <NavLink
+                key={val.id}
+                to={val.href}
+                className={MDBclasses}
+                onClick={toggleNavMenu}
+                style={({ isActive }) =>
+                  isActive
+                    ? {
+                      color: '#000000',
+                      textDecoration: 'none',
+                      background: '#fbfbfb',
+                      borderColor: '#fbfbfb',
+                    }
+                    : {
+                      color: '#fbfbfb',
+                      textDecoration: 'none',
+                    }
+                }><i className={val.icon}></i><span>{val.title}</span>
+              </NavLink>
+            ))}
+            <p id='navFooter'>Have a great fishing day! </p>
+          </div>
+        </nav>
+
+        {/* TOP NAVIGATION */}
+        <nav id="main-navbar" className="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+          <div className="container-fluid">
+
+            {/* TITLE AND SUBTITLE -----------------------------------------*/}
+            <div id="title-computer" className="navbar-brand">
+              <p id="top-title-computer">Doug-E-Fish</p>
+              <p id="top-subTitle-computer">A Greater Hampton Roads Fishing Tool</p>
+            </div>
+            <div id="title-phone" className="navbar-brand">
+              <span id="top-title-phone"><i className="fas fa-bars" onClick={toggleNavMenu}></i>&nbsp;&nbsp;Doug-E-Fish</span>
+              <p id="top-subTitle-phone">A Greater Hampton Roads Fishing Tool</p>
+            </div>
+            {/* ------------------------------------------------*/}
+
+            {/* RIGHT ALIGNED LINKS --------------------------- */}
+            <ul id='top-nav-computer' className="navbar-nav ms-auto d-flex flex-row">
+              <li className="nav-item" id="nav-1">
+                <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{currentDate}</span>
+              </li>
+              <li className="nav-item" id="nav-2">
+                <span><i className="fas fa-fish"></i>&nbsp;Daily Fish Total:&nbsp;&nbsp;{getDailyFishCaught()}</span>
+              </li>
+              <li className="nav-item" id="nav-3">
+                <span><i className="fas fa-ship"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>
               </li>
               <li className="nav-item" id="nav-4">
                 <div className="input-group">
@@ -206,11 +273,12 @@ function Navigation() {
                 </div>
               </li>
             </ul>
+
           </div>
         </nav>
       </header>
 
-      {/* MAIN CONTAINER */}
+      {/* MAIN CONTAINER ----- what the hell is this? MAIN CONTAINER?*/}
       <main style={{ marginTop: 58 + 'px' }}>
         <div className="container pt-4"></div>
       </main>

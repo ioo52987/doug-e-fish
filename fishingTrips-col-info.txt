@@ -1,0 +1,8 @@
+pk - auto-generated
+date - User input date of trip. Safe to manually alter at anytime.
+siteName - Name of the fishing site. If you manually change this field ... This should match a site in the siteName field in fishingSites. There is no check for this. MAKE SURE IT MATCHES!
+description - Safe to manually alter at anytime.
+rating - Should NOT be manually altered. Used in auto-calculations.
+url - Safe to manually alter at anytime.
+fishCaught - Should NOT be manually altered. Used in auto-calculations.
+tideType - Safe to manually alter at anytime.

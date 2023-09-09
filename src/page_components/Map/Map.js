@@ -73,10 +73,10 @@ function Map() {
     let [offset1, setOffset1] = useState('');
     useEffect(() => {
         // GET latest fishing-site data
-        axios.get('/tbl73KANXAAstm4Kr')
+        axios.get(process.env.REACT_APP_FISHING_SITES_AIRTABLE)
             .then(response => {
                 let data = response.data.records;
-                setFishingSiteData([...fishingSiteData, ...data]);
+                setFishingSiteData(fishingSiteData => [...fishingSiteData, ...data]);
                 if(response.data.offset){
                     setOffset1(response.data.offset)
                 }
@@ -87,10 +87,10 @@ function Map() {
     let [offset2, setOffset2] = useState('');
     useEffect(() => {
         // GET daily fishing-trip data
-        axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=siteName')
+        axios.get(`/` + process.env.REACT_APP_FISHING_TRIPS_AIRTABLE + `?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=siteName`)
         .then(response => {
             let data = response.data.records;
-            setDailyFishingTripData([...dailyFishingTripData, ...data]);
+            setDailyFishingTripData(dailyFishingTripData => [...dailyFishingTripData, ...data]);
             if(response.data.offset){
                 setOffset2(response.data.offset);
             }

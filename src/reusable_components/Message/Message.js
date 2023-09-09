@@ -4,7 +4,7 @@ function Message(props) {
     if (props.formValid === true) {
         return (
             <div className='messageFormat'>
-                {props.message}
+                <p className='success'>{props.message}</p>
             </div>
         );
     }

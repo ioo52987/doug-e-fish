@@ -46,10 +46,10 @@ function AddFishingTrip() {
     // GET fishingSite names for dropdown field
     let [offset, setOffset] = useState('');
     useEffect(() => {
-        axios.get(`/tbl73KANXAAstm4Kr?offset=${offset}`)
+        axios.get(`/`+ process.env.REACT_APP_FISHING_SITES_AIRTABLE + `?offset=${offset}`)
             .then(response => {
                 let data = response.data.records;
-                setDropdownValues([...dropdownValues, ...data]);
+                setDropdownValues(dropdownValues=>[...dropdownValues, ...data]);
                 if(response.data.offset) {
                     setOffset(response.data.offset)
                 }
@@ -123,7 +123,7 @@ function AddFishingTrip() {
                 }
             }
             // PATCH(update) fishingSite with new totals based on the fishingTrip user input
-            axios.patch(`/tbl73KANXAAstm4Kr/${recordID}/`,
+            axios.patch(`/` + process.env.REACT_APP_FISHING_SITES_AIRTABLE + `/${recordID}/`,
                 {
                     "fields": {
                         "tripTotal": newTripTotal,
@@ -135,7 +135,7 @@ function AddFishingTrip() {
                 .catch(function (error) { console.log(error) });
 
             // POST new fishingTrip data
-            axios.post("/tblZXiWg0iGnfIucV/",
+            axios.post( `/` + process.env.REACT_APP_FISHING_TRIPS_AIRTABLE + `/`,
                 {
                     "fields": {
                         "date": fieldValues.date,

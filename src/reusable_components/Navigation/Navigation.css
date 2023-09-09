@@ -49,58 +49,169 @@ body {
 .navbar-brand {
     width: 100%;
 }
+
 #dadIcon {
     position: absolute;
     bottom: 0;
     width: 80%;
     margin-left: 20px;
 }
+
 #jeriIcon {
     position: absolute;
     bottom: 0;
     width: 90%;
     margin-left: 20px;
 }
-#sidebarMenu{
+
+#sidebarMenu {
     padding-top: 100px;
 }
-a.list-group-item{
+
+a.list-group-item {
     font-family: 'Architects Daughter', cursive;
     background-color: #424d5c;
 }
-a.list-group-item:hover{
+
+a.list-group-item:hover {
     background-color: #000000;
 }
-#title{
+
+#top-title-computer {
     font-family: 'Reggae One', cursive;
     font-size: 40px;
     text-decoration: none;
     color: #000000;
     margin: 0px;
 }
-#subTitle{
+
+#top-title-phone {
+    font-family: 'Reggae One', cursive;
+    font-size: 25px;
+    text-decoration: none;
+    color: #000000;
     margin: 0px;
-    padding: 0px;
 }
-.navbar-nav{
+
+.navbar-nav {
     align-items: flex-end;
     margin-top: auto;
     padding-bottom: 5px;
 }
 
-#nav-1{
+#nav-1 {
     width: 225px;
     padding-bottom: 5px;
 }
-#nav-2{
+
+#nav-2 {
     width: 175px;
     padding-bottom: 5px;
 }
-#nav-3{
+
+#nav-3 {
     width: 250px;
     padding-bottom: 5px;
 }
-#nav-4{
+
+#nav-4 {
     width: 290px;
-    padding-bottom: 5px;
+    padding-bottom: 0px;
+}
+
+
+
+/* 
+Working on getting top navigation being appropriately responsive on phones.
+Apple iPhone 13 has viewport size 390 x 844 Pixels 
+v12      - 390px × 844px 
+v11      - 414px × 896px
+v10 (X)  - 375px × 812px
+
+iphone SE -------
+I'm currently going to model it around the Iphone 12 Pro
+Find another resource to test phone screen sizes
+Get some android sizes.
+*/
+
+/* PHONE SCREEN DISPLAY */
+@media only screen and (min-width: 200px) and (max-width: 970px) {
+
+    #top-nav-phone {
+        background-color: #f2f2f2;
+        padding: 5px;
+        border-radius: 5px;
+        padding-right: 50px;
+        margin-left: 5px;
+        align-items: flex-start;
+    }
+    #nav-3{
+        padding-bottom: 10px;
+    }
+    #nav-4{
+        padding-bottom: 10px;
+    }
+    #top-subTitle-phone {
+        padding-left: 40px;
+        margin: 0px;
+        font-size: 17px;
+    }
+    #navFooter{
+        padding-top: 25px;
+        font-family: 'Architects Daughter', cursive;
+    }
+
+    /* DO NOT DISPLAY listed below */
+    #top-nav-computer,
+    #title-computer,
+    #sidebarMenu {
+        display: none !important;
+    }
+}
+
+
+
+
+/* COMPUTER SCREEN DISPLAY */
+@media only screen and (min-width: 971px) {
+
+    p#top-subTitle-computer {
+        padding: 0px;
+        margin: 0px;
+    }
+
+    /* DO NOT DISPLAY listed below */
+    #top-nav-phone,
+    #title-phone,
+    #overlayMenu {
+        display: none !important;
+    }
+}
+
+
+/* OVERLAY NAVIGATION (a work in progress)*/
+.overlay {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #f2f2f2;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+.overlay-content {
+    position: relative;
+    top: 11%;
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
+}
+.overlay a {
+    padding: 10px;
+    text-decoration: none;
+    font-size: 20px;
+    display: block;
+    transition: 0.4s;
 }

@@ -1,0 +1,90 @@
+/* App.css */
+#pageContainer{
+    background-color: #e3e5ed;
+}
+#pageTitle{
+    background-color: #f2f2f2;
+}
+input:invalid, textarea:invalid, select:invalid{
+    outline: 2px solid #f37e98;
+}
+input:valid, textarea:valid, select:valid{
+    background-color: #fbfbfb;;
+}
+.submit-btn:hover {
+    background-color: #f37e98;
+}
+
+/* FormErrors.css */
+#w{
+    background-color: #eab7ed;
+}
+
+/* Message.css */
+.messageFormat {
+    color: black;
+    background-color: #9ceb78;
+}
+
+/* Navigation.css  */
+body {
+    background-color: #fbfbfb;
+}
+a.list-group-item {
+    background-color: #424d5c;
+}
+a.list-group-item:hover {
+    background-color: #000000;
+}
+#top-title-computer {
+    color: #000000;
+}
+#top-title-phone {
+    color: #000000;
+}
+
+/* Map.css */
+.fish-site-popup .mapboxgl-popup-content {
+    background-color: #fbfbfb;
+}
+.fish-site-popup .mapboxgl-popup-content p{
+    background-color: #e3e5ed;
+}
+.station-popup .mapboxgl-popup-content {
+    background-color: #e3e5ed;
+}
+.station-popup .mapboxgl-popup-content h6{
+    background-color: #e3e5ed;
+}
+
+
+/*
+List out unique colors on this palette (7) :
+*/
+a{
+    color: #e3e5ed;   /* purple grey */
+    color: #fbfbfb;   /* off-white */
+
+    color: #f37e98;   /* rag color match (hover on submit btn), also outlines invalid input boxes */
+    color: #eab7ed;   /* form validator bubbles */
+    color: #9ceb78;   /* used to indicate successful form submission */
+    color: #424d5c;
+    color: #000000; /* black */
+
+    /* previous trips table (2) */
+    color: #f2f2f2; /* brown in table */
+    color: #ffffff  /* white in table */
+
+    /* gainsboro was here */
+    /* color: gainsboro - used for titles*/
+
+    /* missing the purple in the star icon rating button group */
+    /* I think the default is that purple - I didn't make them that color */
+}
+p{
+    font-family: 'Reggae One', cursive;
+    font-family: 'Architects Daughter', cursive;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
