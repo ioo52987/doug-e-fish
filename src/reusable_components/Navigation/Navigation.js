@@ -128,6 +128,7 @@ function Navigation() {
     }
   };
 
+
   const clickHandler = () => {
     var options = document.getElementById("highTide").options;
     var station = options[options.selectedIndex].id;
@@ -273,12 +274,11 @@ function Navigation() {
                 </div>
               </li>
             </ul>
-
           </div>
         </nav>
       </header>
 
-      {/* MAIN CONTAINER ----- what the hell is this? MAIN CONTAINER?*/}
+      {/* MAIN CONTAINER */}
       <main style={{ marginTop: 58 + 'px' }}>
         <div className="container pt-4"></div>
       </main>

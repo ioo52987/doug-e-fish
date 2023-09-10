@@ -91,7 +91,7 @@ function AddFishingSite() {
             <form className="form-content" onSubmit={handleSubmit} >
                 <p id='pageTitle'>Add Fishing Site</p>
                 <div className="row input-group">
-                    <div className="col-3">
+                    <div className="col-xs-3 col-md-3 field">
                         <input
                             type="text"
                             className="form-control"
@@ -110,7 +110,7 @@ function AddFishingSite() {
                             <FormErrors formErrors={formErrors} fieldName="siteName" />
                         </div>
                     </div>
-                    <div className="col-2">
+                    <div className="col-xs-2 col-md-2 field">
                         <select
                             className="custom-select form-control"
                             id="siteType"
@@ -128,7 +128,7 @@ function AddFishingSite() {
                             <FormErrors formErrors={formErrors} fieldName="siteType" />
                         </div>
                     </div>
-                    <div className="col-2">
+                    <div className="col-xs-2 col-md-2 field">
                         <input
                             type="number"
                             className="form-control"
@@ -147,7 +147,7 @@ function AddFishingSite() {
                             <FormErrors formErrors={formErrors} fieldName="longitude" />
                         </div>
                     </div>
-                    <div className="col-2">
+                    <div className="col-xs-2 col-md-2 field">
                         <input
                             type="number"
                             className="form-control"
@@ -167,9 +167,9 @@ function AddFishingSite() {
                         </div>
                     </div>
                 </div> {/* close row */}
-                <br />
+                
                 <div className="row input-group">
-                    <div className="col-9">
+                    <div className="col-xs-9 col-md-9 field">
                         <textarea
                             rows="5"
                             type="text"
@@ -190,15 +190,14 @@ function AddFishingSite() {
                         </div>
                     </div>
                 </div> {/* close row */}
-                <br />
                 <div className="row">
-                    <div className="col-2">
+                    <div className="col-xs-2 col-md-2 field">
                         <button className="btn submit-btn" type="submit">Submit</button>
                     </div>
-                    <div className="col-6">
+                    <div className="col-xs-6 col-md-6 field">
                         <Message
                             formValid={formValid}
-                            message="Success! Thanks for submitting a fishing site!  :)"
+                            message="Success! Thanks for submitting a new site!"
                         />
                     </div>
                 </div> {/* close row */}

@@ -2,12 +2,17 @@
     padding: 15px;
 }
 
+.field{
+    margin-bottom: 10px;
+}
+
 /* PAGE TITLE */
 #pageTitle{
     font-family: 'Architects Daughter', cursive;
     font-size: 30px;
-    background-color: #f2f2f2;
+    background-color: gainsboro;
     padding: 5px;
+    padding-left: 10px;
     border-radius: 5px;
 }
 
@@ -25,6 +30,10 @@ button.btn.submit-btn {
     font-family: 'Architects Daughter', cursive;
     font-size: 15px;
     border-radius: 5px;
+    background-color: gainsboro;
+}
+button.btn.submit-btn:hover {
+    background-color: #f37e98;
 }
 .submit-btn:hover {
     background-color: #f37e98;
@@ -33,12 +42,8 @@ button.btn.submit-btn {
 /* PHONE SCREEN DISPLAY */
 @media only screen and (min-width: 200px) and (max-width: 970px) {
     #pageContainer{
-        position: fixed;
-        height: 700px;
         background-color: #e3e5ed;
-        top: 12%;
-        width: 100%;
-        margin: 0px;
+        margin-top: 3%;
     }
 }
 
