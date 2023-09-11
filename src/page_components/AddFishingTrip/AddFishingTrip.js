@@ -168,13 +168,12 @@ function AddFishingTrip() {
             <form className="form-content" onSubmit={handleSubmit}>
                 <p id='pageTitle'>Add Fishing Trip</p>
                 <div className='row input-group'>
-                    <div id='rating' className='col-9'>
+                    <div id='rating' className='col-xs-9 col-md-9 field' style={{zIndex:0}}>
                         <RatingButton fieldValues={fieldValues} />
                     </div>
                 </div> {/* close row */}
-                <br />
                 <div className="row input-group">
-                    <div className="col-2">
+                    <div className="col-xs-2 col-md-2 field">
                         <input
                             type="date"
                             className="form-control"
@@ -192,7 +191,7 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="date" />
                         </div>
                     </div>
-                    <div className="col-3">
+                    <div className="col-xs-3 col-md-3 field">
                         <select
                             className="custom-select form-control"
                             id="siteName"
@@ -219,7 +218,7 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="siteName" />
                         </div>
                     </div>
-                    <div className="col-2">
+                    <div className="col-xs-2 col-md-2 field">
                         <select
                             className="custom-select form-control"
                             id="tideType"
@@ -239,7 +238,7 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="tideType" />
                         </div>
                     </div>
-                    <div className="col-2">
+                    <div className="col-xs-2 col-md-2 field">
                         <input
                             type="number"
                             className="form-control"
@@ -259,9 +258,8 @@ function AddFishingTrip() {
                         </div>
                     </div>
                 </div> {/* close row */}
-                <br />
                 <div className="row input-group">
-                    <div className="col-9">
+                    <div className="col-xs-9 col-md-9 field">
                         <textarea
                             rows="5"
                             type="text"
@@ -283,9 +281,8 @@ function AddFishingTrip() {
                         </div>
                     </div>
                 </div> {/* close row */}
-                <br />
                 <div className="row input-group">
-                    <div className="col-9">
+                    <div className="col-xs-9 col-md-9 field">
                         <input
                             type="url"
                             className="form-control"
@@ -303,15 +300,14 @@ function AddFishingTrip() {
                         </div>
                     </div>
                 </div> {/* close row */}
-                <br />
                 <div className="row">
-                    <div className="col-2">
+                    <div className="col-xs-2 col-md-2 field">
                         <button className="btn submit-btn" type="submit">Submit</button>
                     </div>
-                    <div className="col-7 message">
+                    <div className="col-xs-7 col-md-2 field message">
                         <Message
                             formValid={formState}
-                            message="Success! Thanks for submitting a fishing trip!  :)"
+                            message="Success! Thanks for submitting a trip!"
                         />
                     </div>
                 </div> {/* close row */}

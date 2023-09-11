@@ -48,7 +48,7 @@ function AboutThisSite() {
                 <br></br>
                 <form ref={form} onSubmit={sendEmail} id='emailForm'>
                     <div className="row">
-                        <div className="col-3">
+                        <div className="col-xs-3 col-md-3 field">
                             <input
                                 type="text"
                                 name="user_name"
@@ -56,7 +56,7 @@ function AboutThisSite() {
                                 placeholder="Name"
                                 required />
                         </div>
-                        <div className="col-3">
+                        <div className="col-xs-3 col-md-3 field">
                             <input
                                 type="email"
                                 name="user_email"
@@ -65,9 +65,8 @@ function AboutThisSite() {
                                 required />
                         </div>
                     </div> {/* close row */}
-                    <br></br>
                     <div className="row">
-                        <div className="col-6">
+                        <div className="col-xs-6 col-md-6 field">
                             <textarea
                                 rows="3"
                                 type="text"
@@ -76,27 +75,25 @@ function AboutThisSite() {
                                 placeholder="Message"
                                 required />
                         </div>
-                        <div className="col-2">
+                        <div className="col-xs-2 col-md-2 field">
                             <input className="btn submit-btn" type="submit" value="Send" />
                         </div>
                     </div> {/* close row */}
                     <div className="row">
-                        <div className="col-6">
+                        <div className="col-xs-6 col-md-6 field">
                             <Message
                                 formValid={formState}
-                                message="Success! Thanks for submitting us a message!  :)"
+                                message="Success! Thanks for the message!"
                             />
                         </div>
                     </div> {/* close row */}
                 </form>
                 <br></br>
                 <div id='welcome'>Programmers!</div>
-                <br></br>
                 <i className="fab fa-github-alt"></i>&nbsp;&nbsp;&nbsp;Please take a look at the public gitHub repository&nbsp; 
                 <a href="https://github.com/ioo52987/doug-e-fish" target="_blank" rel="noopener noreferrer" >here</a>.
                 <br></br>
                 <i className="fas fa-code-branch"></i>&nbsp;&nbsp;&nbsp;Want to contribute? Checkout a branch and make a pull request!
-                {/* Dedicated to Douglas Dilts, my dad, and the (self proclamied) Unofficial Mayor of Hilton. */}
             </div>
         </div >
     );

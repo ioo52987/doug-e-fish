@@ -84,35 +84,36 @@ function RatingButton({ fieldValues }) {
     return (
         <div>
             {/* use map() here */}
-            <div className="btn-group btn-group" role="group" aria-label="rating" id="rating">
+            <div className="btn-group btn-group row" role="group" id="rating">
+                <div className='col-xs-9 col-md-9'>
                 <button type="button"
-                    className={`btn btn-secondary star-btn ${activeButtons.active1}`}
+                    className={`btn btn-secondary btn-sm star-btn ${activeButtons.active1}`}
                     id="1"
                     onClick={handleClickActivation}
                 ><i className="fa fa-star"></i></button>
                 <button type="button"
-                    className={`btn btn-secondary star-btn ${activeButtons.active2}`}
+                    className={`btn btn-secondary btn-sm star-btn ${activeButtons.active2}`}
                     id="2"
                     onClick={handleClickActivation}
                 ><i className="fa fa-star"></i></button>
                 <button type="button"
-                    className={`btn btn-secondary star-btn ${activeButtons.active3}`}
+                    className={`btn btn-secondary btn-sm star-btn ${activeButtons.active3}`}
                     id="3"
                     onClick={handleClickActivation}
                 ><i className="fa fa-star"></i></button>
                 <button type="button"
-                    className={`btn btn-secondary star-btn ${activeButtons.active4}`}
+                    className={`btn btn-secondary btn-sm star-btn ${activeButtons.active4}`}
                     id="4"
                     onClick={handleClickActivation}
                 ><i className="fa fa-star"></i></button>
                 <button type="button"
-                    className={`btn btn-secondary star-btn ${activeButtons.active5}`}
+                    className={`btn btn-secondary btn-sm star-btn ${activeButtons.active5}`}
                     id="5"
                     onClick={handleClickActivation}
                 ><i className="fa fa-star"></i></button>
-
-                <div className='rating'>{rating} {star}</div>
-            </div>
+                </div>
+                <div className='rating col-xs-3 col-md-3'>{rating} {star}</div>
+            </div> {/* close row */}
         </div>
     );
 }
