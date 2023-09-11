@@ -26,5 +26,3 @@ yarn-error.log*
 .env
 notes.txt
 hidden.txt
-/src/images
-/src/windows_code
