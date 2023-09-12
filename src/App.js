@@ -15,12 +15,12 @@ function App() {
             <Navigation />
             <div id='pageContainer'>
                 <Routes>
-                    <Route exact path="/doug-e-fish/map" element={<Map />} />
-                    <Route path="/doug-e-fish/about_this_site" element={<AboutThisSite />} />
-                    <Route path="/doug-e-fish/add_fishing_site" element={<AddFishingSite />} />
-                    <Route path="/doug-e-fish/add_fishing_trip" element={<AddFishingTrip />} />
-                    <Route path="/doug-e-fish/helpful_fishing_info" element={<HelpfulFishingInfo />} />
-                    <Route path="/doug-e-fish/previous_trips" element={<PreviousTrips />} />
+                    <Route path="/doug-e-fish" element={<Map />} />
+                    <Route path="/about_this_site" element={<AboutThisSite />} />
+                    <Route path="/add_fishing_site" element={<AddFishingSite />} />
+                    <Route path="/add_fishing_trip" element={<AddFishingTrip />} />
+                    <Route path="/helpful_fishing_info" element={<HelpfulFishingInfo />} />
+                    <Route path="/previous_trips" element={<PreviousTrips />} />
                 </Routes>
             </div>
         </div>
