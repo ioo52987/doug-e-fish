@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/doug-e-fish/static/css/main.75896ae8.css",
-    "main.js": "/doug-e-fish/static/js/main.d3f3051d.js",
+    "main.js": "/doug-e-fish/static/js/main.cb553998.js",
     "static/js/787.2a560a0f.chunk.js": "/doug-e-fish/static/js/787.2a560a0f.chunk.js",
     "static/media/fa-solid-900.svg": "/doug-e-fish/static/media/fa-solid-900.7a8b4f130182d19a2d7c.svg",
     "static/media/fa-brands-400.svg": "/doug-e-fish/static/media/fa-brands-400.2f517e09eb2ca6650ff5.svg",
@@ -22,11 +22,11 @@
     "static/media/arrow_left.svg": "/doug-e-fish/static/media/arrow_left.db6e2d88c7c35a775ce4.svg",
     "static/media/arrow_right.svg": "/doug-e-fish/static/media/arrow_right.f7c6ac6d310d3b82f0a0.svg",
     "main.75896ae8.css.map": "/doug-e-fish/static/css/main.75896ae8.css.map",
-    "main.d3f3051d.js.map": "/doug-e-fish/static/js/main.d3f3051d.js.map",
+    "main.cb553998.js.map": "/doug-e-fish/static/js/main.cb553998.js.map",
     "787.2a560a0f.chunk.js.map": "/doug-e-fish/static/js/787.2a560a0f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.75896ae8.css",
-    "static/js/main.d3f3051d.js"
+    "static/js/main.cb553998.js"
   ]
 }
