@@ -8,12 +8,12 @@ function Navigation() {
   let location = useLocation().pathname;
   let MDBclasses = "list-group-item list-group-item-action py-2 ripple";
   let navigationInfo = [
-    { id: 1, href: "/doug-e-fish/map", icon: "fas fa-map fa-fw me-3", title: "Map" },
-    { id: 2, href: "/doug-e-fish/add_fishing_trip", icon: "fas fa-plus fa-fw me-3", title: "Add Fishing Trip" },
-    { id: 3, href: "/doug-e-fish/add_fishing_site", icon: "fas fa-location-arrow fa-fw me-3", title: "Add Fishing Site" },
-    { id: 4, href: "/doug-e-fish/previous_trips", icon: "fas fa-arrow-left fa-fw me-3", title: "Previous Trips" },
-    { id: 5, href: "/doug-e-fish/helpful_fishing_info", icon: "fas fa-info fa-fw me-3", title: "Helpful Info" },
-    { id: 6, href: "/doug-e-fish/about_this_site", icon: "fas fa-heart fa-fw me-3", title: "About This Site" },
+    { id: 1, href: "/doug-e-fish", icon: "fas fa-map fa-fw me-3", title: "Map" },
+    { id: 2, href: "/add_fishing_trip", icon: "fas fa-plus fa-fw me-3", title: "Add Fishing Trip" },
+    { id: 3, href: "/add_fishing_site", icon: "fas fa-location-arrow fa-fw me-3", title: "Add Fishing Site" },
+    { id: 4, href: "/previous_trips", icon: "fas fa-arrow-left fa-fw me-3", title: "Previous Trips" },
+    { id: 5, href: "/helpful_fishing_info", icon: "fas fa-info fa-fw me-3", title: "Helpful Info" },
+    { id: 6, href: "/about_this_site", icon: "fas fa-heart fa-fw me-3", title: "About This Site" },
   ];
 
   /* states */
@@ -127,7 +127,6 @@ function Navigation() {
       return (times.toString());
     }
   };
-
 
   const clickHandler = () => {
     var options = document.getElementById("highTide").options;
