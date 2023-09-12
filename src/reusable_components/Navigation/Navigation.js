@@ -8,7 +8,7 @@ function Navigation() {
   let location = useLocation().pathname;
   let MDBclasses = "list-group-item list-group-item-action py-2 ripple";
   let navigationInfo = [
-    { id: 1, href: "/doug-e-fish", icon: "fas fa-map fa-fw me-3", title: "Map" },
+    { id: 1, href: "/", icon: "fas fa-map fa-fw me-3", title: "Map" },
     { id: 2, href: "/add_fishing_trip", icon: "fas fa-plus fa-fw me-3", title: "Add Fishing Trip" },
     { id: 3, href: "/add_fishing_site", icon: "fas fa-location-arrow fa-fw me-3", title: "Add Fishing Site" },
     { id: 4, href: "/previous_trips", icon: "fas fa-arrow-left fa-fw me-3", title: "Previous Trips" },

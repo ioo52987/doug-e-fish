@@ -15,7 +15,7 @@ function App() {
             <Navigation />
             <div id='pageContainer'>
                 <Routes>
-                    <Route path="/doug-e-fish" element={<Map />} />
+                    <Route path="/" element={<Map />} />
                     <Route path="/about_this_site" element={<AboutThisSite />} />
                     <Route path="/add_fishing_site" element={<AddFishingSite />} />
                     <Route path="/add_fishing_trip" element={<AddFishingTrip />} />
