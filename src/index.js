@@ -4,6 +4,7 @@ import './index.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import reportWebVitals from './reportWebVitals.js';
 import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import axios from 'axios';
 import App from './App.js';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -13,9 +14,9 @@ import 'mdbreact/dist/css/mdb.css';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   /*<React.StrictMode>*/
-    <BrowserRouter basename="/">
+    <HashRouter basename="/">
       <App />
-    </BrowserRouter>
+    </HashRouter>
   /*</React.StrictMode>*/
 );
 
