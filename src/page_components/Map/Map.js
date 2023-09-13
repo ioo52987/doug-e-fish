@@ -77,26 +77,26 @@ function Map() {
             .then(response => {
                 let data = response.data.records;
                 setFishingSiteData(fishingSiteData => [...fishingSiteData, ...data]);
-                if(response.data.offset){
+                if (response.data.offset) {
                     setOffset1(response.data.offset)
                 }
             })
-            .catch(function (error) {console.log(error);});
+            .catch(function (error) { console.log(error); });
     }, [offset1]);
 
     let [offset2, setOffset2] = useState('');
     useEffect(() => {
         // GET daily fishing-trip data
         axios.get(`/` + process.env.REACT_APP_FISHING_TRIPS_AIRTABLE + `?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=siteName`)
-        .then(response => {
-            let data = response.data.records;
-            setDailyFishingTripData(dailyFishingTripData => [...dailyFishingTripData, ...data]);
-            if(response.data.offset){
-                setOffset2(response.data.offset);
-            }
-        })
-        .catch(function (error) {console.log(error);});
-    }, [offset2])        
+            .then(response => {
+                let data = response.data.records;
+                setDailyFishingTripData(dailyFishingTripData => [...dailyFishingTripData, ...data]);
+                if (response.data.offset) {
+                    setOffset2(response.data.offset);
+                }
+            })
+            .catch(function (error) { console.log(error); });
+    }, [offset2])
 
     // create geoJSON data structure for fishing-sites
     if (fishingSiteData.length) {
@@ -129,9 +129,9 @@ function Map() {
 
         for (let i = 0; i < dailyFishingTripData.length; i++) {
             if (dailyFishingTripData[i].fields.date === currentDate) {
-                if(dailyFishingTripData[i].fields.siteName in talliesPerSite){
+                if (dailyFishingTripData[i].fields.siteName in talliesPerSite) {
                     talliesPerSite[dailyFishingTripData[i].fields.siteName].push(dailyFishingTripData[i].fields.fishCaught);
-                }else{
+                } else {
                     talliesPerSite[dailyFishingTripData[i].fields.siteName] = [];
                     talliesPerSite[dailyFishingTripData[i].fields.siteName].push(dailyFishingTripData[i].fields.fishCaught);
                 }
@@ -150,10 +150,10 @@ function Map() {
         });
 
         // then compare to the global fishingSites obj to determine 0 or no entry
-        Object.keys(fishingSites).forEach(key =>{
-            if(key in totalPerSite){
+        Object.keys(fishingSites).forEach(key => {
+            if (key in totalPerSite) {
                 fishingSites[key] = totalPerSite[key];
-            }else{
+            } else {
                 fishingSites[key] = 'No entries for this site today.';
             }
         });
@@ -252,12 +252,17 @@ function Map() {
                 // handling NaN (for new fishingSites with no ratings)
                 isNaN(rating) ? rating = 0 : rating = rating; //-weird
 
-                let content = `
-                                <b>${siteName}</b><br>
-                                <div>Overall Rating: <div style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">${rating}</div></br>
-                                Fish Caught Today: <div style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">${fishingSites[siteName]}</div></br>
-                                <p>${description}</p>
-                                `;
+                let content = ` <div id='top'>
+                                    <b id='title'>${siteName}</b><br>
+                                    Overall Rating: <div 
+                                        style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
+                                        ${rating}</div></br>
+                                    Fish Caught Today: <div 
+                                        style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
+                                        ${fishingSites[siteName]}</div></br>
+                                </div>
+                                <p id='bottom'>${description}</p>
+                            `;
 
                 // Ensure that if the map is zoomed out such that multiple
                 // copies of the feature are visible, the popup appears over the copy being pointed to.
@@ -283,8 +288,8 @@ function Map() {
                 const coordinates = e.features[0].geometry.coordinates.slice();
                 const stationNo = e.features[0].properties.stationNo;
                 const name = e.features[0].properties.name;
-                let content = `<b>${name}</b><br>
-                                 <h6>NOAA Station: ${stationNo}</h6>`;
+                let content = ` <b id='title'>${name}</b><br>
+                                <h6>NOAA Station: ${stationNo}</h6>`;
 
                 while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;

@@ -35,30 +35,36 @@
 /* fish-site popup formatting*/
 .fish-site-popup .mapboxgl-popup-content {
     width: 450px;
-    font-size: 18px;
     background-color: #fbfbfb;
     padding: 12px;
 }
-.fish-site-popup .mapboxgl-popup-content div{
-    margin-top: 3px;
+.fish-site-popup .mapboxgl-popup-content #top{
+    margin-left: 5px;
     font-size: 15px;
 }
-.fish-site-popup .mapboxgl-popup-content p{
+.fish-site-popup .mapboxgl-popup-content #title{
+    font-size: 18px;
+}
+.fish-site-popup .mapboxgl-popup-content #bottom{
     background-color: #e3e5ed;
-    padding: 7px;
+    margin-top: 5px;
+    padding: 3px 6px 6px 6px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     border-radius: 5px;
 }
 
 /* noaa-station popup formatting */
-.station-popup .mapboxgl-popup-content {
-    width: 300px;
-    font-size: 18px;
+.station-popup .mapboxgl-popup-content{
+    width: 315px;
     background-color: #e3e5ed;
     padding: 12px;
+}
+.station-popup .mapboxgl-popup-content #title{
+    margin-left: 7px;
+    font-size: 18px;
 }
 .station-popup .mapboxgl-popup-content h6{
     background-color: #e3e5ed;
