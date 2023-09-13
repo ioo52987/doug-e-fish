@@ -174,6 +174,7 @@ function Navigation() {
                       : {
                         color: '#fbfbfb',
                         textDecoration: 'none',
+                        background: '#424d5c',
                       }
                   }><i className={val.icon}></i><span>{val.title}</span>
                 </NavLink>

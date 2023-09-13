@@ -46,11 +46,11 @@ function AddFishingTrip() {
     // GET fishingSite names for dropdown field
     let [offset, setOffset] = useState('');
     useEffect(() => {
-        axios.get(`/`+ process.env.REACT_APP_FISHING_SITES_AIRTABLE + `?offset=${offset}`)
+        axios.get(`/` + process.env.REACT_APP_FISHING_SITES_AIRTABLE + `?offset=${offset}`)
             .then(response => {
                 let data = response.data.records;
-                setDropdownValues(dropdownValues=>[...dropdownValues, ...data]);
-                if(response.data.offset) {
+                setDropdownValues(dropdownValues => [...dropdownValues, ...data]);
+                if (response.data.offset) {
                     setOffset(response.data.offset)
                 }
             })
@@ -135,7 +135,7 @@ function AddFishingTrip() {
                 .catch(function (error) { console.log(error) });
 
             // POST new fishingTrip data
-            axios.post( `/` + process.env.REACT_APP_FISHING_TRIPS_AIRTABLE + `/`,
+            axios.post(`/` + process.env.REACT_APP_FISHING_TRIPS_AIRTABLE + `/`,
                 {
                     "fields": {
                         "date": fieldValues.date,
@@ -167,11 +167,9 @@ function AddFishingTrip() {
         <div>
             <form className="form-content" onSubmit={handleSubmit}>
                 <p id='pageTitle'>Add Fishing Trip</p>
-                <div className='row input-group'>
-                    <div id='rating' className='col-xs-9 col-md-9 field' style={{zIndex:0}}>
-                        <RatingButton fieldValues={fieldValues} />
-                    </div>
-                </div> {/* close row */}
+                <div id='rating' className='field' style={{ zIndex: 0 }}>
+                    <RatingButton fieldValues={fieldValues} />
+                </div>
                 <div className="row input-group">
                     <div className="col-xs-2 col-md-2 field">
                         <input
@@ -304,7 +302,7 @@ function AddFishingTrip() {
                     <div className="col-xs-2 col-md-2 field">
                         <button className="btn submit-btn" type="submit">Submit</button>
                     </div>
-                    <div className="col-xs-7 col-md-2 field message">
+                    <div className="col-xs-7 col-md-7 field message">
                         <Message
                             formValid={formState}
                             message="Success! Thanks for submitting a trip!"
