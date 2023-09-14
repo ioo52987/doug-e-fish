@@ -97,7 +97,7 @@ function AddFishingSite() {
             <form className="form-content" onSubmit={handleSubmit} >
                 <p id='pageTitle'>Add Fishing Site</p>
                 <div className="row input-group">
-                    <div className="col-xs-3 col-md-3 field">
+                    <div className="col-xs-4 col-md-4 field">
                         <input
                             type="text"
                             className="form-control"
@@ -134,7 +134,9 @@ function AddFishingSite() {
                             <FormErrors formErrors={formErrors} fieldName="siteType" />
                         </div>
                     </div>
-                    <div className="col-xs-2 col-md-2 field">
+                </div>
+                <div className="row input-group">
+                    <div className="col-xs-3 col-md-3 field">
                         <input
                             type="number"
                             className="form-control"
@@ -153,7 +155,7 @@ function AddFishingSite() {
                             <FormErrors formErrors={formErrors} fieldName="longitude" />
                         </div>
                     </div>
-                    <div className="col-xs-2 col-md-2 field">
+                    <div className="col-xs-3 col-md-3 field">
                         <input
                             type="number"
                             className="form-control"
@@ -175,7 +177,7 @@ function AddFishingSite() {
                 </div> {/* close row */}
 
                 <div className="row input-group">
-                    <div className="col-xs-9 col-md-9 field">
+                    <div className="col-xs-6 col-md-6 field">
                         <textarea
                             rows="5"
                             type="text"
@@ -198,7 +200,7 @@ function AddFishingSite() {
                     </div>
                 </div> {/* close row */}
                 <div className="row input-group">
-                    <div className="col-xs-9 col-md-9 field">
+                    <div className="col-xs-6 col-md-6 field">
                         <input
                             type="url"
                             className="form-control"
