@@ -13,6 +13,9 @@ function Map() {
     const [lat, setLat] = useState(37.078133);
     const [zoom, setZoom] = useState(10);
 
+    // set popup url state
+    let [urlInfo, setURLInfo] = useState({ url: '', shortenURL: ''});
+
     // axios response state data
     let [fishingSiteData, setFishingSiteData] = useState([]);
     let [dailyFishingTripData, setDailyFishingTripData] = useState([]);
@@ -111,6 +114,7 @@ function Map() {
                 'properties': {
                     'siteName': fishingSiteData[i].fields.siteName,
                     'rating': fishingSiteData[i].fields.overallRating,
+                    'siteURL': fishingSiteData[i].fields.siteURL,
                     'description': fishingSiteData[i].fields.description
                 },
                 'geometry': {
@@ -248,6 +252,18 @@ function Map() {
                 const siteName = e.features[0].properties.siteName;
                 let rating = (Number(e.features[0].properties.rating)).toFixed(2);
                 const description = e.features[0].properties.description;
+                const siteURL = e.features[0].properties.siteURL;
+
+                // modifying siteURL for webpage display
+                const re = /^https:\/\/(www\.)?(.*?)\.(com|gov|org)/;
+                if(siteURL === 'null'){
+                    urlInfo.url = '#';
+                    urlInfo.shortenURL = '';
+                }else{
+                    let chopped = re.exec(siteURL);
+                    urlInfo.url = siteURL;
+                    urlInfo.shortenURL = chopped[0];
+                }
 
                 // handling NaN (for new fishingSites with no ratings)
                 isNaN(rating) ? rating = 0 : rating = rating; //-weird
@@ -260,6 +276,10 @@ function Map() {
                                     Fish Caught Today: <div 
                                         style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
                                         ${fishingSites[siteName]}</div></br>
+                                    Website: <div
+                                        style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
+                                        <a href='${urlInfo.url}' target='_blank'>${urlInfo.shortenURL}</a>
+                                        </div></br>
                                 </div>
                                 <p id='bottom'>${description}</p>
                             `;

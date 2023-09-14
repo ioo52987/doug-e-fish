@@ -38,7 +38,7 @@ body {
 }
 
 #sidebarMenu {
-    padding-top: 100px;
+    padding-top: 110px;
 }
 
 a.list-group-item {
@@ -204,4 +204,11 @@ Get some android sizes.
     main {
         padding-left: 240px;
     }
+}
+
+/* top decoration border bar */
+nav#main-navbar.navbar.navbar-expand-lg.navbar-light.bg-white.fixed-top{
+    border-width: 5px;
+    border-top-style: ridge;
+    border-color: #9ceb78;
 }

@@ -55,6 +55,10 @@
     font-size: 14px;
     border-radius: 5px;
 }
+.fish-site-popup .mapboxgl-popup-content a{
+    outline: none;
+    text-decoration: none;
+}
 
 /* noaa-station popup formatting */
 .station-popup .mapboxgl-popup-content{
