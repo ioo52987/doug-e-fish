@@ -33,16 +33,12 @@ function AboutThisSite() {
                 <p id='pageTitle'>Welcome!</p>
                 <div className="row">
                     <div className="col-xs-7 col-md-7 field">
-                        This web app is created for people who like to fish in the Greater Hampton Roads Area.
+                        This web app is created for the fishing community in the Greater Hampton Roads Area.
                         Our hope is that it is used and enjoyed by everyone who loves all things fishing!
-                        &nbsp;&nbsp;--<i>Enjoy!</i>
-                        <br></br>
-                        <br></br>
-                        This application's build aim is to serve the community. By design, I intentionally, left out user logins.
-                        A tool is only as good as its users. I am the utmost believer in community work and would be tickled
-                        to see it operate swiftly as such. The tool should be easy, efficient, friendly, fun, and intuitive.
+                        By design, the tool should be easy, efficient, friendly, fun, and intuitive.
                         There will NEVER be ads. It should and will be always free for everyone to use!
-                        &nbsp;&nbsp;--<i>Property is theft!</i>
+                        <br></br>
+                        &nbsp;&nbsp;--<i>Enjoy! &nbsp;&nbsp;Property is theft!</i>
                         <br></br>
                         <br></br>
                         <i className="fas fa-envelope"></i>&nbsp;&nbsp;&nbsp;If you have an suggestions for making this a more effective
@@ -96,8 +92,7 @@ function AboutThisSite() {
                 <div id='welcome'>Programmers!</div>
                 <i className="fab fa-github-alt"></i>&nbsp;&nbsp;&nbsp;Please take a look at the public gitHub repository&nbsp;
                 <a href="https://github.com/ioo52987/doug-e-fish" target="_blank" rel="noopener noreferrer" >here</a>.
-                <br></br>
-                <i className="fas fa-code-branch"></i>&nbsp;&nbsp;&nbsp;Want to contribute? Checkout a branch and make a pull request!
+                Want to contribute? Checkout a branch and make a pull request!
             </div>
         </div >
     );
