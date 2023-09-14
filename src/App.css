@@ -42,8 +42,13 @@ button.btn.submit-btn:hover {
 /* PHONE SCREEN DISPLAY */
 @media only screen and (min-width: 200px) and (max-width: 970px) {
     #pageContainer{
+        position: fixed;
         background-color: #e3e5ed;
-        margin-top: 3%;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 90px 0 0 0; /* this pads the content */
     }
 }
 
@@ -51,10 +56,11 @@ button.btn.submit-btn:hover {
 @media only screen and (min-width: 971px) {
     #pageContainer{
         position: fixed;
-        height: 600px;
         background-color: #e3e5ed;
-        top: 17%;
-        width: 84%;
-        margin-left: 245px;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 115px 0 0 245px; /* this pads the content */
     }
 }
