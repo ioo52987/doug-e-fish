@@ -33,10 +33,10 @@ button.btn.submit-btn {
     background-color: gainsboro;
 }
 button.btn.submit-btn:hover {
-    background-color: #f37e98;
+    font-weight: bold;
 }
 .submit-btn:hover {
-    background-color: #f37e98;
+    font-weight: bold;
 }
 
 /* PHONE SCREEN DISPLAY */
