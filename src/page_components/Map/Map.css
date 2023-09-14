@@ -1,23 +1,8 @@
-/* PHONE SCREEN DISPLAY */
-@media only screen and (min-width: 200px) and (max-width: 970px) {
-    .map-container {
-        height: 700px;
-        width: 100%;
-        border-radius: 5px;
-        margin: auto;
-        box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
-    }
-}
-
-/* COMPUTER SCREEN DISPLAY */
-@media only screen and (min-width: 971px) {
-    .map-container {
-        height: 575px;
-        width: 100%;
-        border-radius: 5px;
-        margin: auto;
-        box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
-    }
+.map-container {
+    height: 100vh;
+    width: 100vw;
+    border-radius: 5px;
+    box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
 }
 
 .mapboxgl-popup {
@@ -30,44 +15,50 @@
     background-color: #fbfbfb;
     padding: 12px;
 }
-.fish-site-popup .mapboxgl-popup-content #top{
+
+.fish-site-popup .mapboxgl-popup-content #top {
     margin-left: 5px;
     font-size: 15px;
 }
-.fish-site-popup .mapboxgl-popup-content #title{
+
+.fish-site-popup .mapboxgl-popup-content #title {
     font-size: 18px;
 }
-.fish-site-popup .mapboxgl-popup-content #bottom{
+
+.fish-site-popup .mapboxgl-popup-content #bottom {
     background-color: #e3e5ed;
     margin-top: 5px;
     padding: 3px 6px 6px 6px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
     font-size: 14px;
     border-radius: 5px;
 }
-.fish-site-popup .mapboxgl-popup-content a{
+
+.fish-site-popup .mapboxgl-popup-content a {
     outline: none;
     text-decoration: none;
 }
 
 /* noaa-station popup formatting */
-.station-popup .mapboxgl-popup-content{
+.station-popup .mapboxgl-popup-content {
     width: 315px;
     background-color: #e3e5ed;
     padding: 12px;
 }
-.station-popup .mapboxgl-popup-content #title{
+
+.station-popup .mapboxgl-popup-content #title {
     margin-left: 7px;
     font-size: 18px;
 }
-.station-popup .mapboxgl-popup-content h6{
+
+.station-popup .mapboxgl-popup-content h6 {
     background-color: #e3e5ed;
     padding: 7px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
     font-size: 15px;
     border-radius: 5px;
 }

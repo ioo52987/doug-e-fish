@@ -19,6 +19,7 @@
 /* CLIENT-SIDE FORM VALIDATION */
 input:invalid, textarea:invalid, select:invalid{
     outline: 2px solid #f37e98;
+    border-radius: 5px;
 }
 input:valid, textarea:valid, select:valid{
     background-color: #fbfbfb;
@@ -59,6 +60,6 @@ button.btn.submit-btn:hover {
         bottom: 0;
         left: 0;
         right: 0;
-        padding: 115px 0 0 245px; /* this pads the content */
+        padding: 115px 0 0 240px; /* this pads the content */
     }
 }
