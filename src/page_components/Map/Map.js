@@ -326,7 +326,9 @@ function Map() {
 
     return (
         <div>
-            <div ref={mapContainer} className='map-container' />
+            <div className='form-content'>
+                <div ref={mapContainer}  className='map-container'/>
+            </div>
         </div>
     );
 }
