@@ -7,11 +7,11 @@ import FormErrors from '../../reusable_components/FormErrors/FormErrors.js';
 function AddFishingSite() {
 
     /* FIELD VALUES */
-    let [fieldValues, setFieldValues] = useState({ siteName: '', siteType: '', longitude: '', latitude: '', description: '' });
+    let [fieldValues, setFieldValues] = useState({ siteName: '', siteType: '', longitude: '', latitude: '', description: '', url: '' });
     /* FIELD VALUES VALID? */
-    let [fieldValuesValid, setFieldValuesValid] = useState({ siteName: false, siteType: false, longitude: false, latitude: false, description: false });
+    let [fieldValuesValid, setFieldValuesValid] = useState({ siteName: false, siteType: false, longitude: false, latitude: false, description: false, url: true });
     /* ERROR TEXT (IF ANY) */
-    let [formErrors, setFormErrors] = useState({ siteName: '', siteType: '', longitude: '', latitude: '', description: '' });
+    let [formErrors, setFormErrors] = useState({ siteName: '', siteType: '', longitude: '', latitude: '', description: '', url: '' });
     /* FORM VALIDED? STATE */
     let [formValid, setFormValid] = useState(false);
 
@@ -38,6 +38,10 @@ function AddFishingSite() {
                 fieldValuesValid.description = (value.length >= 25 && value.length <= 1500);
                 formErrors.description = fieldValuesValid.description ? '' : ' Description required to be between 25-1500 characters';
                 break;
+            case 'url':
+                fieldValuesValid.url = (/(^https:\/\/)|(^\s*$)/).test(value);
+                formErrors.url = fieldValuesValid.url ? '' : ' URL requried to begin with https:// ';
+                break;
             default:
                 break;
         }
@@ -50,11 +54,12 @@ function AddFishingSite() {
     const handleSubmit = (e) => {
 
         e.preventDefault();
-        formValid = (fieldValuesValid.siteName && 
-                    fieldValuesValid.siteType && 
-                    fieldValuesValid.longitude && 
-                    fieldValuesValid.latitude && 
-                    fieldValuesValid.description);
+        formValid = (fieldValuesValid.siteName &&
+            fieldValuesValid.siteType &&
+            fieldValuesValid.longitude &&
+            fieldValuesValid.latitude &&
+            fieldValuesValid.description &&
+            fieldValuesValid.url);
 
         if (formValid) {
             axios.post(`/` + process.env.REACT_APP_FISHING_SITES_AIRTABLE + `/`,
@@ -65,9 +70,10 @@ function AddFishingSite() {
                         "longitude": Number(document.getElementById("longitude").value),
                         "latitude": Number(document.getElementById("latitude").value),
                         "description": document.getElementById("description").value,
+                        "siteURL": document.getElementById("url").value,
 
                         // initialized for overRating calc
-                        "tripTotal" : 0,
+                        "tripTotal": 0,
                         "rSum": 0,
                     }
                 }
@@ -167,7 +173,7 @@ function AddFishingSite() {
                         </div>
                     </div>
                 </div> {/* close row */}
-                
+
                 <div className="row input-group">
                     <div className="col-xs-9 col-md-9 field">
                         <textarea
@@ -178,6 +184,7 @@ function AddFishingSite() {
                             value={fieldValues.description}
                             placeholder="Describe the new fishing site!"
                             onChange={(e) => {
+                                setFieldValuesValid({ ...fieldValuesValid, 'url': false })
                                 setFieldValues({ ...fieldValues, description: e.target.value });
                                 validateField("description", e.target.value);
                             }}
@@ -187,6 +194,25 @@ function AddFishingSite() {
                         ></textarea>
                         <div className='panel panel-default'>
                             <FormErrors formErrors={formErrors} fieldName="description" />
+                        </div>
+                    </div>
+                </div> {/* close row */}
+                <div className="row input-group">
+                    <div className="col-xs-9 col-md-9 field">
+                        <input
+                            type="url"
+                            className="form-control"
+                            id="url"
+                            placeholder="Enter an https:// to an associated website"
+                            aria-label={fieldValues.url}
+                            aria-describedby="basic-addon1"
+                            onChange={(e) => {
+                                setFieldValues({ ...fieldValues, url: e.target.value });
+                                validateField("url", e.target.value);
+                            }}
+                        ></input>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="url" />
                         </div>
                     </div>
                 </div> {/* close row */}
