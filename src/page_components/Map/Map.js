@@ -307,11 +307,10 @@ function Map() {
                 popupFishSite.setLngLat(coordinates).setHTML(content).addTo(map.current);
             });
 
-            map.current.on('mouseleave', 'fishing-sites', () => {
+            map.current.on('click', () => {
                 map.current.getCanvas().style.cursor = '';
                 popupFishSite.remove();
             });
-
 
             // popup pointer logic for noaa-stations
             map.current.on('mouseenter', 'noaa-stations', (e) => {
@@ -330,7 +329,7 @@ function Map() {
                 popupStation.setLngLat(coordinates).setHTML(content).addTo(map.current);
             });
 
-            map.current.on('mouseleave', 'noaa-stations', () => {
+            map.current.on('click', () => {
                 map.current.getCanvas().style.cursor = '';
                 popupStation.remove();
             });

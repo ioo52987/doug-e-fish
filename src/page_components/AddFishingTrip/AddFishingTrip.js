@@ -218,101 +218,101 @@ function AddFishingTrip() {
                     </div>
                 </div> {/* close row */}
                 <div className="row input-group">
-                <div className="col-xs-3 col-md-3 field">
-                    <select
-                        className="custom-select form-control"
-                        id="tideType"
-                        onClick={(e) => {
-                            setFieldValues({ ...fieldValues, tideType: e.target.value });
-                            validateField("tideType", e.target.value);
-                        }}
-                        required
-                    >
-                        <option value="">Tidal Info</option>
-                        <option value="high tide">High Tide</option>
-                        <option value="low tide">Low Tide</option>
-                        <option value="ebb tide">Ebb Tide</option>
-                        <option value="na">Not Applicable</option>
-                    </select>
-                    <div className='panel panel-default'>
-                        <FormErrors formErrors={formErrors} fieldName="tideType" />
+                    <div className="col-xs-3 col-md-3 field">
+                        <select
+                            className="custom-select form-control"
+                            id="tideType"
+                            onClick={(e) => {
+                                setFieldValues({ ...fieldValues, tideType: e.target.value });
+                                validateField("tideType", e.target.value);
+                            }}
+                            required
+                        >
+                            <option value="">Tidal Info</option>
+                            <option value="high tide">High Tide</option>
+                            <option value="low tide">Low Tide</option>
+                            <option value="ebb tide">Ebb Tide</option>
+                            <option value="na">Not Applicable</option>
+                        </select>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="tideType" />
+                        </div>
                     </div>
-                </div>
-    
-        <div className="col-xs-3 col-md-3 field">
-            <input
-                type="number"
-                className="form-control"
-                id="fishCaught"
-                placeholder="No. Fish Caught"
-                aria-label="No. Fish Caught"
-                aria-describedby="basic-addon2"
-                onChange={(e) => {
-                    setFieldValues({ ...fieldValues, fishCaught: e.target.value });;
-                    validateField("fishCaught", e.target.value);
-                }}
-                min="0" max="500"
-                required
-            ></input>
-            <div className='panel panel-default'>
-                <FormErrors formErrors={formErrors} fieldName="fishCaught" />
-            </div>
-        </div>
-        </div> {/* close row */}
-        <div className="row input-group">
-            <div className="col-xs-6 col-md-6 field">
-                <textarea
-                    rows="5"
-                    type="text"
-                    className="form-control"
-                    id="description"
-                    placeholder="Describe the fishing trip!"
-                    aria-label="Describe the fishing trip!"
-                    onChange={(e) => {
-                        setFieldValuesValid({ ...fieldValuesValid, 'url': false })
-                        setFieldValues({ ...fieldValues, description: e.target.value });
-                        validateField("description", e.target.value);
-                    }}
-                    minLength="25"
-                    maxLength="1500"
-                    required
-                ></textarea>
-                <div className='panel panel-default'>
-                    <FormErrors formErrors={formErrors} fieldName="description" />
-                </div>
-            </div>
-        </div> {/* close row */}
-        <div className="row input-group">
-            <div className="col-xs-6 col-md-6 field">
-                <input
-                    type="url"
-                    className="form-control"
-                    id="url"
-                    placeholder="Enter an https:// to a public photo album of trip"
-                    aria-label={fieldValues.url}
-                    aria-describedby="basic-addon1"
-                    onChange={(e) => {
-                        setFieldValues({ ...fieldValues, url: e.target.value });
-                        validateField("url", e.target.value);
-                    }}
-                ></input>
-                <div className='panel panel-default'>
-                    <FormErrors formErrors={formErrors} fieldName="url" />
-                </div>
-            </div>
-        </div> {/* close row */}
-        <div className="row">
-            <div className="col-xs-2 col-md-2 field">
-                <button className="btn submit-btn" type="submit">Submit</button>
-            </div>
-            <div className="col-xs-7 col-md-7 field message">
-                <Message
-                    formValid={formState}
-                    message="Success! Thanks for submitting a trip!"
-                />
-            </div>
-        </div> {/* close row */}
-    </form >
+
+                    <div className="col-xs-3 col-md-3 field">
+                        <input
+                            type="number"
+                            className="form-control"
+                            id="fishCaught"
+                            placeholder="No. Fish Caught"
+                            aria-label="No. Fish Caught"
+                            aria-describedby="basic-addon2"
+                            onChange={(e) => {
+                                setFieldValues({ ...fieldValues, fishCaught: e.target.value });;
+                                validateField("fishCaught", e.target.value);
+                            }}
+                            min="0" max="500"
+                            required
+                        ></input>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="fishCaught" />
+                        </div>
+                    </div>
+                </div> {/* close row */}
+                <div className="row input-group">
+                    <div className="col-xs-6 col-md-6 field">
+                        <textarea
+                            rows="5"
+                            type="text"
+                            className="form-control"
+                            id="description"
+                            placeholder="Describe the fishing trip!"
+                            aria-label="Describe the fishing trip!"
+                            onChange={(e) => {
+                                setFieldValuesValid({ ...fieldValuesValid, 'url': false })
+                                setFieldValues({ ...fieldValues, description: e.target.value });
+                                validateField("description", e.target.value);
+                            }}
+                            minLength="25"
+                            maxLength="1500"
+                            required
+                        ></textarea>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="description" />
+                        </div>
+                    </div>
+                </div> {/* close row */}
+                <div className="row input-group">
+                    <div className="col-xs-6 col-md-6 field">
+                        <input
+                            type="url"
+                            className="form-control"
+                            id="url"
+                            placeholder="Enter an https:// to a public photo album of trip"
+                            aria-label={fieldValues.url}
+                            aria-describedby="basic-addon1"
+                            onChange={(e) => {
+                                setFieldValues({ ...fieldValues, url: e.target.value });
+                                validateField("url", e.target.value);
+                            }}
+                        ></input>
+                        <div className='panel panel-default'>
+                            <FormErrors formErrors={formErrors} fieldName="url" />
+                        </div>
+                    </div>
+                </div> {/* close row */}
+                <div className="row">
+                    <div className="col-xs-2 col-md-2 field">
+                        <button className="btn submit-btn" type="submit">Submit</button>
+                    </div>
+                    <div className="col-xs-7 col-md-7 field message">
+                        <Message
+                            formValid={formState}
+                            message="Success! Thanks for submitting a trip!"
+                        />
+                    </div>
+                </div> {/* close row */}
+            </form >
         </div >
     );
 }

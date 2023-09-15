@@ -17,6 +17,7 @@ function AddFishingSite() {
 
     // form validation
     const validateField = (fieldName, value) => {
+
         switch (fieldName) {
             case 'siteName':
                 fieldValuesValid.siteName = (value.length >= 3 && value.length <= 75);
@@ -61,6 +62,9 @@ function AddFishingSite() {
     // on form submission
     const handleSubmit = (e) => {
 
+        //console.log(fieldValues);
+        //console.log(fieldValuesValid);
+
         e.preventDefault();
         formValid = (fieldValuesValid.siteName &&
             fieldValuesValid.siteType &&
@@ -69,7 +73,9 @@ function AddFishingSite() {
             fieldValuesValid.description &&
             fieldValuesValid.url);
 
-        if (formValid) {
+        //console.log(formValid);
+
+        if (formValid) { //formValid
             axios.post(`/` + process.env.REACT_APP_FISHING_SITES_AIRTABLE + `/`,
                 {
                     "fields": {

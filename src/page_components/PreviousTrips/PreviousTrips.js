@@ -48,8 +48,8 @@ function PreviousTrips() {
             { label: 'Date', field: 'date', sort: 'asc', width: 65 },
             { label: 'Site', field: 'site', sort: 'asc', width: 90 },
             { label: 'Description', field: 'description', sort: '', width: 395 },
-            { label: 'No.Fish', field: 'fishCaught', sort: 'asc'},
-            { label: 'Tide', field: 'tideType', sort: 'asc'},
+            { label: 'No.Fish', field: 'fishCaught', sort: 'asc' },
+            { label: 'Tide', field: 'tideType', sort: 'asc' },
             { label: 'Photos', field: 'photos', sort: '', width: 40 },
             { label: 'Rating', field: 'rating', sort: 'asc', width: 40 }
         ],
@@ -61,18 +61,16 @@ function PreviousTrips() {
         <div>
             <form className="form-content">
                 <p id='pageTitle'>PreviousTrips</p>
-                <div className='temp-hack-overFlw'>
-                    <MDBDataTable
-                        /*scrollY*/ 
-                        /* tired using MDB's overflow-y but the column headers wouldn't line up 
-                           even their online example had mis-aligned headers */
-                        maxHeight="45vh"
-                        striped
-                        bordered
-                        small
-                        data={data}
-                    />
-                </div>
+                <MDBDataTable
+                    scrollY
+                    /* column headers wouldn't line up 
+                       even their online example had mis-aligned headers */
+                    maxHeight="45vh"
+                    striped
+                    bordered
+                    small
+                    data={data}
+                />
             </form>
         </div>
     );
