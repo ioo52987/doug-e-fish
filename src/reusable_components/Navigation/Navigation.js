@@ -184,7 +184,7 @@ function Navigation() {
           {
             location === '/about_this_site'
               ? <img id="jeriIcon" src="https://i.ibb.co/kMn501q/jeri-triangle-glasses.png" alt="jeri-the-coolest-duh" border="0" />
-              : <img id="dadIcon" src="https://i.ibb.co/wRcmdxw/dad-hilton-pier.png" alt="dad-hilton-pier" border="0" />
+              : <img id="dadIcon" src="https://i.ibb.co/WgsJ7WQ/Screenshot-2023-09-14-222730-removebg-preview.png" alt="dad-hilton-pier" border="0" />
           }
         </nav>
         <nav id="overlayMenu" className="overlay">
