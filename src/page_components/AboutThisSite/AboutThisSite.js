@@ -76,7 +76,7 @@ function AboutThisSite() {
                                 required />
                         </div>
                         <div className="col-xs-2 col-md-2 field">
-                            <button className="btn submit-btn" type="submit" value="Send" style={{marginTop: 0}}>Send</button> 
+                            <button className="btn submit-btn" type="submit" value="Send" style={{ marginTop: 0 }}>Send</button>
                         </div>
                     </div> {/* close row */}
                     <div className="row">
@@ -90,9 +90,13 @@ function AboutThisSite() {
                 </form>
 
                 <div id='welcome'>Programmers!</div>
-                <i className="fab fa-github-alt"></i>&nbsp;&nbsp;&nbsp;Please take a look at the public gitHub repository&nbsp;
-                <a href="https://github.com/ioo52987/doug-e-fish" target="_blank" rel="noopener noreferrer" >here</a>.
-                Want to contribute? Checkout a branch and make a pull request!
+                <div className="row">
+                    <div className="col-xs-7 col-md-7 field">
+                        <i className="fab fa-github-alt"></i>&nbsp;&nbsp;&nbsp;Please take a look at the public gitHub repository&nbsp;
+                        <a href="https://github.com/ioo52987/doug-e-fish" target="_blank" rel="noopener noreferrer" >here</a>.
+                        Want to contribute? Checkout a branch and make a pull request!
+                    </div>
+                </div>
             </div>
         </div >
     );

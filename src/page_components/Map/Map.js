@@ -6,15 +6,28 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZmlzaG5uMjMiLCJhIjoiY2xpb3o4YjlhMHFjYjNkcDJie
 
 function Map() {
 
+    // check if on mobile or computer device --> https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
     // map defaults
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const [lng, setLng] = useState(-76.362954);
-    const [lat, setLat] = useState(37.078133);
-    const [zoom, setZoom] = useState(10);
+    let [lng, setLng] = useState(0);
+    let [lat, setLat] = useState(0);
+    let [zoom, setZoom] = useState(10);
+
+    if(isMobile){
+        // phone
+        lng = -76.3605171;
+        lat = 36.9784821;
+    }else{
+        // computer
+        lng = -76.2621354;
+        lat = 36.9744482;
+    }
 
     // set popup url state
-    let [urlInfo, setURLInfo] = useState({ url: '', shortenURL: ''});
+    let [urlInfo, setURLInfo] = useState({ url: '', shortenURL: '' });
 
     // axios response state data
     let [fishingSiteData, setFishingSiteData] = useState([]);
@@ -256,10 +269,10 @@ function Map() {
 
                 // modifying siteURL for webpage display
                 const re = /^https:\/\/(www\.)?(.*?)\.(com|gov|org)/;
-                if(siteURL === 'null'){
+                if (siteURL === 'null') {
                     urlInfo.url = '#';
                     urlInfo.shortenURL = '';
-                }else{
+                } else {
                     let chopped = re.exec(siteURL);
                     urlInfo.url = siteURL;
                     urlInfo.shortenURL = chopped[0];
@@ -294,11 +307,10 @@ function Map() {
                 popupFishSite.setLngLat(coordinates).setHTML(content).addTo(map.current);
             });
 
-            map.current.on('mouseleave', 'fishing-sites', () => {
+            map.current.on('click', () => {
                 map.current.getCanvas().style.cursor = '';
                 popupFishSite.remove();
             });
-
 
             // popup pointer logic for noaa-stations
             map.current.on('mouseenter', 'noaa-stations', (e) => {
@@ -317,7 +329,7 @@ function Map() {
                 popupStation.setLngLat(coordinates).setHTML(content).addTo(map.current);
             });
 
-            map.current.on('mouseleave', 'noaa-stations', () => {
+            map.current.on('click', () => {
                 map.current.getCanvas().style.cursor = '';
                 popupStation.remove();
             });
@@ -326,7 +338,7 @@ function Map() {
 
     return (
         <div>
-            <div ref={mapContainer}  className='map-container'/>
+            <div ref={mapContainer} className='map-container' />
         </div>
     );
 }
