@@ -48,6 +48,8 @@ button.btn.submit-btn:hover {
         left: 0;
         right: 0;
         padding: 90px 0 0 0; /* this pads the content */
+        overflow-y:scroll;
+        overflow-x:hidden;
     }
 }
 
@@ -61,5 +63,7 @@ button.btn.submit-btn:hover {
         left: 0;
         right: 0;
         padding: 115px 0 0 240px; /* this pads the content */
+        overflow-y:scroll;
+        overflow-x:hidden;
     }
 }
