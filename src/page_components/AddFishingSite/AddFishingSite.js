@@ -29,10 +29,18 @@ function AddFishingSite() {
             case 'longitude':
                 fieldValuesValid.longitude = (value >= -77.58 && value <= -75.2);
                 formErrors.longitude = fieldValuesValid.longitude ? '' : ' Range is -77.58 to -75.2';
+                if(fieldValuesValid.longitude){
+                    fieldValuesValid.longitude = (/\d\d\.\d{5}/gm).test(value);
+                    formErrors.longitude = fieldValuesValid.longitude ? '' : 'Minimum 5 decimal points';
+                }
                 break;
             case 'latitude':
                 fieldValuesValid.latitude = (value >= 36.56 && value <= 37.60);
                 formErrors.latitude = fieldValuesValid.latitude ? '' : ' Range is 36.56 to 37.60';
+                if(fieldValues.latitude){
+                    fieldValuesValid.latitude = (/\d\d\.\d{5}/gm).test(value);
+                    formErrors.latitude = fieldValuesValid.latitude ? '' : 'Minimum 5 decimal points';
+                }
                 break;
             case 'description':
                 fieldValuesValid.description = (value.length >= 25 && value.length <= 1500);
