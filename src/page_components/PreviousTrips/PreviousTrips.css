@@ -1,6 +1,6 @@
 .temp-hack-overFlw{
-    display: block;
-    position: relative;
-    height: 500px;
+    /*display: block;*/
+    position: fixed; /* relative vs fixed */
+    height: 100vh;
     overflow: auto;
 }
