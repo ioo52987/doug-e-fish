@@ -65,7 +65,7 @@ function PreviousTrips() {
                     scrollY
                     /* column headers wouldn't line up 
                        even their online example had mis-aligned headers */
-                    maxHeight="45vh"
+                    maxHeight="45vh" /* won't work if scrollY isn't declared */
                     striped
                     bordered
                     small

@@ -16,37 +16,22 @@ function Map() {
     let [lat, setLat] = useState(0);
     let [zoom, setZoom] = useState(10);
 
-    if(isMobile){
-        // phone
+    if (isMobile) { // phone
         lng = -76.3605171;
         lat = 36.9784821;
-    }else{
-        // computer
+    } else { // computer
         lng = -76.2621354;
         lat = 36.9744482;
     }
 
-    // set popup url state
-    let [urlInfo, setURLInfo] = useState({ url: '', shortenURL: '' });
-
-    // axios response state data
+    // set states (includes axios response data) 
     let [fishingSiteData, setFishingSiteData] = useState([]);
-    let [dailyFishingTripData, setDailyFishingTripData] = useState([]);
+    let [fishingTripData, setFishingTripData] = useState([]);
+    let [urlInfo, setURLInfo] = useState({ url: '', shortenURL: '' }); // set popup url state
+    let [fishingSites, setFishingSites] = useState({});
+    let [siteMapProperties, setSiteMapProperties] = useState([]);
 
-    let fishingSites = {};
-
-    // custom icons
-    let icon = {
-        url: 'https://i.ibb.co/DfQyp9M/icons8-fish-100-1.png',
-        id: 'custom-marker'
-    };
-    let stationIcon = {
-        url: 'https://i.ibb.co/P5W4M4x/icons8-float-64.png',
-        id: 'station-custom-marker'
-    };
-
-    let siteMapProperties = [];
-    // geoJSON data structure for noaa-stations
+    // geoJSON data structure for noaa-stations layer
     let noaaStationMapProperties = [
         {
             'type': 'Feature',
@@ -86,9 +71,19 @@ function Map() {
         }
     ];
 
+    // custom icons
+    let icon = {
+        url: 'https://i.ibb.co/DfQyp9M/icons8-fish-100-1.png',
+        id: 'custom-marker'
+    };
+    let stationIcon = {
+        url: 'https://i.ibb.co/P5W4M4x/icons8-float-64.png',
+        id: 'station-custom-marker'
+    };
+
+    // GET latest fishing-site data
     let [offset1, setOffset1] = useState('');
     useEffect(() => {
-        // GET latest fishing-site data
         axios.get(process.env.REACT_APP_FISHING_SITES_AIRTABLE)
             .then(response => {
                 let data = response.data.records;
@@ -100,83 +95,25 @@ function Map() {
             .catch(function (error) { console.log(error); });
     }, [offset1]);
 
+    // GET latest fishing-trip data
     let [offset2, setOffset2] = useState('');
     useEffect(() => {
-        // GET daily fishing-trip data
         axios.get(`/` + process.env.REACT_APP_FISHING_TRIPS_AIRTABLE + `?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=siteName`)
             .then(response => {
                 let data = response.data.records;
-                setDailyFishingTripData(dailyFishingTripData => [...dailyFishingTripData, ...data]);
+                setFishingTripData(fishingTripData => [...fishingTripData, ...data]);
                 if (response.data.offset) {
                     setOffset2(response.data.offset);
                 }
             })
             .catch(function (error) { console.log(error); });
-    }, [offset2])
+    }, [offset2]);
 
-    // create geoJSON data structure for fishing-sites
-    if (fishingSiteData.length) {
-        let len = fishingSiteData.length;
-        for (let i = 0; i < len; i++) {
-
-            // stuffing site obj
-            fishingSites[fishingSiteData[i].fields.siteName] = null;
-
-            siteMapProperties.push({
-                'type': 'Feature',
-                'properties': {
-                    'siteName': fishingSiteData[i].fields.siteName,
-                    'rating': fishingSiteData[i].fields.overallRating,
-                    'siteURL': fishingSiteData[i].fields.siteURL,
-                    'description': fishingSiteData[i].fields.description
-                },
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [fishingSiteData[i].fields.longitude, fishingSiteData[i].fields.latitude]
-                }
-            });
-        }
-    }
-
-    // calculate daily fish caught per fishing-site
-    if (dailyFishingTripData.length) {
-        let talliesPerSite = {};
-        let totalPerSite = {};
-        let currentDate = new Date().toJSON().slice(0, 10);
-
-        for (let i = 0; i < dailyFishingTripData.length; i++) {
-            if (dailyFishingTripData[i].fields.date === currentDate) {
-                if (dailyFishingTripData[i].fields.siteName in talliesPerSite) {
-                    talliesPerSite[dailyFishingTripData[i].fields.siteName].push(dailyFishingTripData[i].fields.fishCaught);
-                } else {
-                    talliesPerSite[dailyFishingTripData[i].fields.siteName] = [];
-                    talliesPerSite[dailyFishingTripData[i].fields.siteName].push(dailyFishingTripData[i].fields.fishCaught);
-                }
-            }
-        }
-
-        // total the count in the arr
-        Object.entries(talliesPerSite).forEach(entry => {
-            let total = 0;
-            let key = entry[0];
-            let value = entry[1];
-            for (let i = 0; i < value.length; i++) {
-                total = total + value[i];
-            }
-            totalPerSite[key] = total;
-        });
-
-        // then compare to the global fishingSites obj to determine 0 or no entry
-        Object.keys(fishingSites).forEach(key => {
-            if (key in totalPerSite) {
-                fishingSites[key] = totalPerSite[key];
-            } else {
-                fishingSites[key] = 'No entries for this site today.';
-            }
-        });
-    }
-
+    // mapbox load
     useEffect(() => {
+
+        createGeoJson(fishingSiteData);
+        calculateDailyFish(fishingTripData, fishingSites);
 
         if (siteMapProperties.length === 0) return;
 
@@ -335,6 +272,69 @@ function Map() {
             });
         });
     }, [fishingSiteData]); /* useEffect() */
+
+    // create geoJSON data structure for fishing-sites layer
+    function createGeoJson(arr) {
+        let fS = {};
+        let sMP = [];
+        let len = arr.length;
+        for (let i = 0; i < len; i++) {
+            fS[arr[i].fields.siteName] = null; // stuffing site obj with every fishing-site
+            sMP.push({
+                'type': 'Feature',
+                'properties': {
+                    'siteName': arr[i].fields.siteName,
+                    'rating': arr[i].fields.overallRating,
+                    'siteURL': arr[i].fields.siteURL,
+                    'description': arr[i].fields.description
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [arr[i].fields.longitude, arr[i].fields.latitude]
+                }
+            });
+        }
+
+        // updating states
+        fishingSites = fS; 
+        siteMapProperties = sMP;
+    }
+
+    // calculate daily fish caught per fishing-site
+    function calculateDailyFish(arr, obj) {
+        // calculateDailyFish(fishingTripData, fishingSites);
+        // const count = animals.push('cows');
+        let talliesPerSite = {};
+        let currentDate = new Date().toJSON().slice(0, 10);
+
+        for (let i = 0; i < arr.length; i++) {
+            // apply daily condition filter (only interested in today's trips)
+            if (arr[i].fields.date === currentDate) {
+                let valueARR = talliesPerSite[arr[i].fields.siteName];
+                valueARR.push(arr[i].fields.fishCaught);
+            }
+        }
+
+        // total the count in the arr
+        let totalPerSite = {};
+        for (const [key, value] of Object.entries(talliesPerSite)) {
+            let total = 0;
+            for (let i = 0; i < value.length; i++) {
+                total += value[i];
+            }
+            totalPerSite[key] = total;
+        }
+
+        // then compare to the global fishingSites obj to determine 0 or no entry
+        Object.keys(obj).forEach(key => {
+            if (key in totalPerSite) {
+                obj[key] = totalPerSite[key];
+            } else {
+                obj[key] = 'No entries for this site today.';
+            }
+        });
+        setFishingSites(obj);
+    }
 
     return (
         <div>
