@@ -179,7 +179,7 @@ function Map() {
                 }
             });
 
-            // Create a popups, but don't add them to the map yet
+            // create popups, but don't add them to the map yet
             const popupFishSite = new mapboxgl.Popup({
                 className: 'fish-site-popup ',
                 closeButton: false,
