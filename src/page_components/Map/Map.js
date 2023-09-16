@@ -302,16 +302,19 @@ function Map() {
 
     // calculate daily fish caught per fishing-site
     function calculateDailyFish(arr, obj) {
-        // calculateDailyFish(fishingTripData, fishingSites);
-        // const count = animals.push('cows');
+
         let talliesPerSite = {};
         let currentDate = new Date().toJSON().slice(0, 10);
 
         for (let i = 0; i < arr.length; i++) {
             // apply daily condition filter (only interested in today's trips)
             if (arr[i].fields.date === currentDate) {
-                let valueARR = talliesPerSite[arr[i].fields.siteName];
-                valueARR.push(arr[i].fields.fishCaught);
+                if(talliesPerSite.hasOwnProperty(arr[i].fields.siteName)){
+                    talliesPerSite[arr[i].fields.siteName].push(arr[i].fields.fishCaught);
+                }else{ // initialize an empty array
+                    talliesPerSite[arr[i].fields.siteName] = [];
+                    talliesPerSite[arr[i].fields.siteName].push(arr[i].fields.fishCaught);
+                }
             }
         }
 
