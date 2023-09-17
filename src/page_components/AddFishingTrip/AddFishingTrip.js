@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Message from '../../reusable_components/Message/Message.js';
 import './AddFishingTrip.css';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -7,6 +7,8 @@ import FormErrors from '../../reusable_components/FormErrors/FormErrors.js';
 import RatingButton from '../../reusable_components/RatingButton/RatingButton.js';
 
 function AddFishingTrip() {
+
+    const ref = useRef();
 
     /* DROPDOWN VALUES */
     let [dropdownValues, setDropdownValues] = useState([]);
@@ -174,11 +176,14 @@ function AddFishingTrip() {
                     <div className="col-xs-2 col-md-2 field">
                         <input
                             type="date"
+                            ref={ref}
                             className="form-control"
                             id="date"
                             placeholder="mm/dd/yyyy"
                             aria-label={fieldValues.date}
                             aria-describedby="basic-addon2"
+                            onfocus={() => (ref.current.type = "date")}
+                            onBlur={() => (ref.current.type = "date")}
                             onChange={(e) => {
                                 setFieldValues({ ...fieldValues, date: e.target.value });
                                 validateField("date", e.target.value);
