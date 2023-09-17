@@ -64,12 +64,12 @@ a.list-group-item:hover {
 }
 
 #nav-1 {
-    width: 225px;
+    width: 215px;
     padding-bottom: 5px;
 }
 
 #nav-2 {
-    width: 175px;
+    width: 195px;
     padding-bottom: 5px;
 }
 
@@ -103,11 +103,11 @@ Get some android sizes.
 
     #top-nav-phone {
         background-color: #f2f2f2;
+        text-align: center;
         padding: 10px 0 0 0;
         border-radius: 5px;
-        padding-right: 50px;
         margin-left: 5px;
-        align-items: flex-start;
+        align-items: center;
     }
 
     #nav-3 {
@@ -228,7 +228,6 @@ nav#main-navbar.navbar.navbar-expand-lg.navbar-light.bg-white.fixed-top{
   
   /* Style the accordion panel. Note: hidden by default */
   .panel {
-    padding: 0 18px;
     background-color: #f2f2f2;
     overflow: hidden;
   }
