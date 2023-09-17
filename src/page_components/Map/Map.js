@@ -204,7 +204,8 @@ function Map() {
                 const description = e.features[0].properties.description;
                 const siteURL = e.features[0].properties.siteURL;
 
-                // modifying siteURL for webpage display
+                // modifying siteURL for webpage display -----------------NOT CURRENTLY USING
+                // need to spend more time working with multiple layers and hovering to click link.... issues came up
                 const re = /^https:\/\/(www\.)?(.*?)\.(com|gov|org)/;
                 if (siteURL === 'null') {
                     urlInfo.url = '#';
@@ -244,9 +245,14 @@ function Map() {
                 popupFishSite.setLngLat(coordinates).setHTML(content).addTo(map.current);
             });
 
-            map.current.on('click', () => {
+            // Change the cursor to a pointer when the mouse is over the places layer.
+            map.current.on('mouseenter', 'fishing-sites', () => {
+                map.current.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves.
+            map.current.on('mouseleave', 'fishing-sites', () => {
                 map.current.getCanvas().style.cursor = '';
-                popupFishSite.remove();
             });
 
             // popup pointer logic for noaa-stations
@@ -266,10 +272,22 @@ function Map() {
                 popupStation.setLngLat(coordinates).setHTML(content).addTo(map.current);
             });
 
-            map.current.on('click', () => {
+            map.current.on('mouseenter', 'noaa-stations', () => {
+                map.current.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves.
+            map.current.on('mouseleave', 'noaa-stations', () => {
                 map.current.getCanvas().style.cursor = '';
                 popupStation.remove();
             });
+
+            // 
+            map.current.on('click', () => {
+                map.current.getCanvas().style.cursor = '';
+                popupFishSite.remove();
+            });
+
         });
     }, [fishingSiteData]); /* useEffect() */
 
