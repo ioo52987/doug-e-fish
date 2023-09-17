@@ -35,7 +35,6 @@ button.btn.submit-btn {
 }
 button.btn.submit-btn:hover {
     font-weight: bold;
-    background-color: rgba(255, 191, 0, 0.6);
 }
 
 /* PHONE SCREEN DISPLAY */
@@ -47,7 +46,7 @@ button.btn.submit-btn:hover {
         bottom: 0;
         left: 0;
         right: 0;
-        padding: 90px 0 0 0; /* this pads the content */
+        padding: 65px 0 0 0; /* this pads the content */
         overflow-y:scroll;
         overflow-x:hidden;
     }

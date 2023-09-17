@@ -7,6 +7,7 @@ function Navigation() {
 
   let location = useLocation().pathname;
   let MDBclasses = "list-group-item list-group-item-action py-2 ripple";
+  let currentDate = new Date().toJSON().slice(0, 10);
   let navigationInfo = [
     { id: 1, href: "/", icon: "fas fa-map fa-fw me-3", title: "Map" },
     { id: 2, href: "/add_fishing_trip", icon: "fas fa-plus fa-fw me-3", title: "Add Fishing Trip" },
@@ -22,15 +23,22 @@ function Navigation() {
   let [stationValue, setStationValue] = useState("8637689");
   let [offset, setOffset] = useState('');
   let [navToggle, setNavToggle] = useState(false);
+  let [isContentVisible, setContentVisible] = useState(false);
 
-  let currentDate = new Date().toJSON().slice(0, 10);
-
+  /* GET daily tide data from NOAA's api*/
   useEffect(() => {
 
-    /* build NOAA api call*/
     let frontOfAPIcall = `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?`;
     let endOfAPIcall = `time_zone=lst_ldt&interval=hilo&units=english&application=dougEfish&format=json`;
     let tideAPIcall = `${frontOfAPIcall}date=today&station=${stationValue}&product=predictions&datum=MLLW&${endOfAPIcall}`;
+
+    axios.get(tideAPIcall)
+      .then(response => setTideData(response.data))
+      .catch(function (error) { console.log(error); });
+  }, [stationValue]);
+
+  /* GET fishCaught data from Airtable */
+  useEffect(() => {
 
     axios.get(`/` + process.env.REACT_APP_FISHING_TRIPS_AIRTABLE + `?fields%5B%5D=fishCaught&fields%5B%5D=date&offset=${offset}`)
       .then(response => {
@@ -41,12 +49,9 @@ function Navigation() {
         }
       })
       .catch(function (error) { console.log(error); });
-    axios.get(tideAPIcall)
-      .then(response => setTideData(response.data))
-      .catch(function (error) { console.log(error); });
-  }, [stationValue, offset]);
+  }, [offset]);
 
-  /* extract daily caught fish from response data */
+  /* extract DAILY fishCaught from response data */
   const getDailyFishCaught = () => {
     let totalFishCaughtToday = 0;
     if (fishCaughtData) {
@@ -128,19 +133,22 @@ function Navigation() {
     }
   };
 
+  /* handles tide dropdown field when on top navigation (computer) */
   const clickHandler = () => {
     var options = document.getElementById("highTide").options;
     var station = options[options.selectedIndex].id;
     setStationValue(station);
   }
 
+  /* handles tide dropdown field when on side navigation (phone) */
   const clickHandlerSide = () => {
     var options = document.getElementById("highTide-side").options;
     var station = options[options.selectedIndex].id;
     setStationValue(station);
   }
 
-  /* overlay functions */
+
+  /* overlay function for phone navigation */
   function toggleNavMenu() {
     if (navToggle === true) {
       document.getElementById("overlayMenu").style.width = "0%";
@@ -154,7 +162,8 @@ function Navigation() {
   return (
     <div>
       <header>
-        {/* SIDE NAVIGATION */}
+
+        {/* sidebar menu */}
         <nav id="sidebarMenu" className="collapse d-lg-block sidebar collapse bg-white">
           <div className="position-sticky">
             <div className="list-group list-group-flush mx-3 mt-4">
@@ -187,30 +196,37 @@ function Navigation() {
               : <img id="dadIcon" src="https://i.ibb.co/WgsJ7WQ/Screenshot-2023-09-14-222730-removebg-preview.png" alt="dad-hilton-pier" border="0" />
           }
         </nav>
+
+        {/* overlay menu */}
         <nav id="overlayMenu" className="overlay">
           <div className="overlay-content">
-            <ul id='top-nav-phone' className="navbar-nav flex-column">
-              <li className="nav-item" id="nav-1">
-                <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{currentDate}</span>
-              </li>
-              <li className="nav-item" id="nav-2">
-                <span><i className="fas fa-fish"></i>&nbsp;Daily Fish Total:&nbsp;&nbsp;{getDailyFishCaught()}</span>
-              </li>
-              <li className="nav-item" id="nav-3">
-                <span><i className="fas fa-ship"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>
-              </li>
-              <li className="nav-item" id="nav-4">
-                <div className="input-group">
-                  <select className="custom-select form-control" id="highTide-side" onClick={clickHandlerSide}>
-                    <option id="8637689" defaultValue>Yorktown USCG Training Center</option>
-                    <option id="8632200">Kiptopeke</option>
-                    <option id="8638901">Chesapeake Channel CBBT</option>
-                    <option id="8638610">Sewells Point</option>
-                    <option id="8639348">Money Point</option>
-                  </select>
-                </div>
-              </li>
-            </ul>
+            <button onClick={() => setContentVisible(isContentVisible = !isContentVisible)} className="accordion">Today's Information</button>
+            <div className="panel">
+              {isContentVisible && (
+                <ul id='top-nav-phone' className="navbar-nav flex-column">
+                  <li className="nav-item" id="nav-1">
+                    <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{currentDate}</span>
+                  </li>
+                  <li className="nav-item" id="nav-2">
+                    <span><i className="fas fa-fish"></i>&nbsp;Daily Fish Total:&nbsp;&nbsp;{getDailyFishCaught()}</span>
+                  </li>
+                  <li className="nav-item" id="nav-3">
+                    <span><i className="fas fa-ship"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>
+                  </li>
+                  <li className="nav-item" id="nav-4">
+                    <div className="input-group">
+                      <select className="custom-select form-control" id="highTide-side" onClick={clickHandlerSide}>
+                        <option id="8637689" defaultValue>Yorktown USCG Training Center</option>
+                        <option id="8632200">Kiptopeke</option>
+                        <option id="8638901">Chesapeake Channel CBBT</option>
+                        <option id="8638610">Sewells Point</option>
+                        <option id="8639348">Money Point</option>
+                      </select>
+                    </div>
+                  </li>
+                </ul>
+              )}
+            </div>
             {navigationInfo.map((val) => (
               <NavLink
                 key={val.id}
@@ -236,20 +252,24 @@ function Navigation() {
           </div>
         </nav>
 
-        {/* TOP NAVIGATION */}
+        {/* topbar */}
         <nav id="main-navbar" className="navbar navbar-expand-lg navbar-light bg-white fixed-top">
           <div className="container-fluid">
 
-            {/* TITLE AND SUBTITLE -----------------------------------------*/}
+            {/* title */}
             <div id="title-computer" className="navbar-brand">
               <p id="top-title-computer">Doug-E-Fish</p>
               <p id="top-subTitle-computer">A Greater Hampton Roads Fishing Tool</p>
             </div>
             <div id="title-phone" className="navbar-brand">
-              <span id="top-title-phone"><i className="fas fa-bars" onClick={toggleNavMenu}></i>&nbsp;&nbsp;Doug-E-Fish</span>
-              <p id="top-subTitle-phone">A Greater Hampton Roads Fishing Tool</p>
+              <span id="top-title-phone">
+                <i className="fas fa-bars" onClick={toggleNavMenu}></i>
+                &nbsp;&nbsp;
+                {/* <img src="https://i.ibb.co/kmgM90S/favicon.png" alt="fish icon" width="35" height="35"></img>
+                &nbsp; */}
+                <p id="top-title-phone" style={{ display: 'inline-block' }} >Doug-E-Fish</p>
+              </span>
             </div>
-            {/* ------------------------------------------------*/}
 
             {/* RIGHT ALIGNED LINKS --------------------------- */}
             <ul id='top-nav-computer' className="navbar-nav ms-auto d-flex flex-row">
