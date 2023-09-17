@@ -193,7 +193,7 @@ function Map() {
             });
 
             // popup pointer logic for fishing-sites
-            map.current.on('click', 'fishing-sites', (e) => {
+            map.current.on('mouseenter', 'fishing-sites', (e) => {
 
                 // Change the cursor style as a UI indicator.
                 map.current.getCanvas().style.cursor = 'pointer';
@@ -244,23 +244,10 @@ function Map() {
                 popupFishSite.setLngLat(coordinates).setHTML(content).addTo(map.current);
             });
 
-            if (isMobile) {
-                /*
-                map.current.on('mouseleave', 'fishing-sites', () => {
-                    map.current.getCanvas().style.cursor = '';
-                    popupFishSite.remove();
-                });
-                */
-                map.current.on('click', () => {
-                    map.current.getCanvas().style.cursor = '';
-                    popupFishSite.remove();
-                });
-            } else {
-                map.current.on('click', () => {
-                    map.current.getCanvas().style.cursor = '';
-                    popupFishSite.remove();
-                });
-            }
+            map.current.on('click', () => {
+                map.current.getCanvas().style.cursor = '';
+                popupFishSite.remove();
+            });
 
             // popup pointer logic for noaa-stations
             map.current.on('mouseenter', 'noaa-stations', (e) => {
