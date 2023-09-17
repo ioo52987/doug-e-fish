@@ -193,7 +193,7 @@ function Map() {
             });
 
             // popup pointer logic for fishing-sites
-            map.current.on('mouseenter', 'fishing-sites', (e) => {
+            map.current.on('click', 'fishing-sites', (e) => {
 
                 // Change the cursor style as a UI indicator.
                 map.current.getCanvas().style.cursor = 'pointer';
@@ -244,10 +244,17 @@ function Map() {
                 popupFishSite.setLngLat(coordinates).setHTML(content).addTo(map.current);
             });
 
-            map.current.on('click', () => {
-                map.current.getCanvas().style.cursor = '';
-                popupFishSite.remove();
-            });
+            if (isMobile) {
+                map.current.on('mouseleave', 'fishing-sites', () => {
+                    map.current.getCanvas().style.cursor = '';
+                    popupFishSite.remove();
+                });
+            } else {
+                map.current.on('click', () => {
+                    map.current.getCanvas().style.cursor = '';
+                    popupFishSite.remove();
+                });
+            }
 
             // popup pointer logic for noaa-stations
             map.current.on('mouseenter', 'noaa-stations', (e) => {
@@ -296,7 +303,7 @@ function Map() {
         }
 
         // updating states
-        fishingSites = fS; 
+        fishingSites = fS;
         siteMapProperties = sMP;
     }
 
@@ -309,9 +316,9 @@ function Map() {
         for (let i = 0; i < arr.length; i++) {
             // apply daily condition filter (only interested in today's trips)
             if (arr[i].fields.date === currentDate) {
-                if(talliesPerSite.hasOwnProperty(arr[i].fields.siteName)){
+                if (talliesPerSite.hasOwnProperty(arr[i].fields.siteName)) {
                     talliesPerSite[arr[i].fields.siteName].push(arr[i].fields.fishCaught);
-                }else{ // initialize an empty array
+                } else { // initialize an empty array
                     talliesPerSite[arr[i].fields.siteName] = [];
                     talliesPerSite[arr[i].fields.siteName].push(arr[i].fields.fishCaught);
                 }

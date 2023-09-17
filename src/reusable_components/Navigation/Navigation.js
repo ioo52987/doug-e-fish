@@ -23,7 +23,7 @@ function Navigation() {
   let [stationValue, setStationValue] = useState("8637689");
   let [offset, setOffset] = useState('');
   let [navToggle, setNavToggle] = useState(false);
-  let [display, setDisplay] = useState({display: "none"}); // this is landing in the html correctly
+  let [isContentVisible, setContentVisible] = useState(false);
 
   /* GET daily tide data from NOAA's api*/
   useEffect(() => {
@@ -147,14 +147,6 @@ function Navigation() {
     setStationValue(station);
   }
 
-  /* handles info button in overlay */
-  const clickInfo = () => {
-    // the logic here seems to be working right but isn't updating in the DOM
-    console.log('made it!');
-    console.log(display);
-    (display.display === 'block') ? display = {display:'none'} : display = {display:'block'};
-    console.log(display);
-  }
 
   /* overlay function for phone navigation */
   function toggleNavMenu() {
@@ -208,30 +200,32 @@ function Navigation() {
         {/* overlay menu */}
         <nav id="overlayMenu" className="overlay">
           <div className="overlay-content">
-            <button onClick={clickInfo} className="accordion">Today's Information</button>
-            <div className="panel" style={display}>
-              <ul id='top-nav-phone' className="navbar-nav flex-column">
-                <li className="nav-item" id="nav-1">
-                  <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{currentDate}</span>
-                </li>
-                <li className="nav-item" id="nav-2">
-                  <span><i className="fas fa-fish"></i>&nbsp;Daily Fish Total:&nbsp;&nbsp;{getDailyFishCaught()}</span>
-                </li>
-                <li className="nav-item" id="nav-3">
-                  <span><i className="fas fa-ship"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>
-                </li>
-                <li className="nav-item" id="nav-4">
-                  <div className="input-group">
-                    <select className="custom-select form-control" id="highTide-side" onClick={clickHandlerSide}>
-                      <option id="8637689" defaultValue>Yorktown USCG Training Center</option>
-                      <option id="8632200">Kiptopeke</option>
-                      <option id="8638901">Chesapeake Channel CBBT</option>
-                      <option id="8638610">Sewells Point</option>
-                      <option id="8639348">Money Point</option>
-                    </select>
-                  </div>
-                </li>
-              </ul>
+            <button onClick={() => setContentVisible(isContentVisible = !isContentVisible)} className="accordion">Today's Information</button>
+            <div className="panel">
+              {isContentVisible && (
+                <ul id='top-nav-phone' className="navbar-nav flex-column">
+                  <li className="nav-item" id="nav-1">
+                    <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{currentDate}</span>
+                  </li>
+                  <li className="nav-item" id="nav-2">
+                    <span><i className="fas fa-fish"></i>&nbsp;Daily Fish Total:&nbsp;&nbsp;{getDailyFishCaught()}</span>
+                  </li>
+                  <li className="nav-item" id="nav-3">
+                    <span><i className="fas fa-ship"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>
+                  </li>
+                  <li className="nav-item" id="nav-4">
+                    <div className="input-group">
+                      <select className="custom-select form-control" id="highTide-side" onClick={clickHandlerSide}>
+                        <option id="8637689" defaultValue>Yorktown USCG Training Center</option>
+                        <option id="8632200">Kiptopeke</option>
+                        <option id="8638901">Chesapeake Channel CBBT</option>
+                        <option id="8638610">Sewells Point</option>
+                        <option id="8639348">Money Point</option>
+                      </select>
+                    </div>
+                  </li>
+                </ul>
+              )}
             </div>
             {navigationInfo.map((val) => (
               <NavLink
