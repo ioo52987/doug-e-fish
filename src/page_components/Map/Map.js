@@ -282,11 +282,11 @@ function Map() {
                 popupStation.remove();
             });
 
-            // 
+            /*
             map.current.on('click', () => {
                 map.current.getCanvas().style.cursor = '';
                 popupFishSite.remove();
-            });
+            }); */
 
         });
     }, [fishingSiteData]); /* useEffect() */
