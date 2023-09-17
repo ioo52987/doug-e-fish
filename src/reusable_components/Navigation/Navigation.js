@@ -208,7 +208,7 @@ function Navigation() {
                     <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{currentDate}</span>
                   </li>
                   <li className="nav-item" id="nav-2">
-                    <span><i className="fas fa-fish"></i>&nbsp;Daily Fish Total:&nbsp;&nbsp;{getDailyFishCaught()}</span>
+                    <span><i className="fas fa-fish"></i>&nbsp;Fish Caught Today:&nbsp;&nbsp;{getDailyFishCaught()}</span>
                   </li>
                   <li className="nav-item" id="nav-3">
                     <span><i className="fas fa-ship"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>
@@ -277,7 +277,7 @@ function Navigation() {
                 <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{currentDate}</span>
               </li>
               <li className="nav-item" id="nav-2">
-                <span><i className="fas fa-fish"></i>&nbsp;Daily Fish Total:&nbsp;&nbsp;{getDailyFishCaught()}</span>
+                <span><i className="fas fa-fish"></i>&nbsp;Fish Caught Today:&nbsp;&nbsp;{getDailyFishCaught()}</span>
               </li>
               <li className="nav-item" id="nav-3">
                 <span><i className="fas fa-ship"></i>&nbsp;High Tide:&nbsp;&nbsp;{getTideTimes()}</span>

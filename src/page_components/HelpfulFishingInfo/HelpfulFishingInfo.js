@@ -77,7 +77,7 @@ function HelpfulFishingInfo() {
             <div className='form-content'>
                 <p id='pageTitle'>Helpful Info</p>
                 <div className="row input-group">
-                    <div className="col-2">
+                    <div className="col-xs-2 col-md-2 field">
                         <input
                             type="date"
                             className="form-control"
@@ -85,7 +85,7 @@ function HelpfulFishingInfo() {
                             placeholder="Date Format: ##/##/####"
                         ></input>
                     </div>
-                    <div className="input-group col-4">
+                    <div className="input-group col-xs-4 col-md-4 field">
                         <select className="custom-select form-control" id="tide">
                             <option id="8637689" defaultValue>Yorktown USCG Training Center</option>
                             <option id="8632200">Kiptopeke</option>
@@ -94,12 +94,12 @@ function HelpfulFishingInfo() {
                             <option id="8639348">Money Point</option>
                         </select>
                     </div>
-                    <div className="col-2">
+                    <div className="col-xs-2 col-md-4 field">
                         <button className="btn submit-btn high-tide-btn" onClick={clickHandler}>Find Tides</button>
                     </div>
                 </div>
 
-                <div className='temp-hack-overFlw'>
+                <div>
                     <MDBDataTable
                         /*scrollY*/
                         /* tired using MDB's overflow-y but the column headers wouldn't line up 
