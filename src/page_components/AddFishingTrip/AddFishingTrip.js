@@ -175,7 +175,7 @@ function AddFishingTrip() {
                 <div className="row input-group">
                     <div className="col-xs-2 col-md-2 field">
                         <input
-                            type="date"
+                            type="text"
                             ref={ref}
                             className="form-control"
                             id="date"
@@ -183,7 +183,7 @@ function AddFishingTrip() {
                             aria-label={fieldValues.date}
                             aria-describedby="basic-addon2"
                             onfocus={() => (ref.current.type = "date")}
-                            onBlur={() => (ref.current.type = "date")}
+                            onBlur={() => (ref.current.type = "text")}
                             onChange={(e) => {
                                 setFieldValues({ ...fieldValues, date: e.target.value });
                                 validateField("date", e.target.value);
