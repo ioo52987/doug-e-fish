@@ -176,7 +176,7 @@ function AddFishingTrip() {
                             type="date"
                             className="form-control"
                             id="date"
-                            placeholder="Date Format: ##/##/####"
+                            placeholder="mm/dd/yyyy"
                             aria-label={fieldValues.date}
                             aria-describedby="basic-addon2"
                             onChange={(e) => {
