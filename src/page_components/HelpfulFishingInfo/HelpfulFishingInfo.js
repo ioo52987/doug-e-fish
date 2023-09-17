@@ -81,13 +81,13 @@ function HelpfulFishingInfo() {
                 <div className="row input-group">
                     <div className="col-xs-2 col-md-2 field">
                         <input
-                            type="date"
+                            type="text"
                             ref={ref}
                             className="form-control"
                             id="date"
                             placeholder="mm/dd/yyyy"
                             onfocus={() => (ref.current.type = "date")}
-                            onBlur={() => (ref.current.type = "date")}
+                            onBlur={() => (ref.current.type = "text")}
                         ></input>
                     </div>
                     <div className="input-group col-xs-4 col-md-4 field">
