@@ -1,22 +1,3 @@
 button.btn.btn-secondary.btn-sm.star-btn {
     margin:1px;
 }
-
-/* type=date placeholder doesn't show up in mobile */
-/* this fixes that issue */
-input[type="date"]::before {
-    padding-top: 5px;
-	color: #999999;
-	content: attr(placeholder);
-}
-input[type="date"] {
-	color: #ffffff;
-}
-input[type="date"]:focus,
-input[type="date"]:valid {
-	color: #777777; /* #6C757D */
-}
-input[type="date"]:focus::before,
-input[type="date"]:valid::before {
-	content: "" !important;
-}

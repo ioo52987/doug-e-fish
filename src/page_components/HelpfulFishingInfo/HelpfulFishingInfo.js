@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './HelpfulFishingInfo.css';
 import { MDBDataTable } from 'mdbreact';
 
 function HelpfulFishingInfo() {
+
+    const ref = useRef();
 
     /* API response data states */
     let [tideData, setTideData] = useState([]);
@@ -80,9 +82,12 @@ function HelpfulFishingInfo() {
                     <div className="col-xs-2 col-md-2 field">
                         <input
                             type="date"
+                            ref={ref}
                             className="form-control"
                             id="date"
-                            placeholder="Date Format: ##/##/####"
+                            placeholder="mm/dd/yyyy"
+                            onfocus={() => (ref.current.type = "date")}
+                            onBlur={() => (ref.current.type = "date")}
                         ></input>
                     </div>
                     <div className="input-group col-xs-4 col-md-4 field">
