@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import './Navigation.css';
 import { NavLink, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 function Navigation() {
 
+  let ref = useRef();
   let location = useLocation().pathname;
   let MDBclasses = "list-group-item list-group-item-action py-2 ripple";
   let currentDate = new Date().toJSON().slice(0, 10);
@@ -200,7 +201,13 @@ function Navigation() {
         {/* overlay menu */}
         <nav id="overlayMenu" className="overlay">
           <div className="overlay-content">
-            <button onClick={() => setContentVisible(isContentVisible = !isContentVisible)} className="accordion">Today's Information</button>
+            <button 
+              onClick={() => setContentVisible(isContentVisible = !isContentVisible)} 
+              className="accordion"
+              ref={ref}
+            >
+            Today's Information
+            </button>
             <div className="panel">
               {isContentVisible && (
                 <ul id='top-nav-phone' className="navbar-nav flex-column">
