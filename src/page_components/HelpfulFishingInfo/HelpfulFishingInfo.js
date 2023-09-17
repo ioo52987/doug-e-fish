@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import './HelpfulFishingInfo.css';
 import { MDBDataTable } from 'mdbreact';
+//import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
 function HelpfulFishingInfo() {
 
