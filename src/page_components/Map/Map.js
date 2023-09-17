@@ -245,7 +245,13 @@ function Map() {
             });
 
             if (isMobile) {
+                /*
                 map.current.on('mouseleave', 'fishing-sites', () => {
+                    map.current.getCanvas().style.cursor = '';
+                    popupFishSite.remove();
+                });
+                */
+                map.current.on('click', () => {
                     map.current.getCanvas().style.cursor = '';
                     popupFishSite.remove();
                 });
