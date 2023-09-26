@@ -204,8 +204,11 @@ function Map() {
                 const description = e.features[0].properties.description;
                 const siteURL = e.features[0].properties.siteURL;
 
+                // popup URL regex work
                 // modifying siteURL for webpage display -----------------NOT CURRENTLY USING
                 // need to spend more time working with multiple layers and hovering to click link.... issues came up
+                // regex needs to make the 's' in http's' optional
+                /*
                 const re = /^https:\/\/(www\.)?(.*?)\.(com|gov|org)/;
                 if (siteURL === 'null') {
                     urlInfo.url = '#';
@@ -214,10 +217,10 @@ function Map() {
                     let chopped = re.exec(siteURL);
                     urlInfo.url = siteURL;
                     urlInfo.shortenURL = chopped[0];
-                }
+                }*/
 
                 // handling NaN (for new fishingSites with no ratings)
-                isNaN(rating) ? rating = 0 : rating = rating; //-weird
+                isNaN(rating) ? rating = 0 : rating = rating;
 
                 let content = ` <div id='top'>
                                     <b id='title'>${siteName}</b><br>

@@ -59,10 +59,7 @@ function AddFishingTrip() {
             .catch(function (error) { console.log(error); });
     }, [offset]);
 
-    // alphabetize siteNames
-    let pN = [];
-    dropdownValues.map((i) => (pN.push(i.fields.siteName)));
-    let orderedPn = pN.sort();
+    cleanUpDropdown(dropdownValues);
 
     // form validation
     const validateField = (fieldName, value) => {
@@ -165,6 +162,19 @@ function AddFishingTrip() {
         }
     };
 
+    // filter and alphabetize dropdown fishing-sites
+    function cleanUpDropdown (fs){
+        // remove unwated sites (designated as 'false' in the db) from appearing in the dropdown
+        let pN = [];
+        fs.map((i) => {
+            if(!i.fields.showInDropdown){
+                pN.push(i.fields.siteName);
+            }
+        })
+        // alphabetize siteNames
+        dropdownValues = pN.sort();
+    }
+
     return (
         <div>
             <form className="form-content" onSubmit={handleSubmit}>
@@ -213,7 +223,7 @@ function AddFishingTrip() {
                             required
                         >
                             <option value="">Choose Fishing Site</option>
-                            {orderedPn.map((i) =>
+                            {dropdownValues.map((i) =>
                                 (<option key={i}>{i}</option>)
                             )}
                         </select>
