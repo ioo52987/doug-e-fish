@@ -227,10 +227,6 @@ function Map() {
                                     Fish Caught Today: <div 
                                         style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
                                         ${fishingSites[siteName]}</div></br>
-                                    Website: <div
-                                        style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
-                                        <a href='${urlInfo.url}' target='_blank'>${urlInfo.shortenURL}</a>
-                                        </div></br>
                                 </div>
                                 <p id='bottom'>${description}</p>
                             `;
@@ -253,6 +249,7 @@ function Map() {
             // Change it back to a pointer when it leaves.
             map.current.on('mouseleave', 'fishing-sites', () => {
                 map.current.getCanvas().style.cursor = '';
+                popupFishSite.remove();
             });
 
             // popup pointer logic for noaa-stations
