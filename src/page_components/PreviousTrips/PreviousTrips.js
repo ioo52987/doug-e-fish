@@ -45,12 +45,12 @@ function PreviousTrips() {
     const data = {
         columns: [
             { label: '#', field: 'pk', sort: 'asc', width: 25 }, /* these widths aren't working */
-            { label: 'Date', field: 'date', sort: 'asc', width: 65 },
+            { label: 'Date', field: 'date', sort: 'desc', width: 65 },
             { label: 'Site', field: 'site', sort: 'asc', width: 90 },
-            { label: 'Description', field: 'description', sort: '', width: 395 },
-            { label: 'No.Fish', field: 'fishCaught', sort: 'asc' },
-            { label: 'Tide', field: 'tideType', sort: 'asc' },
-            { label: 'Photos', field: 'photos', sort: '', width: 40 },
+            { label: 'Description', field: 'description', sort: 'asc', width: 395 },
+            { label: 'No.Fish', field: 'fishCaught', sort: 'asc', width: 40 },
+            { label: 'Tide', field: 'tideType', sort: 'asc', width: 55 },
+            { label: 'Photos', field: 'photos', sort: 'asc', width: 40 },
             { label: 'Rating', field: 'rating', sort: 'asc', width: 40 }
         ],
         rows: rows
@@ -69,6 +69,7 @@ function PreviousTrips() {
                     striped
                     bordered
                     small
+                    order={['date', 'desc' ]}
                     data={data}
                 />
             </form>
