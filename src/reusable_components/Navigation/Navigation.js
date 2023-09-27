@@ -5,10 +5,22 @@ import axios from 'axios';
 
 function Navigation() {
 
+  /* states */
+  let [fishCaughtData, setFishCaughtData] = useState([]);
+  let [tideData, setTideData] = useState({});
+  let [stationValue, setStationValue] = useState("8637689");
+  let [offset, setOffset] = useState('');
+  let [navToggle, setNavToggle] = useState(false);
+  let [isContentVisible, setContentVisible] = useState(false);
+  let [date, setDate] = useState();
+
+  /* */
   let ref = useRef();
   let location = useLocation().pathname;
   let MDBclasses = "list-group-item list-group-item-action py-2 ripple";
-  let currentDate = new Date().toJSON().slice(0, 10);
+  
+  getDate();
+  
   let navigationInfo = [
     { id: 1, href: "/", icon: "fas fa-map fa-fw me-3", title: "Map" },
     { id: 2, href: "/add_fishing_trip", icon: "fas fa-plus fa-fw me-3", title: "Add Fishing Trip" },
@@ -17,14 +29,6 @@ function Navigation() {
     { id: 5, href: "/helpful_fishing_info", icon: "fas fa-info fa-fw me-3", title: "Helpful Info" },
     { id: 6, href: "/about_this_site", icon: "fas fa-heart fa-fw me-3", title: "About This Site" },
   ];
-
-  /* states */
-  let [fishCaughtData, setFishCaughtData] = useState([]);
-  let [tideData, setTideData] = useState({});
-  let [stationValue, setStationValue] = useState("8637689");
-  let [offset, setOffset] = useState('');
-  let [navToggle, setNavToggle] = useState(false);
-  let [isContentVisible, setContentVisible] = useState(false);
 
   /* GET daily tide data from NOAA's api*/
   useEffect(() => {
@@ -57,9 +61,8 @@ function Navigation() {
     let totalFishCaughtToday = 0;
     if (fishCaughtData) {
       let d = fishCaughtData;
-      let currentDate = new Date().toJSON().slice(0, 10);
       for (let i = 0; i < d.length; i++) {
-        if (d[i].fields.date === currentDate) {
+        if (d[i].fields.date === date) {
           totalFishCaughtToday = d[i].fields.fishCaught + totalFishCaughtToday;
         }
       }
@@ -148,7 +151,6 @@ function Navigation() {
     setStationValue(station);
   }
 
-
   /* overlay function for phone navigation */
   function toggleNavMenu() {
     if (navToggle === true) {
@@ -158,6 +160,13 @@ function Navigation() {
       document.getElementById("overlayMenu").style.width = "100%";
       setNavToggle(true);
     }
+  }
+
+  /* get date after modifiying the time to match EST */
+  function getDate(){
+    let currentDate = new Date();
+    currentDate.setHours(currentDate.getHours()-4); // -4hrs (to get EST)
+    date = new Date(currentDate).toJSON().slice(0, 10);
   }
 
   return (
@@ -212,7 +221,7 @@ function Navigation() {
               {isContentVisible && (
                 <ul id='top-nav-phone' className="navbar-nav flex-column">
                   <li className="nav-item" id="nav-1">
-                    <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{currentDate}</span>
+                    <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{date}</span>
                   </li>
                   <li className="nav-item" id="nav-2">
                     <span><i className="fas fa-fish"></i>&nbsp;Fish Caught Today:&nbsp;&nbsp;{getDailyFishCaught()}</span>
@@ -281,7 +290,7 @@ function Navigation() {
             {/* RIGHT ALIGNED LINKS --------------------------- */}
             <ul id='top-nav-computer' className="navbar-nav ms-auto d-flex flex-row">
               <li className="nav-item" id="nav-1">
-                <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{currentDate}</span>
+                <span><i className='fas fa-calendar'></i>&nbsp;Today's Date:&nbsp;&nbsp;{date}</span>
               </li>
               <li className="nav-item" id="nav-2">
                 <span><i className="fas fa-fish"></i>&nbsp;Fish Caught Today:&nbsp;&nbsp;{getDailyFishCaught()}</span>

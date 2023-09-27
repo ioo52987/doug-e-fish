@@ -87,7 +87,7 @@ function HelpfulFishingInfo() {
                             className="form-control"
                             id="date"
                             placeholder="mm/dd/yyyy"
-                            onfocus={() => (ref.current.type = "date")}
+                            onFocus={() => (ref.current.type = "date")}
                             onBlur={() => (ref.current.type = "text")}
                         ></input>
                     </div>

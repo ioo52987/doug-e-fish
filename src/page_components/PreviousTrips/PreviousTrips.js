@@ -31,7 +31,7 @@ function PreviousTrips() {
             fishCaught: previousTrips[i].fields.fishCaught,
             tideType: previousTrips[i].fields.tideType,
             photos: (previousTrips[i].fields.url) ?
-                <a target="_blank" href={previousTrips[i].fields.url}>
+                <a target="_blank" rel="noopener noreferrer" href={previousTrips[i].fields.url}>
                     <i className="fas fa-camera"></i>
                 </a>
                 :
