@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from 'react';
 import './Navigation.css';
 import { NavLink, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { getAllByPlaceholderText } from '@testing-library/react';
 
 function Navigation() {
 

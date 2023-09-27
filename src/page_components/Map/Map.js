@@ -289,7 +289,19 @@ function Map() {
             }); */
 
         });
-    }, [fishingSiteData]); /* useEffect() */
+    }, [fishingSiteData,
+        fishingSites, 
+        fishingTripData, 
+        icon.id, 
+        icon.url, 
+        lat, 
+        lng, 
+        noaaStationMapProperties,
+        siteMapProperties,
+        stationIcon.id,
+        stationIcon.url,
+        zoom
+    ]); /* useEffect() */
 
     // create geoJSON data structure for fishing-sites layer
     function createGeoJson(arr) {

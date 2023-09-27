@@ -166,11 +166,11 @@ function AddFishingTrip() {
     function cleanUpDropdown (fs){
         // remove unwated sites (designated as 'false' in the db) from appearing in the dropdown
         let pN = [];
-        fs.map((i) => {
+        fs.forEach( (i) => {
             if(!i.fields.showInDropdown){
                 pN.push(i.fields.siteName);
             }
-        })
+        });
         // alphabetize siteNames
         dropdownValues = pN.sort();
     }
@@ -192,7 +192,7 @@ function AddFishingTrip() {
                             placeholder="mm/dd/yyyy"
                             aria-label={fieldValues.date}
                             aria-describedby="basic-addon2"
-                            onfocus={() => (ref.current.type = "date")}
+                            onFocus={() => (ref.current.type = "date")}
                             onBlur={() => (ref.current.type = "text")}
                             onChange={(e) => {
                                 setFieldValues({ ...fieldValues, date: e.target.value });
