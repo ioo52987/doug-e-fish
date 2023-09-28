@@ -94,7 +94,8 @@ function AboutThisSite() {
                     <div className="col-xs-7 col-md-7 field">
                         <i className="fab fa-github-alt"></i>&nbsp;&nbsp;&nbsp;Please take a look at the public gitHub repository&nbsp;
                         <a href="https://github.com/ioo52987/doug-e-fish" target="_blank" rel="noopener noreferrer" >here</a>.
-                        Want to contribute? Checkout a branch and make a pull request! (this is running v1.0.0)
+                        Want to contribute? Checkout a branch and make a pull request! <br></br><br></br>
+                        <i> v{process.env.REACT_APP_VERSION} </i>
                     </div>
                 </div>
             </div>
