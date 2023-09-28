@@ -7,3 +7,4 @@ description - Safe to manually alter at anytime.
 overallRating - (rSum/tripTotal) This is auto-calculated and should NOT be manually altered.
 tripTotal - This increments the trip total per site every time a user enters a fishing trip into the app. Used to auto-calculate overallRating. This should NOT be manually altered.
 rSum - The sum of all ratings per site. Used in the auto-calculation of overallRating. This should NOT be manually altered.
+showInDropdown - This field regulates sites to be shown in the 'Add Fishing Trip' dropdown. For example, Avalon Pier is NOT within the Hampton Roads range. It still shows on the map, but does not appear in the dropdown for a user to select. It is a  'special' case scenario.
