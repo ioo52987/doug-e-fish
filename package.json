@@ -1,7 +1,7 @@
 {
   "homepage": "https://doug-e-fish.com",
   "name": "doug-e-fish-app",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "dependencies": {
