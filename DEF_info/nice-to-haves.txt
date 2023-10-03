@@ -1,0 +1,34 @@
+-----------------------------------------------------------------------------------------------
+Nice to haves - (minor and major) - Future work
+-----------------------------------------------------------------------------------------------
+-safari tide info not rendering immediately on useEffect, also the date field is small in safari,
+-have to click back into the dropdowns to select information for it to take in mobile browsers
+-- datePicker won't show up if I want the placeholder to show up  because I have to change the field type 'text' to 'date' to 'text'
+    -- would be cool if I could figure out a way to get the datePicker and the placeholder to show up at the same time
+    -- for both mobile and computer
+-- don't need the MDBdatatable for helpful info tides. a simple table will suffice. It's overkill
+- media queries for tablets and landscape view
+- clean up Navigation.js click handlers - model after accordion - try to drop additional function code
+- column headers don't line up exactly to the corresponding table data in PreviousTrips.js need to plug in another table type
+-- list of things I've turned off (url in popUp, icon in overlay nav for phones)
+-- probably need to write a toggle to hide the menu/title line in phone view so user can maximize their screen space
+- pet friendly checkbox field when entering a fishingSite
+- check on duplicate locations (if name already exists) - possibility to have same location twice with similar names tho
+- put bounding box onto map if possible
+    - latitude range 36.5610543 - 37.6024947 => 36.56 - 37.60
+    - longitude range -75.4199042 - -77.5756627 => -75.2 - -77.58
+- center photo icon under 'Photos' column 
+- tidy up Navigation.js + .css -> not sure how tho. it just seems messy. i don't like it
+- custom validation ... small one-offs ... additional notes in corresponding files
+- include the star icon in being able to select (rating) - right now it is not clickable
+- what is this aria-label in AddFishingTrip.js - used for screen readers - need to spend time putting on website
+    - and test using a screen-reader... i really want to try this, and aria-describedby
+-----------------------------------------------------------------------------------------------
+HELPFUL INFO PAGE
+-----------------------------------------------------------------------------------------------
+- visual map of bounding box (limits)
+- updating tally of fish caught per site for the year
+- fish identification resources
+- VIMS resources - https://dwr.virginia.gov/wildlife/fish/
+- 5 page - fish species in the area and NOAA API 
+            - https://www.eregulations.com/virginia/fishing/fish-identification
