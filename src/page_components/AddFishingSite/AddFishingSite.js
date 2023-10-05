@@ -85,10 +85,6 @@ function AddFishingSite() {
                         "latitude": Number(document.getElementById("latitude").value),
                         "description": document.getElementById("description").value,
                         "siteURL": document.getElementById("url").value,
-
-                        // initialized for overRating calc
-                        "tripTotal": 0,
-                        "rSum": 0,
                     }
                 }
             )
