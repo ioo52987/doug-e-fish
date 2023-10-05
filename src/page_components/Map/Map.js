@@ -27,7 +27,6 @@ function Map() {
     // set states (includes axios response data) 
     const [fishingSiteData, setFishingSiteData] = useState([]); // all site data returned from axios
     const [fishingTripData, setFishingTripData] = useState([]); // all trip data returned from axios
-    const [siteMapProperties, setSiteMapProperties] = useState([]); // fishing-site data-layer (includes popupData)
 
     // GET latest fishing-site data
     let [offset1, setOffset1] = useState('');
@@ -110,12 +109,12 @@ function Map() {
         })
 
         // create geoJSON data structure for fishing-sites layer ---------------------------------------------
-        let sMP = [];
+        let siteMapProperties = [];
         // make popup for each fishing-site
         for (let i = 0; i < fishingSiteData.length; i++) {
             popupData.forEach(item => {
                 if (item.siteName === fishingSiteData[i].fields.siteName) {
-                    sMP.push({
+                    siteMapProperties.push({
                         'type': 'Feature',
                         'properties': {
                             'siteName': fishingSiteData[i].fields.siteName,
@@ -131,7 +130,6 @@ function Map() {
                 }
             })
         }
-        setSiteMapProperties(sMP);
 
         // custom icons
         let fsIcon = {
@@ -339,7 +337,6 @@ function Map() {
     }, [
         fishingSiteData,
         fishingTripData,
-        siteMapProperties,
         lat,
         lng,
         zoom
