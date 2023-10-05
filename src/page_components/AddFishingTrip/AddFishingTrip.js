@@ -10,6 +10,8 @@ function AddFishingTrip() {
 
     const ref = useRef();
 
+    /* FISHING SITES */
+    let [fishingSiteData, setFishingSiteData] = useState([]);
     /* DROPDOWN VALUES */
     let [dropdownValues, setDropdownValues] = useState([]);
     /* FIELD VALUES */
@@ -51,7 +53,7 @@ function AddFishingTrip() {
         axios.get(`/` + process.env.REACT_APP_FISHING_SITES_AIRTABLE + `?offset=${offset}`)
             .then(response => {
                 let data = response.data.records;
-                setDropdownValues(dropdownValues => [...dropdownValues, ...data]);
+                setFishingSiteData(fishingSiteData => [...fishingSiteData, ...data]);
                 if (response.data.offset) {
                     setOffset(response.data.offset)
                 }
@@ -59,7 +61,19 @@ function AddFishingTrip() {
             .catch(function (error) { console.log(error); });
     }, [offset]);
 
-    cleanUpDropdown(dropdownValues);
+    // filter and alphabetize dropdown fishing-sites
+    useEffect(() => {
+        // remove unwated sites (designated as 'false' in the db) from appearing in the dropdown
+        let pN = [];
+        fishingSiteData.forEach((i) => {
+            if (!i.fields.showInDropdown) {
+                pN.push(i.fields.siteName);
+            }
+        });
+        // alphabetize siteNames
+        let sorted_dropdown = pN.sort();
+        setDropdownValues(sorted_dropdown);
+    }, [fishingSiteData]);
 
     // form validation
     const validateField = (fieldName, value) => {
@@ -108,30 +122,8 @@ function AddFishingTrip() {
             fieldValuesValid.description &&
             fieldValuesValid.url);
 
-        if (formState) {
 
-            // get prior tripTotal and rSum record for specific fishingSite
-            let newTripTotal = 0;
-            let newRSum = 0;
-            let recordID = '';
-            for (let i = 0; i < dropdownValues.length; i++) {
-                if (fieldValues.siteName === dropdownValues[i].fields.siteName) {
-                    newTripTotal = dropdownValues[i].fields.tripTotal + 1;
-                    newRSum = dropdownValues[i].fields.rSum + fieldValues.rating;
-                    recordID = dropdownValues[i].id;
-                }
-            }
-            // PATCH(update) fishingSite with new totals based on the fishingTrip user input
-            axios.patch(`/` + process.env.REACT_APP_FISHING_SITES_AIRTABLE + `/${recordID}/`,
-                {
-                    "fields": {
-                        "tripTotal": newTripTotal,
-                        "rSum": newRSum,
-                    }
-                }
-            )
-                .then(response => console.log("PATCH success!"))
-                .catch(function (error) { console.log(error) });
+        if (formState) {
 
             // POST new fishingTrip data
             axios.post(`/` + process.env.REACT_APP_FISHING_TRIPS_AIRTABLE + `/`,
@@ -161,19 +153,6 @@ function AddFishingTrip() {
                 });
         }
     };
-
-    // filter and alphabetize dropdown fishing-sites
-    function cleanUpDropdown (fs){
-        // remove unwated sites (designated as 'false' in the db) from appearing in the dropdown
-        let pN = [];
-        fs.forEach( (i) => {
-            if(!i.fields.showInDropdown){
-                pN.push(i.fields.siteName);
-            }
-        });
-        // alphabetize siteNames
-        dropdownValues = pN.sort();
-    }
 
     return (
         <div>
@@ -210,7 +189,8 @@ function AddFishingTrip() {
                             id="siteName"
                             /* dropdown scroll handling */
                             size={size}
-                            onFocus={() => setSize(7)}
+                            onFocus={() => setSize(7)
+                            }
                             onBlur={() => setSize(1)}
                             onClick={(e) => {
                                 setFieldValues({ ...fieldValues, siteName: e.target.value });
@@ -223,16 +203,18 @@ function AddFishingTrip() {
                             required
                         >
                             <option value="">Choose Fishing Site</option>
-                            {dropdownValues.map((i) =>
-                                (<option key={i}>{i}</option>)
-                            )}
-                        </select>
+                            {
+                                dropdownValues.map((i) =>
+                                    (<option key={i}>{i}</option>)
+                                )
+                            }
+                        </select >
                         <div className='panel panel-default'>
                             <FormErrors formErrors={formErrors} fieldName="siteName" />
                         </div>
-                    </div>
-                </div> {/* close row */}
-                <div className="row input-group">
+                    </div >
+                </div > {/* close row */}
+                < div className="row input-group" >
                     <div className="col-xs-3 col-md-3 field">
                         <select
                             className="custom-select form-control"
@@ -273,8 +255,8 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="fishCaught" />
                         </div>
                     </div>
-                </div> {/* close row */}
-                <div className="row input-group">
+                </div > {/* close row */}
+                < div className="row input-group" >
                     <div className="col-xs-6 col-md-6 field">
                         <textarea
                             rows="5"
@@ -296,8 +278,8 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="description" />
                         </div>
                     </div>
-                </div> {/* close row */}
-                <div className="row input-group">
+                </div > {/* close row */}
+                < div className="row input-group" >
                     <div className="col-xs-6 col-md-6 field">
                         <input
                             type="url"
@@ -315,8 +297,8 @@ function AddFishingTrip() {
                             <FormErrors formErrors={formErrors} fieldName="url" />
                         </div>
                     </div>
-                </div> {/* close row */}
-                <div className="row">
+                </div > {/* close row */}
+                < div className="row" >
                     <div className="col-xs-2 col-md-2 field">
                         <button className="btn submit-btn" type="submit">Submit</button>
                     </div>
@@ -326,7 +308,7 @@ function AddFishingTrip() {
                             message="Success! Thanks for submitting a trip!"
                         />
                     </div>
-                </div> {/* close row */}
+                </div > {/* close row */}
             </form >
         </div >
     );
