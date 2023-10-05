@@ -27,8 +27,7 @@ function Map() {
     // set states (includes axios response data) 
     const [fishingSiteData, setFishingSiteData] = useState([]); // all site data returned from axios
     const [fishingTripData, setFishingTripData] = useState([]); // all trip data returned from axios
-    let [dailyFishCaughtPerSite, setDailyFishCaughtPerSite] = useState({}); // the daily total of fish caught at each fishing-site
-    let [popupData, setPopupData] = useState([]); // calculates overall rating
+    const [siteMapProperties, setSiteMapProperties] = useState([]); // fishing-site data-layer (includes popupData)
 
     // GET latest fishing-site data
     let [offset1, setOffset1] = useState('');
@@ -58,13 +57,13 @@ function Map() {
             .catch(function (error) { console.log(error); });
     }, [offset2]);
 
-    // calculate daily fish caught per fishing-site
+    // mapbox load
     useEffect(() => {
 
+        // calculate daily fish caught per fishing-site ------------------------------------------------------
         let tally = {};
-        let dFC = {};
+        let dailyFishCaughtPerSite = {};
         let currentDate = new Date().toJSON().slice(0, 10);
-
         for (let i = 0; i < fishingTripData.length; i++) {
             // apply daily condition filter (only interested in today's trips)
             if (fishingTripData[i].fields.date === currentDate) {
@@ -76,23 +75,16 @@ function Map() {
                 }
             }
         }
-
         for (let i = 0; i < fishingSiteData.length; i++) {
             if (tally[fishingSiteData[i].fields.siteName]) {
-                dFC[fishingSiteData[i].fields.siteName] = tally[fishingSiteData[i].fields.siteName];
+                dailyFishCaughtPerSite[fishingSiteData[i].fields.siteName] = tally[fishingSiteData[i].fields.siteName];
             } else {
-                dFC[fishingSiteData[i].fields.siteName] = 'No entries for this site today.'
+                dailyFishCaughtPerSite[fishingSiteData[i].fields.siteName] = 'No entries for this site today.'
             }
         }
 
-        setDailyFishCaughtPerSite(dFC);
-    }, [fishingSiteData, fishingTripData]);
-
-    // calculate numTrips and overallRating per fishing-site (popupData)
-    useEffect(() => {
-
-        let objArr = [];
-
+        // calculate numTrips and overallRating per fishing-site ---------------------------------------------
+        let popupData = [];
         // initializing structure
         for (let i = 0; i < fishingSiteData.length; i++) {
             let obj = {
@@ -101,30 +93,45 @@ function Map() {
                 numTrips: 0,
                 overallRating: 0
             }
-            objArr.push(obj);
+            popupData.push(obj);
         }
-
         // sum ratings and number of trips per fishing-site
         for (let i = 0; i < fishingTripData.length; i++) {
-            objArr.forEach(item => {
+            popupData.forEach(item => {
                 if (item.siteName === fishingTripData[i].fields.siteName) {
                     item.ratingSum = item.ratingSum + fishingTripData[i].fields.rating;
                     item.numTrips++;
                 }
             })
         }
-
         // calculate overall rating for each site
-        objArr.forEach(item => {
+        popupData.forEach(item => {
             item.overallRating = (Number(item.ratingSum / item.numTrips).toFixed(2));
         })
 
-        setPopupData(objArr);
-
-    }, [fishingSiteData, fishingTripData]);
-
-    // mapbox load
-    useEffect(() => {
+        // create geoJSON data structure for fishing-sites layer ---------------------------------------------
+        let sMP = [];
+        // make popup for each fishing-site
+        for (let i = 0; i < fishingSiteData.length; i++) {
+            popupData.forEach(item => {
+                if (item.siteName === fishingSiteData[i].fields.siteName) {
+                    sMP.push({
+                        'type': 'Feature',
+                        'properties': {
+                            'siteName': fishingSiteData[i].fields.siteName,
+                            'overallRating': item.overallRating,
+                            'description': fishingSiteData[i].fields.description,
+                            'dFc': dailyFishCaughtPerSite[fishingSiteData[i].fields.siteName]
+                        },
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [fishingSiteData[i].fields.longitude, fishingSiteData[i].fields.latitude]
+                        }
+                    });
+                }
+            })
+        }
+        setSiteMapProperties(sMP);
 
         // custom icons
         let fsIcon = {
@@ -177,10 +184,7 @@ function Map() {
                 }
             ];
 
-        // data create geoJSON stucture for each fishing-site
-        //const siteMapProperties = createGeoJSON();
-        //console.log(siteMapProperties); // works on last render
-        //console.log(noaaStationMapProperties); // works each time
+        if (siteMapProperties.length === 0) return;
 
         // initialize NEW map
         if (map.current) return; // initialize map only once
@@ -193,11 +197,6 @@ function Map() {
 
         // map loading layer control
         map.current.on('load', () => {
-
-            // data create geoJSON stucture for each fishing-site
-            let siteMapProperties = createGeoJSON();
-            //console.log(siteMapProperties); // doesn't work
-            //console.log(noaaStationMapProperties); // works
 
             // load dynamic geoJSON data to map
             map.current.addSource("fishing-sites", {
@@ -248,41 +247,99 @@ function Map() {
                     'icon-size': 0.6
                 }
             });
+            // create popups, but don't add them to the map yet
+            const popupFishSite = new mapboxgl.Popup({
+                className: 'fish-site-popup ',
+                closeButton: false,
+                closeOnClick: false
+            });
 
+            const popupStation = new mapboxgl.Popup({
+                className: 'station-popup',
+                closeButton: false,
+                closeOnClick: false
+            });
 
-            // create geoJSON data structure for fishing-sites layer
-            function createGeoJSON() {
+            // popup pointer logic for fishing-sites
+            map.current.on('mouseenter', 'fishing-sites', (e) => {
 
-                let sMP = [];
+                // Change the cursor style as a UI indicator.
+                map.current.getCanvas().style.cursor = 'pointer';
 
-                // make popup for each fishing-site
-                for (let i = 0; i < fishingSiteData.length; i++) {
-                    popupData.forEach(item => {
-                        if (item.siteName === fishingSiteData[i].fields.siteName) {
-                            sMP.push({
-                                'type': 'Feature',
-                                'properties': {
-                                    'siteName': fishingSiteData[i].fields.siteName,
-                                    'overallRating': item.overallRating,
-                                    'description': fishingSiteData[i].fields.description,
-                                    'dFc': dailyFishCaughtPerSite[fishingSiteData[i].fields.siteName]
-                                },
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [fishingSiteData[i].fields.longitude, fishingSiteData[i].fields.latitude]
-                                }
-                            });
-                        }
-                    })
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                const siteName = e.features[0].properties.siteName;
+                let overallRating = e.features[0].properties.overallRating;
+                const description = e.features[0].properties.description;
+                const dFc = e.features[0].properties.dFc; // daily fish caught
+
+                // handling NaN
+                isNaN(overallRating) ? overallRating = 0 : overallRating = overallRating;
+
+                let content = ` <div id='top'>
+                    <b id='title'>${siteName}</b><br>
+                    Overall Rating: <div 
+                        style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
+                        ${overallRating}</div></br>
+                    Fish Caught Today: <div 
+                        style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
+                        ${dFc}</div></br>
+                </div>
+                <p id='bottom'>${description}</p>
+            `;
+
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                 }
-                console.log(sMP);
-                return (sMP);
-            }
+
+                // Populate the popup and set its coordinates based on the feature found.
+                popupFishSite.setLngLat(coordinates).setHTML(content).addTo(map.current);
+            });
+
+            // Change the cursor to a pointer when the mouse is over the places layer.
+            map.current.on('mouseenter', 'fishing-sites', () => {
+                map.current.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves.
+            map.current.on('mouseleave', 'fishing-sites', () => {
+                map.current.getCanvas().style.cursor = '';
+                popupFishSite.remove();
+            });
+
+            // popup pointer logic for noaa-stations
+            map.current.on('mouseenter', 'noaa-stations', (e) => {
+
+                map.current.getCanvas().style.cursor = 'pointer';
+
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                const stationNo = e.features[0].properties.stationNo;
+                const name = e.features[0].properties.name;
+                let content = ` <b id='title'>${name}</b><br>
+                                <h6>NOAA Station: ${stationNo}</h6>`;
+
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+                popupStation.setLngLat(coordinates).setHTML(content).addTo(map.current);
+            });
+
+            map.current.on('mouseenter', 'noaa-stations', () => {
+                map.current.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves.
+            map.current.on('mouseleave', 'noaa-stations', () => {
+                map.current.getCanvas().style.cursor = '';
+                popupStation.remove();
+            });
         });
+
     }, [
-        dailyFishCaughtPerSite,
         fishingSiteData,
-        popupData,
+        fishingTripData,
+        siteMapProperties,
         lat,
         lng,
         zoom
