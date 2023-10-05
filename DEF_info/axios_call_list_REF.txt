@@ -1,0 +1,19 @@
+-----------------------------------------------------------------------------------------------
+AXIOS CALLS LIST
+-----------------------------------------------------------------------------------------------
+(1) AddFishingSite.js - axios.post("/tbl73KANXAAstm4Kr/")
+(2) AddFishingTrip.js - axios.get('/tbl73KANXAAstm4Kr'), axios.post("/tblZXiWg0iGnfIucV/")
+(1) HelpfulFishingInfo.js - axios.get(tideAPIcall)
+(2) Map.js -  axios.get('/tbl73KANXAAstm4Kr'), axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=pierName')
+(1) PreviousTrips.js - axios.get('/tblZXiWg0iGnfIucV')
+(2) Navigation.js - axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date'), axios.get(tideAPIcall)
+
+Stats ------------------- Total = 9
+2  - POSTS - to Airtable
+7 - GETS  - 2 NOAA, 5 Airtable
+
+I GET data from AirTable - 5x
+(1) AddFishingTrip.js - axios.get('/tbl73KANXAAstm4Kr')
+(2) Map.js -  axios.get('/tbl73KANXAAstm4Kr'), axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=pierName')
+(1) PreviousTrips.js - axios.get('/tblZXiWg0iGnfIucV')
+(1) Navigation.js - axios.get('/tblZXiWg0iGnfIucV?fields%5B%5D=fishCaught&fields%5B%5D=date

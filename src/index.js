@@ -27,7 +27,7 @@ axios.defaults.baseURL = 'https://api.airtable.com/v0/appZ344IY3438RjUG/';
 //content type to send with all POST requests 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 //authenticate to the base with the API key 
-axios.defaults.headers['Authorization'] = `Bearer ${process.env.REACT_APP_AIRTABLE_APIKEY}`;
+axios.defaults.headers['Authorization'] = `Bearer ${process.env.REACT_APP_AIRTABLE_PERSONAL_ACCESS_TOKEN}`;
 
 
 
