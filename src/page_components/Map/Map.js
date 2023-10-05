@@ -25,61 +25,8 @@ function Map() {
     }
 
     // set states (includes axios response data) 
-    let [fishingSiteData, setFishingSiteData] = useState([]);
-    let [fishingTripData, setFishingTripData] = useState([]);
-    let [urlInfo, setURLInfo] = useState({ url: '', shortenURL: '' }); // set popup url state
-    let [fishingSites, setFishingSites] = useState({});
-    let [siteMapProperties, setSiteMapProperties] = useState([]);
-
-    // geoJSON data structure for noaa-stations layer
-    let noaaStationMapProperties = [
-        {
-            'type': 'Feature',
-            'properties': { 'stationNo': 8637689, 'name': 'Yorktown USCG Training Center' },
-            'geometry': {
-                'type': 'Point',
-                'coordinates': [-76.47881, 37.22650]
-            }
-        }, {
-            'type': 'Feature',
-            'properties': { 'stationNo': 8632200, 'name': 'Kiptopeke' },
-            'geometry': {
-                'type': 'Point',
-                'coordinates': [-75.98830, 37.16670]
-            }
-        }, {
-            'type': 'Feature',
-            'properties': { 'stationNo': 8638901, 'name': 'Chesapeake Channel CBBT' },
-            'geometry': {
-                'type': 'Point',
-                'coordinates': [-76.08330, 37.03290]
-            }
-        }, {
-            'type': 'Feature',
-            'properties': { 'stationNo': 8638610, 'name': 'Sewells Point' },
-            'geometry': {
-                'type': 'Point',
-                'coordinates': [-76.33000, 36.94667]
-            }
-        }, {
-            'type': 'Feature',
-            'properties': { 'stationNo': 8639348, 'name': 'Money Point' },
-            'geometry': {
-                'type': 'Point',
-                'coordinates': [-76.30169, 36.77831]
-            }
-        }
-    ];
-
-    // custom icons
-    let icon = {
-        url: 'https://i.ibb.co/DfQyp9M/icons8-fish-100-1.png',
-        id: 'custom-marker'
-    };
-    let stationIcon = {
-        url: 'https://i.ibb.co/P5W4M4x/icons8-float-64.png',
-        id: 'station-custom-marker'
-    };
+    const [fishingSiteData, setFishingSiteData] = useState([]); // all site data returned from axios
+    const [fishingTripData, setFishingTripData] = useState([]); // all trip data returned from axios
 
     // GET latest fishing-site data
     let [offset1, setOffset1] = useState('');
@@ -98,7 +45,7 @@ function Map() {
     // GET latest fishing-trip data
     let [offset2, setOffset2] = useState('');
     useEffect(() => {
-        axios.get(`/` + process.env.REACT_APP_FISHING_TRIPS_AIRTABLE + `?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=siteName`)
+        axios.get(`/` + process.env.REACT_APP_FISHING_TRIPS_AIRTABLE + `?fields%5B%5D=fishCaught&fields%5B%5D=date&fields%5B%5D=siteName&fields%5B%5D=rating`)
             .then(response => {
                 let data = response.data.records;
                 setFishingTripData(fishingTripData => [...fishingTripData, ...data]);
@@ -112,8 +59,128 @@ function Map() {
     // mapbox load
     useEffect(() => {
 
-        createGeoJson(fishingSiteData);
-        calculateDailyFish(fishingTripData, fishingSites);
+        // calculate daily fish caught per fishing-site ------------------------------------------------------
+        let tally = {};
+        let dailyFishCaughtPerSite = {};
+        let currentDate = new Date().toJSON().slice(0, 10);
+        for (let i = 0; i < fishingTripData.length; i++) {
+            // apply daily condition filter (only interested in today's trips)
+            if (fishingTripData[i].fields.date === currentDate) {
+                if (tally.hasOwnProperty(fishingTripData[i].fields.siteName)) {
+                    tally[fishingTripData[i].fields.siteName] += Number(fishingTripData[i].fields.fishCaught);
+                } else { // initialize an empty array
+                    tally[fishingTripData[i].fields.siteName] = 0;
+                    tally[fishingTripData[i].fields.siteName] += Number(fishingTripData[i].fields.fishCaught);
+                }
+            }
+        }
+        for (let i = 0; i < fishingSiteData.length; i++) {
+            if (tally[fishingSiteData[i].fields.siteName]) {
+                dailyFishCaughtPerSite[fishingSiteData[i].fields.siteName] = tally[fishingSiteData[i].fields.siteName];
+            } else {
+                dailyFishCaughtPerSite[fishingSiteData[i].fields.siteName] = 'No entries for this site today.'
+            }
+        }
+
+        // calculate numTrips and overallRating per fishing-site ---------------------------------------------
+        let popupData = [];
+        // initializing structure
+        for (let i = 0; i < fishingSiteData.length; i++) {
+            let obj = {
+                siteName: fishingSiteData[i].fields.siteName,
+                ratingSum: 0,
+                numTrips: 0,
+                overallRating: 0
+            }
+            popupData.push(obj);
+        }
+        // sum ratings and number of trips per fishing-site
+        for (let i = 0; i < fishingTripData.length; i++) {
+            popupData.forEach(item => {
+                if (item.siteName === fishingTripData[i].fields.siteName) {
+                    item.ratingSum = item.ratingSum + fishingTripData[i].fields.rating;
+                    item.numTrips++;
+                }
+            })
+        }
+        // calculate overall rating for each site
+        popupData.forEach(item => {
+            item.overallRating = (Number(item.ratingSum / item.numTrips).toFixed(2));
+        })
+
+        // create geoJSON data structure for fishing-sites layer ---------------------------------------------
+        let siteMapProperties = [];
+        // make popup for each fishing-site
+        for (let i = 0; i < fishingSiteData.length; i++) {
+            popupData.forEach(item => {
+                if (item.siteName === fishingSiteData[i].fields.siteName) {
+                    siteMapProperties.push({
+                        'type': 'Feature',
+                        'properties': {
+                            'siteName': fishingSiteData[i].fields.siteName,
+                            'overallRating': item.overallRating,
+                            'description': fishingSiteData[i].fields.description,
+                            'dFc': dailyFishCaughtPerSite[fishingSiteData[i].fields.siteName]
+                        },
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [fishingSiteData[i].fields.longitude, fishingSiteData[i].fields.latitude]
+                        }
+                    });
+                }
+            })
+        }
+
+        // custom icons
+        let fsIcon = {
+            url: 'https://i.ibb.co/DfQyp9M/icons8-fish-100-1.png',
+            id: 'fs-custom-marker'
+        };
+        let stationIcon = {
+            url: 'https://i.ibb.co/P5W4M4x/icons8-float-64.png',
+            id: 'station-custom-marker'
+        };
+
+        // geoJSON data structure for noaa-stations layer
+        const noaaStationMapProperties =
+            [
+                {
+                    'type': 'Feature',
+                    'properties': { 'stationNo': 8637689, 'name': 'Yorktown USCG Training Center' },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-76.47881, 37.22650]
+                    }
+                }, {
+                    'type': 'Feature',
+                    'properties': { 'stationNo': 8632200, 'name': 'Kiptopeke' },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-75.98830, 37.16670]
+                    }
+                }, {
+                    'type': 'Feature',
+                    'properties': { 'stationNo': 8638901, 'name': 'Chesapeake Channel CBBT' },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-76.08330, 37.03290]
+                    }
+                }, {
+                    'type': 'Feature',
+                    'properties': { 'stationNo': 8638610, 'name': 'Sewells Point' },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-76.33000, 36.94667]
+                    }
+                }, {
+                    'type': 'Feature',
+                    'properties': { 'stationNo': 8639348, 'name': 'Money Point' },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-76.30169, 36.77831]
+                    }
+                }
+            ];
 
         if (siteMapProperties.length === 0) return;
 
@@ -147,9 +214,9 @@ function Map() {
                 }
             });
 
-            // load custom-marker to map
-            map.current.loadImage(icon.url, function (error, res) {
-                map.current.addImage(icon.id, res);
+            // load fs-custom-marker to map
+            map.current.loadImage(fsIcon.url, function (error, res) {
+                map.current.addImage(fsIcon.id, res);
             })
 
             // load station-custom-marker to map
@@ -163,7 +230,7 @@ function Map() {
                 type: 'symbol',
                 source: 'fishing-sites',
                 layout: {
-                    'icon-image': 'custom-marker',
+                    'icon-image': 'fs-custom-marker',
                     'icon-size': 0.55
                 }
             });
@@ -178,7 +245,6 @@ function Map() {
                     'icon-size': 0.6
                 }
             });
-
             // create popups, but don't add them to the map yet
             const popupFishSite = new mapboxgl.Popup({
                 className: 'fish-site-popup ',
@@ -200,39 +266,24 @@ function Map() {
 
                 const coordinates = e.features[0].geometry.coordinates.slice();
                 const siteName = e.features[0].properties.siteName;
-                let rating = (Number(e.features[0].properties.rating)).toFixed(2);
+                let overallRating = e.features[0].properties.overallRating;
                 const description = e.features[0].properties.description;
-                const siteURL = e.features[0].properties.siteURL;
+                const dFc = e.features[0].properties.dFc; // daily fish caught
 
-                // popup URL regex work
-                // modifying siteURL for webpage display -----------------NOT CURRENTLY USING
-                // need to spend more time working with multiple layers and hovering to click link.... issues came up
-                // regex needs to make the 's' in http's' optional
-                /*
-                const re = /^https:\/\/(www\.)?(.*?)\.(com|gov|org)/;
-                if (siteURL === 'null') {
-                    urlInfo.url = '#';
-                    urlInfo.shortenURL = '';
-                } else {
-                    let chopped = re.exec(siteURL);
-                    urlInfo.url = siteURL;
-                    urlInfo.shortenURL = chopped[0];
-                }*/
-
-                // handling NaN (for new fishingSites with no ratings)
-                isNaN(rating) ? rating = 0 : rating = rating;
+                // handling NaN
+                isNaN(overallRating) ? overallRating = 0 : overallRating = overallRating;
 
                 let content = ` <div id='top'>
-                                    <b id='title'>${siteName}</b><br>
-                                    Overall Rating: <div 
-                                        style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
-                                        ${rating}</div></br>
-                                    Fish Caught Today: <div 
-                                        style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
-                                        ${fishingSites[siteName]}</div></br>
-                                </div>
-                                <p id='bottom'>${description}</p>
-                            `;
+                    <b id='title'>${siteName}</b><br>
+                    Overall Rating: <div 
+                        style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
+                        ${overallRating}</div></br>
+                    Fish Caught Today: <div 
+                        style="display: inline; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
+                        ${dFc}</div></br>
+                </div>
+                <p id='bottom'>${description}</p>
+            `;
 
                 // Ensure that if the map is zoomed out such that multiple
                 // copies of the feature are visible, the popup appears over the copy being pointed to.
@@ -281,93 +332,15 @@ function Map() {
                 map.current.getCanvas().style.cursor = '';
                 popupStation.remove();
             });
-
-            /*
-            map.current.on('click', () => {
-                map.current.getCanvas().style.cursor = '';
-                popupFishSite.remove();
-            }); */
-
         });
-    }, [fishingSiteData,
-        fishingSites, 
-        fishingTripData, 
-        icon.id, 
-        icon.url, 
-        lat, 
-        lng, 
-        noaaStationMapProperties,
-        siteMapProperties,
-        stationIcon.id,
-        stationIcon.url,
+
+    }, [
+        fishingSiteData,
+        fishingTripData,
+        lat,
+        lng,
         zoom
-    ]); /* useEffect() */
-
-    // create geoJSON data structure for fishing-sites layer
-    function createGeoJson(arr) {
-        let fS = {};
-        let sMP = [];
-        let len = arr.length;
-        for (let i = 0; i < len; i++) {
-            fS[arr[i].fields.siteName] = null; // stuffing site obj with every fishing-site
-            sMP.push({
-                'type': 'Feature',
-                'properties': {
-                    'siteName': arr[i].fields.siteName,
-                    'rating': arr[i].fields.overallRating,
-                    'siteURL': arr[i].fields.siteURL,
-                    'description': arr[i].fields.description
-                },
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [arr[i].fields.longitude, arr[i].fields.latitude]
-                }
-            });
-        }
-
-        // updating states
-        fishingSites = fS;
-        siteMapProperties = sMP;
-    }
-
-    // calculate daily fish caught per fishing-site
-    function calculateDailyFish(arr, obj) {
-
-        let talliesPerSite = {};
-        let currentDate = new Date().toJSON().slice(0, 10);
-
-        for (let i = 0; i < arr.length; i++) {
-            // apply daily condition filter (only interested in today's trips)
-            if (arr[i].fields.date === currentDate) {
-                if (talliesPerSite.hasOwnProperty(arr[i].fields.siteName)) {
-                    talliesPerSite[arr[i].fields.siteName].push(arr[i].fields.fishCaught);
-                } else { // initialize an empty array
-                    talliesPerSite[arr[i].fields.siteName] = [];
-                    talliesPerSite[arr[i].fields.siteName].push(arr[i].fields.fishCaught);
-                }
-            }
-        }
-
-        // total the count in the arr
-        let totalPerSite = {};
-        for (const [key, value] of Object.entries(talliesPerSite)) {
-            let total = 0;
-            for (let i = 0; i < value.length; i++) {
-                total += value[i];
-            }
-            totalPerSite[key] = total;
-        }
-
-        // then compare to the global fishingSites obj to determine 0 or no entry
-        Object.keys(obj).forEach(key => {
-            if (key in totalPerSite) {
-                obj[key] = totalPerSite[key];
-            } else {
-                obj[key] = 'No entries for this site today.';
-            }
-        });
-        setFishingSites(obj);
-    }
+    ]); /* map.load useEffect() */
 
     return (
         <div>

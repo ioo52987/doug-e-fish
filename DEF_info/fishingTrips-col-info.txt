@@ -4,5 +4,5 @@ siteName - Name of the fishing site. If you manually change this field ... This 
 description - Safe to manually alter at anytime.
 rating - Should NOT be manually altered. Used in auto-calculations.
 url - Safe to manually alter at anytime.
-fishCaught - Should NOT be manually altered. Used in auto-calculations.
+fishCaught - Safe to manually alter at anytime.
 tideType - Safe to manually alter at anytime.
